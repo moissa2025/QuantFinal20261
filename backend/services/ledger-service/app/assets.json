@@ -1,0 +1,1170 @@
+[
+  {
+    "symbol": "USD",
+    "name": "US Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "EUR",
+    "name": "Euro",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "GBP",
+    "name": "British Pound",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "JPY",
+    "name": "Japanese Yen",
+    "type": "fiat",
+    "precision": 0,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CHF",
+    "name": "Swiss Franc",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "AUD",
+    "name": "Australian Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CAD",
+    "name": "Canadian Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "NZD",
+    "name": "New Zealand Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SEK",
+    "name": "Swedish Krona",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "NOK",
+    "name": "Norwegian Krone",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "DKK",
+    "name": "Danish Krone",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SGD",
+    "name": "Singapore Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "HKD",
+    "name": "Hong Kong Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CNY",
+    "name": "Chinese Yuan Renminbi",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "INR",
+    "name": "Indian Rupee",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "BRL",
+    "name": "Brazilian Real",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "MXN",
+    "name": "Mexican Peso",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ZAR",
+    "name": "South African Rand",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "AED",
+    "name": "UAE Dirham",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SAR",
+    "name": "Saudi Riyal",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "TRY",
+    "name": "Turkish Lira",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "PLN",
+    "name": "Polish Zloty",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "HUF",
+    "name": "Hungarian Forint",
+    "type": "fiat",
+    "precision": 0,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CZK",
+    "name": "Czech Koruna",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ILS",
+    "name": "Israeli Shekel",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "KRW",
+    "name": "South Korean Won",
+    "type": "fiat",
+    "precision": 0,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "TWD",
+    "name": "New Taiwan Dollar",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "THB",
+    "name": "Thai Baht",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "MYR",
+    "name": "Malaysian Ringgit",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "IDR",
+    "name": "Indonesian Rupiah",
+    "type": "fiat",
+    "precision": 0,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "PHP",
+    "name": "Philippine Peso",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CLP",
+    "name": "Chilean Peso",
+    "type": "fiat",
+    "precision": 0,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "COP",
+    "name": "Colombian Peso",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ARS",
+    "name": "Argentine Peso",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "EGP",
+    "name": "Egyptian Pound",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "NGN",
+    "name": "Nigerian Naira",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "KES",
+    "name": "Kenyan Shilling",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+
+  {
+    "symbol": "GHS",
+    "name": "Ghanaian Cedi",
+    "type": "fiat",
+    "precision": 2,
+    "chain": "none",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "bitcoin",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereum",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SOL",
+    "name": "Solana",
+    "type": "crypto",
+    "precision": 9,
+    "chain": "solana",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "XRP",
+    "name": "XRP",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "xrpl",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ADA",
+    "name": "Cardano",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "cardano",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "AVAX",
+    "name": "Avalanche",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "avalanche",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "DOT",
+    "name": "Polkadot",
+    "type": "crypto",
+    "precision": 10,
+    "chain": "polkadot",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "LTC",
+    "name": "Litecoin",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "litecoin",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "BCH",
+    "name": "Bitcoin Cash",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "bitcoincash",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ETC",
+    "name": "Ethereum Classic",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereumclassic",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "XLM",
+    "name": "Stellar",
+    "type": "crypto",
+    "precision": 7,
+    "chain": "stellar",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ATOM",
+    "name": "Cosmos Hub",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "cosmos",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "HBAR",
+    "name": "Hedera",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "hedera",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ICP",
+    "name": "Internet Computer",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "internetcomputer",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "FIL",
+    "name": "Filecoin",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "filecoin",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "APT",
+    "name": "Aptos",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "aptos",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "NEAR",
+    "name": "Near Protocol",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "near",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "ALGO",
+    "name": "Algorand",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "algorand",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "EGLD",
+    "name": "MultiversX",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "multiversx",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "KAS",
+    "name": "Kaspa",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "kaspa",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "TON",
+    "name": "Toncoin",
+    "type": "crypto",
+    "precision": 9,
+    "chain": "ton",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "TRX",
+    "name": "Tron",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "tron",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "XTZ",
+    "name": "Tezos",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "tezos",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "MINA",
+    "name": "Mina",
+    "type": "crypto",
+    "precision": 9,
+    "chain": "mina",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "AR",
+    "name": "Arweave",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "arweave",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "RUNE",
+    "name": "THORChain",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "thorchain",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SEI",
+    "name": "Sei",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "sei",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "SUI",
+    "name": "Sui",
+    "type": "crypto",
+    "precision": 9,
+    "chain": "sui",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CKB",
+    "name": "Nervos CKB",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "nervos",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "CELO",
+    "name": "Celo",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "celo",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "FLOW",
+    "name": "Flow",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "flow",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "FTM",
+    "name": "Fantom",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "fantom",
+    "contract_address": null,
+    "is_active": true
+  },
+  {
+    "symbol": "USDT-ETH",
+    "name": "Tether USD (ERC20)",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "ethereum",
+    "contract_address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "is_active": true
+  },
+  {
+    "symbol": "USDC-ETH",
+    "name": "USD Coin (ERC20)",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "ethereum",
+    "contract_address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "is_active": true
+  },
+  {
+    "symbol": "DAI-ETH",
+    "name": "Dai Stablecoin (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "is_active": true
+  },
+  {
+    "symbol": "TUSD-ETH",
+    "name": "TrueUSD (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+    "is_active": true
+  },
+  {
+    "symbol": "FRAX-ETH",
+    "name": "Frax (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+    "is_active": true
+  },
+  {
+    "symbol": "USDP-ETH",
+    "name": "Pax Dollar (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+    "is_active": true
+  },
+  {
+    "symbol": "GUSD-ETH",
+    "name": "Gemini Dollar (ERC20)",
+    "type": "crypto",
+    "precision": 2,
+    "chain": "ethereum",
+    "contract_address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+    "is_active": true
+  },
+  {
+    "symbol": "UNI-ETH",
+    "name": "Uniswap (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "is_active": true
+  },
+  {
+    "symbol": "AAVE-ETH",
+    "name": "Aave (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    "is_active": true
+  },
+  {
+    "symbol": "MKR-ETH",
+    "name": "Maker (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    "is_active": true
+  },
+  {
+    "symbol": "COMP-ETH",
+    "name": "Compound (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+    "is_active": true
+  },
+  {
+    "symbol": "SNX-ETH",
+    "name": "Synthetix (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xC011A72400E58ecD99Ee497CF89E3775d4bd732F",
+    "is_active": true
+  },
+  {
+    "symbol": "LDO-ETH",
+    "name": "Lido DAO (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32",
+    "is_active": true
+  },
+  {
+    "symbol": "CRV-ETH",
+    "name": "Curve DAO Token (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+    "is_active": true
+  },
+  {
+    "symbol": "YFI-ETH",
+    "name": "Yearn Finance (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
+    "is_active": true
+  },
+  {
+    "symbol": "1INCH-ETH",
+    "name": "1inch (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "is_active": true
+  },
+  {
+    "symbol": "BAL-ETH",
+    "name": "Balancer (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xba100000625a3754423978a60c9317c58a424e3D",
+    "is_active": true
+  },
+  {
+    "symbol": "SUSHI-ETH",
+    "name": "SushiSwap (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+    "is_active": true
+  },
+  {
+    "symbol": "REN-ETH",
+    "name": "Ren Protocol (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x408e41876cCCDC0F92210600ef50372656052a38",
+    "is_active": true
+  },
+  {
+    "symbol": "ZRX-ETH",
+    "name": "0x Protocol (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
+    "is_active": true
+  },
+  {
+    "symbol": "KNC-ETH",
+    "name": "Kyber Network Crystal (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
+    "is_active": true
+  },
+  {
+    "symbol": "CVX-ETH",
+    "name": "Convex Finance (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x4e3FBD56CD56c3eB5E3dB6C1cBfE1Ff3C3dB1A0F",
+    "is_active": true
+  },
+  {
+    "symbol": "LINK-ETH",
+    "name": "Chainlink (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "is_active": true
+  },
+  {
+    "symbol": "BAND-ETH",
+    "name": "Band Protocol (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xba11D00c5f74255f56a5E366F4F77f5A186d7f55",
+    "is_active": true
+  },
+  {
+    "symbol": "GRT-ETH",
+    "name": "The Graph (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
+    "is_active": true
+  },
+  {
+    "symbol": "OCEAN-ETH",
+    "name": "Ocean Protocol (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
+    "is_active": true
+  },
+  {
+    "symbol": "API3-ETH",
+    "name": "API3 (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0b38210ea11411557c13457D4dA7dC6ea731B88a",
+    "is_active": true
+  },
+  {
+    "symbol": "NMR-ETH",
+    "name": "Numeraire (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671",
+    "is_active": true
+  },
+  {
+    "symbol": "REQ-ETH",
+    "name": "Request Network (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x8f8221aFbB33998d8584A2B05749bA73c37a938a",
+    "is_active": true
+  },
+  {
+    "symbol": "ANT-ETH",
+    "name": "Aragon (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xa117000000f279D81A1D3cc75430fAA017FA5A2e",
+    "is_active": true
+  },
+  {
+    "symbol": "RLC-ETH",
+    "name": "iExec RLC (ERC20)",
+    "type": "crypto",
+    "precision": 9,
+    "chain": "ethereum",
+    "contract_address": "0x607F4C5BB672230e8672085532f7e901544a7375",
+    "is_active": true
+  },
+  {
+    "symbol": "STORJ-ETH",
+    "name": "Storj (ERC20)",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereum",
+    "contract_address": "0xb64ef51C888972c908CFacf59B47C1AfBC0Ab8aC",
+    "is_active": true
+  },
+  {
+    "symbol": "ANKR-ETH",
+    "name": "Ankr (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4",
+    "is_active": true
+  },
+  {
+    "symbol": "BICO-ETH",
+    "name": "Biconomy (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xf17e65822b568b3903685a7c9f496cf7656cc6c0",
+    "is_active": true
+  },
+  {
+    "symbol": "MANA-ETH",
+    "name": "Decentraland (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0f5D2fB29fb7d3CFeE444a200298f468908cC942",
+    "is_active": true
+  },
+  {
+    "symbol": "SAND-ETH",
+    "name": "The Sandbox (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x3845badAde8e6dFF049820680d1F14bD3903a5d0",
+    "is_active": true
+  },
+  {
+    "symbol": "AXS-ETH",
+    "name": "Axie Infinity (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b",
+    "is_active": true
+  },
+  {
+    "symbol": "ENJ-ETH",
+    "name": "Enjin Coin (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c",
+    "is_active": true
+  },
+  {
+    "symbol": "ILV-ETH",
+    "name": "Illuvium (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x767FE9EDC9E0dF98E07454847909b5E959D7ca0E",
+    "is_active": true
+  },
+  {
+    "symbol": "GALA-ETH",
+    "name": "Gala (ERC20)",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereum",
+    "contract_address": "0x15D4c048F83bd7e37d49eA4C83a07267Ec4203dA",
+    "is_active": true
+  },
+  {
+    "symbol": "IMX-ETH",
+    "name": "Immutable X (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xfF9D4E1cE9c8bA4c6A2dBf5b7FfF5e9E5b1cBf1C",
+    "is_active": true
+  },
+  {
+    "symbol": "YGG-ETH",
+    "name": "Yield Guild Games (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x5fE4B3aD9FfA1F8E3cFf7E3eD1F1C3A8E1C1F1C1",
+    "is_active": true
+  },
+  {
+    "symbol": "APE-ETH",
+    "name": "ApeCoin (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x4d224452801ACEd8B2F0aEBE155379bb5D594381",
+    "is_active": true
+  },
+  {
+    "symbol": "MAGIC-ETH",
+    "name": "Treasure DAO (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xB0c7a8d7C1E5F1A8E1F1C3A8E1C1F1C1F1C1F1C1",
+    "is_active": true
+  },
+  {
+    "symbol": "BAT-ETH",
+    "name": "Basic Attention Token (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0D8775F648430679A709E98d2b0Cb6250d2887EF",
+    "is_active": true
+  },
+  {
+    "symbol": "OMG-ETH",
+    "name": "OMG Network (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07",
+    "is_active": true
+  },
+  {
+    "symbol": "HOT-ETH",
+    "name": "HoloToken (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x6c6EE5e31d828De241282B9606C8e98Ea48526E2",
+    "is_active": true
+  },
+  {
+    "symbol": "CHZ-ETH",
+    "name": "Chiliz (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x3506424F91fD33084466F402d5D97f05F8e3b4AF",
+    "is_active": true
+  },
+  {
+    "symbol": "CELR-ETH",
+    "name": "Celer Network (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x4F9254C83EB525f9FCf346490bbb3ed28a81C667",
+    "is_active": true
+  },
+  {
+    "symbol": "SKL-ETH",
+    "name": "SKALE Network (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x00c83aeCC790e8a4453e5dD3B0B4b3680501a7A7",
+    "is_active": true
+  },
+  {
+    "symbol": "OXT-ETH",
+    "name": "Orchid (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x4575f41308EC1483f3d399aa9a2826d74Da13Deb",
+    "is_active": true
+  },
+  {
+    "symbol": "PLA-ETH",
+    "name": "PlayDapp (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x3a4F06431457de873B588846F5f84fCAbdB5A8A4",
+    "is_active": true
+  },
+  {
+    "symbol": "UOS-ETH",
+    "name": "Ultra (ERC20)",
+    "type": "crypto",
+    "precision": 4,
+    "chain": "ethereum",
+    "contract_address": "0xD13c7342e1EF687C5ad21b27C2b65d772cab5c8c",
+    "is_active": true
+  },
+  {
+    "symbol": "MTL-ETH",
+    "name": "Metal DAO (ERC20)",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereum",
+    "contract_address": "0xF433089366899D83a9f26A773D59ec7eCF30355e",
+    "is_active": true
+  },
+  {
+    "symbol": "CVC-ETH",
+    "name": "Civic (ERC20)",
+    "type": "crypto",
+    "precision": 8,
+    "chain": "ethereum",
+    "contract_address": "0x41e5560054824Ea6B0732E656E3Ad64E20e94E45",
+    "is_active": true
+  },
+  {
+    "symbol": "POWR-ETH",
+    "name": "Power Ledger (ERC20)",
+    "type": "crypto",
+    "precision": 6,
+    "chain": "ethereum",
+    "contract_address": "0x595832F8FC6BF59c85C527fEC3740A1b7a361269",
+    "is_active": true
+  },
+  {
+    "symbol": "REQ-ETH",
+    "name": "Request Network (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x8f8221aFbB33998d8584A2B05749bA73c37a938a",
+    "is_active": true
+  },
+  {
+    "symbol": "STMX-ETH",
+    "name": "StormX (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+    "is_active": true
+  },
+  {
+    "symbol": "BNT-ETH",
+    "name": "Bancor Network Token (ERC20)",
+    "type": "crypto",
+    "precision": 18,
+    "chain": "ethereum",
+    "contract_address": "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C",
+    "is_active": true
+  }
+]
+

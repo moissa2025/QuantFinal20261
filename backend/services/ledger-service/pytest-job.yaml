@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ledger-pytest
+  namespace: infra
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pytest
+          image: ledger-pytest:latest
+          imagePullPolicy: Never
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://bassteck:bassteck123@postgres.infra.svc.cluster.local:5432/trading"

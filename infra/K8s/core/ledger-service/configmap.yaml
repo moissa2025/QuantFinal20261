@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ledger-config
+  namespace: infra
+data:
+  DATABASE_URL: "postgresql://bassteck:bassteck123@postgres.infra.svc.cluster.local:5432/trading"
+  ENV: "production"
