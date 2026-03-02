@@ -14,9 +14,7 @@ mod routes;
 mod session;
 mod state;
 
-use crate::db::init_db;
 use crate::state::AppState;
-use common::messaging::Messaging;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

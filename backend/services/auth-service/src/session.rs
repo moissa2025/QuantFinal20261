@@ -130,7 +130,7 @@ pub async fn validate_session(
     };
 
     let user_id: Uuid = row.get("user_id");
-    let stored_ip: Option<String> = row.get("ip_address");
+    let _stored_ip: Option<String> = row.get("ip_address");
     let stored_ua_hash: Option<String> = row.get("user_agent");
     let expires_at: DateTime<Utc> = row.get("expires_at");
     let revoked: bool = row.get("revoked");
