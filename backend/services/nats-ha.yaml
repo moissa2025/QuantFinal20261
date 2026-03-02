@@ -1,0 +1,20 @@
+replicaCount: 3
+
+nats:
+  image: nats:2.10.14
+
+statefulSet:
+  enabled: true
+
+config:
+  cluster:
+    enabled: true
+    port: 6222
+  jetstream:
+    max_mem_store: 1Gb
+    max_file_store: 10Gb
+
+persistence:
+  enabled: true
+  size: 20Gi
+

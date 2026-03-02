@@ -1,0 +1,28 @@
+<!-- logo.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 72">
+  <defs>
+    <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#7C4DFF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <rect x="6" y="8" width="56" height="56" rx="16" fill="#050814"/>
+  <rect x="10" y="12" width="48" height="48" rx="14" fill="url(#lg)"/>
+  <path d="M24 44 L24 28 L30 28 L30 36 L36 30 L42 30 L42 44" 
+        fill="none" stroke="#050814" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Wordmark -->
+  <text x="82" y="32" fill="#FFFFFF"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+        font-size="20" font-weight="600" letter-spacing="0.06em">
+    GLOBALQUANTX
+  </text>
+  <text x="82" y="50" fill="#7C8AA5"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+        font-size="11" letter-spacing="0.22em">
+    INSTITUTIONAL MULTI-ASSET ALGO TRADING
+  </text>
+</svg>
+

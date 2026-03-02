@@ -1,3 +1,30 @@
+# Rust
+target/
+**/target/
+**/*.rs.bk
+
+# Python
+**/__pycache__/
+**/*.pyc
+
+# Node / frontend
+frontend/node_modules/
+frontend/.next/
+frontend/dist/
+
+# SQLx metadata (optional)
+backend/.sqlx/
+
+# Env files
+*.env
+*.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
 # Python
 __pycache__/
 *.pyc

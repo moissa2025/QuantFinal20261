@@ -4,13 +4,23 @@ metadata:
   name: ledger-pytest
   namespace: infra
 spec:
+  backoffLimit: 0
   template:
     spec:
       restartPolicy: Never
       containers:
-        - name: pytest
+        - name: ledger-pytest
           image: ledger-pytest:latest
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
+          workingDir: /app
           env:
-            - name: DATABASE_URL
+            - name: TEST_DATABASE_URL
               value: "postgresql://bassteck:bassteck123@postgres.infra.svc.cluster.local:5432/trading"
+            - name: ENV
+              value: "pytest"
+          command: ["pytest"]
+          args:
+            - "-vv"
+            - "--disable-warnings"
+            - "--maxfail=1"
+            - "test/"

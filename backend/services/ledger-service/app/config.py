@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 from pydantic import Field
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = Field(default="sqlite:///app.db")
+    DATABASE_URL: str
     ENV: str = "development"
 
     class Config:
@@ -11,3 +11,4 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 settings = Settings()
+

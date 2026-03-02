@@ -1,0 +1,15 @@
+ALTER TABLE sessions
+    ADD COLUMN IF NOT EXISTS user_agent TEXT;
+
+ALTER TABLE sessions
+    ADD COLUMN IF NOT EXISTS device_hash TEXT;
+
+ALTER TABLE sessions
+    ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+ALTER TABLE sessions
+    ADD COLUMN IF NOT EXISTS ip_address inet;
+
+ALTER TABLE sessions
+    ADD COLUMN IF NOT EXISTS last_used_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+

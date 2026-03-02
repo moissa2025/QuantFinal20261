@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trading-service-config
+  namespace: trading
+data:
+  ledger_service_url: "{{ .Values.env.ledger_service_url }}"
+  risk_service_url: "{{ .Values.env.risk_service_url }}"
+  market_data_url: "{{ .Values.env.market_data_url }}"
+  event_bus_url: "{{ .Values.env.event_bus_url }}"
+

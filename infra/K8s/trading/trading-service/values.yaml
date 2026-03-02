@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+  repository: europe-west2-docker.pkg.dev/bassteck-trading/bassteck-trading/trading-service
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+env:
+  ledger_service_url: "http://ledger-service.trading.svc.cluster.local"
+  risk_service_url: "http://risk-service.trading.svc.cluster.local"
+  market_data_url: "http://market-data-service.trading.svc.cluster.local"
+  event_bus_url: "http://event-bus-service.trading.svc.cluster.local"
+

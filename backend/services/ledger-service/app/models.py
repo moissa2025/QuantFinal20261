@@ -1,3 +1,6 @@
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+from datetime import datetime, timezone as tz
 from app.db_base import Base
 from sqlalchemy import (
     Column,
@@ -11,14 +14,10 @@ from sqlalchemy import (
     CheckConstraint,
     UniqueConstraint,
     Index,
+    DateTime
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-#from .db import Base
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
-
 import uuid
 from datetime import datetime, UTC
 
@@ -49,38 +48,42 @@ class Account(Base):
     type = Column(String, nullable=False)                     # asset, liability, equity, revenue, expense
     user_id = Column(UUID(as_uuid=True), nullable=True)
     currency = Column(String, nullable=False)
+    # NEW FIELD
+    is_suspense = Column(Boolean, nullable=False, default=False)
     created_at = Column(
         TIMESTAMP(timezone=True),
         nullable=False,
         default=lambda: datetime.now(UTC),
     )
-
+    entries = relationship("JournalEntry", back_populates="account")
     # Relationships
     entries = relationship("JournalEntry", back_populates="account")
-
-
-# -------------------------
-# Transaction Model
-# -------------------------
+#####Bank grade changed 
 class Transaction(Base):
     __tablename__ = "transactions"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    type = Column(String, nullable=False)  # trade, deposit, withdrawal, transfer
+    type = Column(String, nullable=False)
     correlation_id = Column(String, nullable=True)
-    created_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(UTC),
+
+    # NEW: reversal linkage
+    reversal_of_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("transactions.id", ondelete="RESTRICT"),
+        nullable=True,
+        index=True,
     )
 
-    # Relationship
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(tz.utc),
+    )
+
     entries = relationship("JournalEntry", back_populates="transaction")
+    reversal_of = relationship("Transaction", remote_side=[id])
 
-
-# -------------------------
-# Journal Entry Model (UPDATED + HARDENED)
-# -------------------------
+# New journal entry Model 
 class JournalEntry(Base):
     __tablename__ = "journal_entries"
 
@@ -98,6 +101,9 @@ class JournalEntry(Base):
         nullable=False,
     )
 
+    # Business-level posting identifier (idempotency + audit)
+    reference = Column(String, nullable=False, index=True)
+
     amount = Column(Numeric(18, 8), nullable=False)
     meta = Column(JSON, nullable=True)
 
@@ -107,25 +113,18 @@ class JournalEntry(Base):
         default=lambda: datetime.now(UTC),
     )
 
-    # Relationships
     transaction = relationship("Transaction", back_populates="entries")
     account = relationship("Account", back_populates="entries")
 
-    # Constraints + Indexes
     __table_args__ = (
-        # Prevent invalid ledger entries
         CheckConstraint("amount IS NOT NULL", name="ck_journal_amount_not_null"),
         CheckConstraint("amount <> 0", name="ck_journal_amount_non_zero"),
-
-        # Deterministic ordering guarantee
         UniqueConstraint(
             "account_id",
             "created_at",
             "id",
             name="uq_journal_account_created_id",
         ),
-
-        # Composite index for pagination
         Index(
             "idx_journal_entry_account_created_id",
             "account_id",
@@ -133,4 +132,3 @@ class JournalEntry(Base):
             "id",
         ),
     )
-

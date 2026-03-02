@@ -1,0 +1,42 @@
+[package]
+name = "auth-service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.21"
+futures-util = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.5", features = ["cors"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+async-nats = "0.34"
+uuid = { version = "1", features = ["v4", "serde"] }
+jsonwebtoken = "9"
+common = { path = "../../libs/common" }
+subtle = "2.5"
+ipnetwork = "0.20"
+# new
+sqlx = { version = "0.7", features = [
+    "runtime-tokio-rustls",
+    "postgres",
+    "uuid",
+    "time",
+    "macros",
+    "chrono",
+    "ipnetwork"
+] }
+time = { version = "0.3", features = ["macros", "formatting"] }
+argon2 = "0.5"
+rand = "0.8"
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+dotenvy = "0.15"
+thiserror = "1"
+

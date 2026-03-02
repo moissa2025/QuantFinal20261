@@ -5,14 +5,18 @@ WORKDIR /app
 # System deps for psycopg2
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
-# Copy code into image
 COPY . /app
 
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH=/app
+
+CMD ["pytest", "-vv", "test/"]
+
+
+# Install dependencies
 RUN pip install --no-cache-dir pytest
 RUN pip install --no-cache-dir httpx
 
 # Default: run your cursor pagination tests
-CMD ["pytest", "misc/test_cursor_pagination_prod.py", "-vv"]
 

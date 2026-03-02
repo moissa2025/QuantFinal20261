@@ -3,14 +3,25 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 from decimal import Decimal
+import enum
+#-------------------Posting
+class PostingType(str, enum.Enum):
+    trade = "trade"
+    deposit = "deposit"
+    withdrawal = "withdrawal"
+    fee = "fee"
+    adjustment = "adjustment"
+    fx = "fx"
+    reversal = "reversal"
+    other = "other"
+# ----------------- Accounts -----------------
 
-# Account Schemas
-# -------------------------
 class AccountCreate(BaseModel):
     name: str
     type: str
     user_id: UUID
     currency: str
+    is_suspense: bool = False
 
 class Account(BaseModel):
     id: UUID
@@ -24,47 +35,79 @@ class Account(BaseModel):
         from_attributes = True
 
 
-# -------------------------
-# Journal Entry Schemas
-# -------------------------
-class JournalEntryCreate(BaseModel):
-    account_id: UUID
-    amount: float
-    meta: Optional[dict] = None   # aligned with SQLAlchemy
+# ----------------- Simple entry (for /entries) -----------------
 
-class JournalEntry(BaseModel):
+class SimpleEntryCreate(BaseModel):
+    account_id: UUID
+    amount: Decimal
+    meta: Optional[dict] = None
+
+
+# ----------------- Posting engine -----------------
+
+class JournalLineCreate(BaseModel):
+    account_id: UUID
+    amount: Decimal
+    direction: str  # "debit" or "credit"
+    meta: Optional[dict] = None
+
+class SimpleJournalEntryCreate(BaseModel):
+    transaction_id: UUID
+    account_id: UUID
+    amount: Decimal
+    reference: str
+    meta: Optional[dict] = None
+
+
+class JournalEntryCreate(BaseModel):
+    reference: str
+    lines: List[JournalLineCreate]
+    meta: Optional[dict] = None
+    posting_type: PostingType = PostingType.other
+
+class JournalLine(BaseModel):
     id: UUID
     account_id: UUID
-    amount: float
-    meta: Optional[dict] = None
-    created_at: datetime
+    amount: Decimal
+    direction: str
+    meta: Optional[dict]
+    reference: str
 
     class Config:
         from_attributes = True
 
 
-# -------------------------
-# Transaction Schemas
-# -------------------------
-class TransactionCreate(BaseModel):
-    type: str
-    correlation_id: Optional[str] = None
-    entries: List[JournalEntryCreate]
-#--------------------------
-#Balance Schema
-#---------------------------
+class JournalEntryOut(BaseModel):
+    id: UUID
+    reference: str
+    created_at: datetime
+    meta: Optional[dict]
+    lines: List[JournalLine]
+
+    class Config:
+        from_attributes = True
+
+class FxPostingCreate(BaseModel):
+    reference: str
+    from_account_id: UUID
+    to_account_id: UUID
+    from_amount: Decimal
+    to_amount: Decimal
+    rate: Decimal
+    meta: Optional[dict] = None
+
+# ----------------- Statement / balances (unchanged) -----------------
+
 class AccountBalance(BaseModel):
     account_id: UUID
     balance: Decimal
     currency: str
     as_of: datetime
 
-#-----------------------------
-#Statement Entry
-#------------------------------
+
 class StatementEntry(BaseModel):
     entry_id: UUID
-    transaction_id: UUID | None
+    transaction_id: Optional[UUID]
     amount: Decimal
     balance_after: Decimal
     meta: Optional[dict]
@@ -73,9 +116,7 @@ class StatementEntry(BaseModel):
     class Config:
         from_attributes = True
 
-#-----------------------------
-#Account Statement
-#------------------------------
+
 class AccountStatement(BaseModel):
     account_id: UUID
     currency: str
@@ -84,3 +125,34 @@ class AccountStatement(BaseModel):
     closing_balance: Decimal
     as_of: datetime
     next_cursor: Optional[UUID] = None
+
+# --- existing AccountBalance already present ---
+# class AccountBalance(BaseModel):
+#     account_id: UUID
+#     balance: Decimal
+#     currency: str
+#     as_of: datetime
+
+class TrialBalanceLine(BaseModel):
+    account_id: UUID
+    name: str
+    balance: Decimal
+    currency: str
+
+class TrialBalance(BaseModel):
+    lines: List[TrialBalanceLine]
+    total: Decimal
+    is_balanced: bool
+    as_of: datetime
+
+
+class ReversalResult(BaseModel):
+    original_transaction_id: UUID
+    reversal_transaction_id: UUID
+    reference: str
+    created_at: datetime
+
+class LedgerHealth(BaseModel):
+    is_balanced: bool
+    total: Decimal
+    checked_at: datetime

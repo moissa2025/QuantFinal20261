@@ -1,0 +1,15 @@
+<!-- favicon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#7C4DFF"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="#050814"/>
+  <rect x="8" y="8" width="48" height="48" rx="14" fill="url(#g)"/>
+  <path d="M20 40 L20 26 L26 26 L26 34 L32 28 L38 28 L38 40" 
+        fill="none" stroke="#050814" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="22" y="30" font-size="0" fill="none">GQX</text>
+</svg>
+

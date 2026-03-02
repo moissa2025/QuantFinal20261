@@ -1,0 +1,19 @@
+[workspace]
+members = [
+    "services/auth-service",
+    "services/ledger-service",
+    "services/trading-service",
+    "services/user-service",
+    "services/risk-service",
+    "services/market-data-service",
+    "services/api-gateway",
+    "services/wallet-service",
+    "services/onboarding-service",
+    "services/reconciliation-service",
+    "services/aml-monitoring-service"
+]
+[workspace.dependencies]
+axum = "0.7"
+
+resolver = "2"
+
