@@ -1,17 +1,35 @@
 use async_nats::{Client, Message};
 use serde_json;
 use tracing::{error, info, warn};
+use chrono::Utc;
+use uuid::Uuid;
 
-use common::auth_messages::{
-    AuthLoginRequest,
-    AuthLoginResponse,
-};
+use common::auth_messages::{AuthLoginRequest, AuthLoginResponse};
 
 use crate::{
     db::DbPool,
     session::{normalise_device_ua, hash_device_ua, create_session},
+    password::verify_password,
+    crypto::refresh_token::{
+        generate_refresh_token,
+        hash_refresh_token,
+        encrypt_refresh_token,
+    },
 };
 
+//
+// Local helper for NATS replies
+//
+async fn respond<T: serde::Serialize>(nats: &Client, msg: &Message, value: &T) {
+    if let Some(reply) = msg.reply.clone() {
+        let payload = serde_json::to_vec(value).unwrap();
+        let _ = nats.publish(reply, payload.into()).await;
+    }
+}
+
+//
+// LOGIN HANDLER
+//
 pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     let req: AuthLoginRequest = match serde_json::from_slice(&msg.payload) {
         Ok(r) => r,
@@ -22,6 +40,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
                 session_token: "".into(),
                 roles: vec![],
                 ttl_seconds: 0,
+                refresh_token: None,
             }).await;
             return;
         }
@@ -30,7 +49,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     info!("login: authenticating {}", req.email);
 
     //
-    // 1. Load user by email
+    // 1. Load user
     //
     let user = match sqlx::query!(
         r#"SELECT id, password_hash, disabled
@@ -49,6 +68,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
                 session_token: "".into(),
                 roles: vec![],
                 ttl_seconds: 0,
+                refresh_token: None,
             }).await;
             return;
         }
@@ -59,6 +79,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
                 session_token: "".into(),
                 roles: vec![],
                 ttl_seconds: 0,
+                refresh_token: None,
             }).await;
             return;
         }
@@ -71,13 +92,25 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
             session_token: "".into(),
             roles: vec![],
             ttl_seconds: 0,
+            refresh_token: None,
         }).await;
         return;
     }
 
     //
-    // 2. TODO: verify password
+    // 2. Verify password
     //
+    if !verify_password(&req.password, &user.password_hash).unwrap_or(false) {
+        warn!("login: invalid credentials (password mismatch)");
+        respond(&nats, &msg, &AuthLoginResponse {
+            user_id: "".into(),
+            session_token: "".into(),
+            roles: vec![],
+            ttl_seconds: 0,
+            refresh_token: None,
+        }).await;
+        return;
+    }
 
     //
     // 3. Device fingerprinting
@@ -104,6 +137,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
                 session_token: "".into(),
                 roles: vec![],
                 ttl_seconds: 0,
+                refresh_token: None,
             }).await;
             return;
         }
@@ -132,22 +166,65 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     };
 
     //
-    // 6. Respond
+    // 6. Generate encrypted refresh token
+    //
+    let refresh_plain = generate_refresh_token();
+    let refresh_hash = hash_refresh_token(&refresh_plain);
+
+    let (ciphertext, nonce) = match encrypt_refresh_token(&refresh_plain) {
+        Ok(v) => v,
+        Err(e) => {
+            error!("login: failed to encrypt refresh token: {}", e);
+            respond(&nats, &msg, &AuthLoginResponse {
+                user_id: "".into(),
+                session_token: "".into(),
+                roles: vec![],
+                ttl_seconds: 0,
+                refresh_token: None,
+            }).await;
+            return;
+        }
+    };
+
+    let expires_at = Utc::now() + chrono::Duration::days(30);
+
+    if let Err(e) = sqlx::query!(
+        r#"
+        INSERT INTO refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        VALUES ($1, $2, $3, $4, $5, $6, false)
+        "#,
+        Uuid::new_v4(),
+        user.id,
+        refresh_hash,
+        ciphertext,
+        nonce,
+        expires_at
+    )
+    .execute(&pool)
+    .await
+    {
+        error!("login: failed to insert refresh token: {}", e);
+        respond(&nats, &msg, &AuthLoginResponse {
+            user_id: "".into(),
+            session_token: "".into(),
+            roles: vec![],
+            ttl_seconds: 0,
+            refresh_token: None,
+        }).await;
+        return;
+    }
+
+    //
+    // 7. Respond
     //
     let response = AuthLoginResponse {
         user_id: user.id.to_string(),
         session_token: session.session_token,
         roles,
         ttl_seconds: 3600,
+        refresh_token: Some(refresh_plain),
     };
 
     respond(&nats, &msg, &response).await;
-}
-
-async fn respond<T: serde::Serialize>(nats: &Client, msg: &Message, value: &T) {
-    if let Some(reply) = msg.reply.clone() {
-        let payload = serde_json::to_vec(value).unwrap();
-        let _ = nats.publish(reply, payload.into()).await;
-    }
 }
 

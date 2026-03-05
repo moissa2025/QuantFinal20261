@@ -1,7 +1,7 @@
 # Core service users
 gcloud sql users create authuser \
   --instance=globalquantx \
-  --password=authGos608eg
+  --password=Gos608eg
 
 gcloud sql users create ledgeruser \
   --instance=globalquantx \

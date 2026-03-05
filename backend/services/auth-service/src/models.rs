@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use sqlx::types::ipnetwork::IpNetwork;
+
 //
 // USERS
 //
@@ -9,8 +10,9 @@ use sqlx::types::ipnetwork::IpNetwork;
 pub struct User {
     pub id: Uuid,
     pub email: String,
+    pub password_hash: String,
     pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub disabled: bool,
 }
 
 //
@@ -44,25 +46,16 @@ pub struct UserRole {
 //
 // SESSIONS
 //
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Session {
     pub id: Uuid,
     pub user_id: Uuid,
     pub session_token: String,
     pub ip_address: Option<IpNetwork>,
-
-    // NEW — raw user agent string
     pub user_agent: Option<String>,
-
-    // NEW — hashed + normalised UA
     pub device_hash: Option<String>,
-
-    pub expires_at: DateTime<Utc>,
-    pub created_at: DateTime<Utc>,
-
-    // RENAMED — canonical name for activity tracking
-    pub last_activity_at: DateTime<Utc>,
-
+    pub expires_at: Option<DateTime<Utc>>,
+    pub created_at: Option<DateTime<Utc>>,
+    pub last_activity_at: Option<DateTime<Utc>>,
     pub revoked: bool,
 }
 
@@ -74,6 +67,8 @@ pub struct RefreshToken {
     pub id: Uuid,
     pub user_id: Uuid,
     pub token_hash: String,
+    pub ciphertext: Vec<u8>,
+    pub nonce: Vec<u8>,
     pub created_at: DateTime<Utc>,
     pub expires_at: DateTime<Utc>,
     pub revoked: bool,
@@ -196,3 +191,4 @@ pub struct EventLog {
     pub payload: serde_json::Value,
     pub created_at: DateTime<Utc>,
 }
+

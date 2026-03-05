@@ -4,40 +4,38 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# --- Core async runtime ---
 tokio = { version = "1", features = ["full"] }
 
-# --- Axum 0.6 (required for Utoipa Swagger UI compatibility) ---
-axum = { version = "0.6", features = ["macros", "json"] }
+axum = { version = "0.7", features = ["macros", "json"] }
+axum-extra = { version = "0.9", features = ["cookie", "typed-header"] }
 
-# --- Tower ecosystem aligned with Axum 0.6 ---
 tower = "0.4"
-tower-http = { version = "0.4", features = ["trace", "cors"] }
+tower-http = { version = "0.5", features = ["trace", "cors"] }
 
-# --- Serialization ---
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
-# --- Logging & tracing ---
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
 
-# --- Utoipa OpenAPI + Swagger UI (Axum 0.6 compatible) ---
-utoipa = "4"
-utoipa-swagger-ui = { version = "4", features = ["axum"] }
-
-# --- HTTP client for internal service calls ---
 reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
 
-# --- NATS client ---
-async-nats = "0.33"
+async-nats = "0.34"
 
-# --- Utilities ---
 uuid = { version = "1", features = ["v4", "serde"] }
 thiserror = "1"
 anyhow = "1"
 
-# --- For rate limiting, hashing, tokens ---
 dashmap = "5"
 tokio-util = "0.7"
+
+headers = "0.4"
+
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres"] }
+
+common = { path = "../../libs/common" }
+
+# --- Utoipa stack (correct versions) ---
+utoipa = "4.2.3"
+utoipa-swagger-ui = { version = "7.1.0", features = ["axum"] }
 

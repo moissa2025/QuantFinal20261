@@ -5,7 +5,6 @@ use tokio::sync::mpsc;
 use tokio::time::{interval, Duration};
 
 use common::market::MarketRow;
-use common::messaging::publish_json;
 
 use crate::engine::connectors::{binance, coinbase, okx};
 use crate::state::AppState;
@@ -44,8 +43,7 @@ pub async fn run_aggregator(state: Arc<AppState>) {
 
                 let snapshot: Vec<MarketRow> = books.values().cloned().collect();
 
-                let _ = publish_json("market.snapshot", &snapshot).await;
-
+                // Broadcast snapshot to all WS subscribers
                 let _ = state.snapshot_tx.send(snapshot);
             }
         }

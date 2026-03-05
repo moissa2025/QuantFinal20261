@@ -7,7 +7,6 @@ use axum::{
 };
 use common::ws::WsMessage;
 use tokio::time::{timeout, Duration};
-use futures_util::SinkExt;
 
 use crate::state::AppState;
 
@@ -31,6 +30,7 @@ async fn handle_market_stream(mut socket: WebSocket, state: Arc<AppState>) {
         };
 
         let msg = WsMessage::MarketSnapshot(snapshot);
+
         let json = match serde_json::to_string(&msg) {
             Ok(j) => j,
             Err(_) => continue,

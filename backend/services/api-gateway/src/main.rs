@@ -1,6 +1,4 @@
-use axum::routing::post;
-use crate::routes::auth;
-
+mod db;
 mod state;
 mod routes;
 mod error;
@@ -25,6 +23,9 @@ use tracing_subscriber::EnvFilter;
 
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
+
+use tokio::net::TcpListener;
+use axum::serve;
 
 use crate::middleware::rate_limit_user::per_user_rate_limit;
 use crate::middleware::auth::auth_middleware;
@@ -52,17 +53,21 @@ async fn main() {
 
     println!("🚀 API Gateway running on http://{addr}");
 
-    axum::Server::bind(&addr.parse().unwrap())
-        .serve(app.into_make_service())
+    // Axum 0.7 server startup
+    let listener = TcpListener::bind(addr)
         .await
-        .unwrap();
+        .expect("failed to bind TCP listener");
+
+    serve(listener, app)
+        .await
+        .expect("server error");
 }
 
 pub fn app(state: Arc<AppState>) -> Router {
     let openapi = openapi::ApiDoc::openapi();
 
     Router::new()
-        // Swagger UI
+        // Swagger UI (utoipa 5 / swagger-ui 7)
         .merge(
             SwaggerUi::new("/swagger-ui")
                 .url("/openapi.json", openapi.clone())
@@ -70,7 +75,7 @@ pub fn app(state: Arc<AppState>) -> Router {
         .route("/openapi.json", get(|| async { Json(openapi) }))
 
         // -------------------------------
-        // PUBLIC ROUTES (NO AUTH REQUIRED)
+        // PUBLIC ROUTES
         // -------------------------------
         .nest(
             "/v1/auth",
@@ -80,7 +85,7 @@ pub fn app(state: Arc<AppState>) -> Router {
         )
 
         // -------------------------------
-        // PROTECTED ROUTES (AUTH REQUIRED)
+        // PROTECTED ROUTES
         // -------------------------------
         .nest(
             "/v1/orders",
@@ -127,13 +132,13 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .layer(from_fn_with_state(state.clone(), auth_middleware)),
         )
 
-        // Health check (public)
+        // Health check
         .route("/health", get(|| async { "OK" }))
 
         // Global state
         .with_state(state)
 
-        // Tracing layer
+        // Tracing layer (tower-http 0.5)
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(|req: &axum::http::Request<_>| {

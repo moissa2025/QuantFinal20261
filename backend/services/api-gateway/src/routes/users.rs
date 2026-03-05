@@ -23,7 +23,7 @@ pub async fn get_me(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<UserResponse>, AppError> {
     let user = state
-        .user
+        .user_client
         .get_user_by_id(&identity.user_id)
         .await
         .map_err(|_| AppError::Http(axum::http::StatusCode::BAD_GATEWAY))?;

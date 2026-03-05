@@ -68,8 +68,8 @@ pub async fn start_nats_listeners(nats: Client, pool: DbPool) {
                 let nats = nats.clone();
                 let db_pool = db_pool.clone();
                 tokio::spawn(async move {
-                    handle_validate_session(db_pool, nats, msg).await;
-                });
+                handle_validate_session(db_pool, nats, msg).await;
+		});
             }
         });
     }

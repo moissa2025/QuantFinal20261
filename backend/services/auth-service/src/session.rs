@@ -72,34 +72,41 @@ pub async fn create_session(
         .as_deref()
         .map(hash_device_ua);
 
-    let rec = sqlx::query_as!(
-        Session,
-        r#"
-        INSERT INTO sessions (
-            id, user_id, session_token,
-            ip_address, user_agent, device_hash,
-            expires_at, created_at, last_activity_at, revoked
-        )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$8,false)
-        RETURNING id, user_id, session_token,
-                  ip_address, user_agent, device_hash,
-                  expires_at, created_at, last_activity_at, revoked
-        "#,
-        Uuid::new_v4(),
-        user_id,
-        session_token,
-        ip_network,
-        raw_user_agent,
-        device_hash,
-        expires_at,
-        now
+let rec = sqlx::query_as!(
+    Session,
+    r#"
+    INSERT INTO sessions (
+        id, user_id, session_token,
+        ip_address, user_agent, device_hash,
+        expires_at, created_at, last_activity_at, revoked
     )
-    .fetch_one(pool)
-    .await?;
+    VALUES (
+        $1, $2, $3,
+        $4, $5, $6,
+        $7::timestamptz,
+        $8::timestamptz,
+        $8::timestamptz,
+        false
+    )
+    RETURNING
+        id, user_id, session_token,
+        ip_address, user_agent, device_hash,
+        expires_at, created_at, last_activity_at, revoked
+    "#,
+    Uuid::new_v4(),
+    user_id,
+    session_token,
+    ip_network,
+    raw_user_agent,
+    device_hash,
+    expires_at,
+    now
+)
+.fetch_one(pool)
+.await?;
 
     Ok(rec)
 }
-
 
 //
 // SESSION VALIDATION
@@ -115,7 +122,7 @@ pub async fn validate_session(
 
     let row = sqlx::query(
         r#"
-        SELECT s.user_id, s.ip_address, s.user_agent, s.expires_at, s.revoked, u.email
+        SELECT s.user_id, s.ip_address, s.device_hash, s.expires_at, s.revoked, u.email
         FROM sessions s
         JOIN users u ON u.id = s.user_id
         WHERE s.session_token = $1
@@ -130,8 +137,8 @@ pub async fn validate_session(
     };
 
     let user_id: Uuid = row.get("user_id");
-    let _stored_ip: Option<String> = row.get("ip_address");
-    let stored_ua_hash: Option<String> = row.get("user_agent");
+    let stored_ip: Option<String> = row.try_get("ip_address")?;
+    let stored_device_hash: Option<String> = row.try_get("device_hash")?;
     let expires_at: DateTime<Utc> = row.get("expires_at");
     let revoked: bool = row.get("revoked");
     let email: String = row.get("email");
@@ -140,12 +147,12 @@ pub async fn validate_session(
         return Ok(None);
     }
 
-    if let Some(stored_hash) = stored_ua_hash {
+    if let Some(stored_hash) = stored_device_hash {
         if stored_hash != device_ua_hash {
             return Ok(None);
         }
     }
-    let stored_ip: Option<String> = row.try_get("ip_address")?;
+
     if let Some(stored_ip) = stored_ip.as_ref() {
         if !same_subnet_24(&stored_ip, ip) {
             return Ok(None);

@@ -17,6 +17,7 @@ pub struct AuthLoginResponse {
     pub session_token: String,
     pub roles: Vec<String>,
     pub ttl_seconds: i64,
+    pub refresh_token: Option<String>,   // <-- REQUIRED
 }
 
 //

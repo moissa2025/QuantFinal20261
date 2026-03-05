@@ -1,17 +1,17 @@
 [workspace]
+resolver = "2"
+
 members = [
     "backend/services/auth-service",
     "backend/services/ledger-service",
-    "backend/services/api-gateway",
-    "backend/services/api-gateway-axum0.6",
-    "backend/services/aml-monitoring-service",
-    "backend/services/kyc-service",
-    "backend/services/market-data-service",
-    "backend/services/reconciliation-service",
-    "backend/services/risk-service",
     "backend/services/trading-service",
     "backend/services/user-service",
+    "backend/services/risk-service",
+    "backend/services/market-data-service",
+    "backend/services/api-gateway",
     "backend/services/wallet-service",
-    "backend/libs/*"
+    "backend/services/reconciliation-service",
+    "backend/services/aml-monitoring-service",
+    "backend/libs/common"
 ]
 

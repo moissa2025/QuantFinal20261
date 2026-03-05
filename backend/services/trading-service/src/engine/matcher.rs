@@ -5,12 +5,11 @@ use tokio::sync::{mpsc, Mutex};
 
 use super::orderbook::OrderBook;
 use super::types::{
-    EngineOrder, EngineEvent, OrderType, MatchEvent, Side,
+    EngineOrder, EngineEvent, OrderType, Side,
 };
 use super::positions::PositionEngine;
 use super::pnl::refresh_pnl;
 
-use common::messaging::publish_json;
 use common::trading::OrderBookSnapshot;
 
 #[derive(Clone)]
@@ -65,7 +64,6 @@ impl MatchingEngine {
 
         let mut pos = inner.positions.snapshot();
         refresh_pnl(&mut pos);
-        let _ = publish_json("trading.positions", &pos).await;
 
         events
     }
@@ -84,11 +82,9 @@ pub async fn run_matching_engine_loop(
     mut rx_orders: mpsc::Receiver<EngineOrder>,
 ) {
     while let Some(order) = rx_orders.recv().await {
-        let events = engine.submit_order(order).await;
+        let _events = engine.submit_order(order).await;
 
-        for ev in events {
-            let _ = publish_json("trading.matches", &ev).await;
-        }
+        // No NATS publishing — trading-service is pure engine
     }
 }
 

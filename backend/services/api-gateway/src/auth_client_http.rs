@@ -1,24 +1,5 @@
 use reqwest::Client;
 use serde::Deserialize;
-use crate::nats_client::NatsClient;
-use common::auth_messages::{AuthRefreshRequest, AuthRefreshResponse};
-
-#[derive(Clone)]
-pub struct AuthNatsClient {
-    nats: NatsClient,
-}
-
-impl AuthNatsClient {
-    pub fn new(nats: NatsClient) -> Self {
-        Self { nats }
-    }
-
-    pub async fn refresh(&self, refresh_token: String) -> Result<AuthRefreshResponse, crate::nats_client::NatsError> {
-        let req = AuthRefreshRequest { refresh_token };
-        self.nats.rpc("auth.refresh.request", &req).await
-    }
-}
-
 
 #[derive(Clone)]
 pub struct AuthClient {
@@ -57,6 +38,5 @@ impl AuthClient {
 
         Ok(resp)
     }
-
 }
 

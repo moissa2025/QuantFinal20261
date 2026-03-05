@@ -1,4 +1,6 @@
 [workspace]
+resolver = "2"
+
 members = [
     "services/auth-service",
     "services/ledger-service",
@@ -8,12 +10,10 @@ members = [
     "services/market-data-service",
     "services/api-gateway",
     "services/wallet-service",
-    "services/onboarding-service",
     "services/reconciliation-service",
-    "services/aml-monitoring-service"
+    "services/aml-monitoring-service",
+    "libs/common"
 ]
-[workspace.dependencies]
-axum = "0.7"
-
-resolver = "2"
-
+[patch.crates-io]
+utoipa = { version = "5.4.0" }
+utoipa-swagger-ui = { version = "7.1.0" }

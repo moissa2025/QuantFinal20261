@@ -9,6 +9,7 @@ pub struct LoginRequest {
 #[derive(Debug, Serialize)]
 pub struct LoginResponse {
     pub access_token: String,
+    pub refresh_token: String,
     pub expires_in: i64,
 }
 
@@ -28,5 +29,28 @@ pub struct ValidateResponse {
 #[derive(Debug, Deserialize)]
 pub struct LogoutRequest {
     pub token: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RefreshRequest {
+    pub refresh_token: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct RefreshResponse {
+    pub access_token: String,
+    pub refresh_token: String,
+    pub expires_in: i64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RegisterRequest {
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct RegisterResponse {
+    pub user_id: String,
 }
 

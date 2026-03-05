@@ -8,7 +8,6 @@ use axum::{
 };
 use dashmap::DashMap;
 
-/// Simple per‑user token bucket limiter
 #[derive(Clone)]
 pub struct UserRateLimiter {
     buckets: DashMap<String, Bucket>,
@@ -55,10 +54,9 @@ impl UserRateLimiter {
     }
 }
 
-/// Axum 0.6 middleware
 pub async fn per_user_rate_limit(
     req: Request<Body>,
-    next: Next<Body>,
+    next: Next,
 ) -> Response {
     let user_id = req
         .extensions()

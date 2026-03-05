@@ -1,11 +1,5 @@
 use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
-use serde::Deserialize;
 
-#[derive(Debug, Clone, Deserialize)]
-pub struct Identity {
-    pub user_id: String,
-    pub email: String,
-}
 #[derive(Clone, Debug)]
 pub struct Identity {
     pub user_id: String,
