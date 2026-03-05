@@ -1,24 +1,18 @@
-use axum::{Router, routing::get};
-use sqlx::PgPool;
+use axum::{Router, routing::{get, post}};
 use std::net::SocketAddr;
 use tracing_subscriber;
 
 mod routes;
-mod models;
+mod workflow;
 mod nats_handlers;
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
 
-    let db = PgPool::connect(&std::env::var("DATABASE_URL").unwrap())
-        .await
-        .expect("Failed to connect to DB");
-
     let app = Router::new()
         .route("/health", get(routes::health))
-        .route("/kyc/status", get(routes::get_kyc_status))
-        .with_state(db);
+        .route("/onboard", post(routes::start_onboarding));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
 

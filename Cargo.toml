@@ -12,6 +12,8 @@ members = [
     "backend/services/wallet-service",
     "backend/services/reconciliation-service",
     "backend/services/aml-monitoring-service",
+    "backend/services/onboarding-service",
+    "backend/services/kyc-service",
     "backend/libs/common"
 ]
 

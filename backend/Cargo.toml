@@ -12,8 +12,7 @@ members = [
     "services/wallet-service",
     "services/reconciliation-service",
     "services/aml-monitoring-service",
+    "services/onboarding-service",
+    "services/kyc-service",
     "libs/common"
 ]
-[patch.crates-io]
-utoipa = { version = "5.4.0" }
-utoipa-swagger-ui = { version = "7.1.0" }

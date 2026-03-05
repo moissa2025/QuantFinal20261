@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reconciliation-service
+  namespace: trading-platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: reconciliation-service
+  template:
+    metadata:
+      labels:
+        app: reconciliation-service
+    spec:
+      serviceAccountName: cloudsql-sa
+      containers:
+        - name: reconciliation-service
+          image: gcr.io/correcttradingplatform/reconciliation-service:latest
+          env:
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@localhost:5432/globalquantx
+            - name: NATS_URL
+              value: nats://nats:4222
+          ports:
+            - containerPort: 8080
+
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=correcttradingplatform:europe-west2:globalquantx=tcp:5432"
+            - "-enable_iam_login"
+          securityContext:
+            runAsNonRoot: true
+

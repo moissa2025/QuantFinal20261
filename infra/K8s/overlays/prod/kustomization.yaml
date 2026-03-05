@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/namespace/namespace.yaml
+  - ../../base/nats/deployment.yaml
+  - ../../base/nats/service.yaml
+  - ../../base/auth-service/deployment.yaml
+  - ../../base/auth-service/service.yaml
+  - ../../base/user-service/deployment.yaml
+  - ../../base/user-service/service.yaml
+  - ../../base/trading-service/deployment.yaml
+  - ../../base/trading-service/service.yaml
+  - ../../base/market-data-service/deployment.yaml
+  - ../../base/market-data-service/service.yaml
+  - ../../base/risk-service/deployment.yaml
+  - ../../base/risk-service/service.yaml
+  - ../../base/ledger-service/deployment.yaml
+  - ../../base/ledger-service/service.yaml
+  - ../../base/wallet-service/deployment.yaml
+  - ../../base/wallet-service/service.yaml
+  - ../../base/reconciliation-service/deployment.yaml
+  - ../../base/reconciliation-service/service.yaml
+  - ../../base/aml-monitoring-service/deployment.yaml
+  - ../../base/aml-monitoring-service/service.yaml
+  - ../../base/api-gateway/deployment.yaml
+  - ../../base/api-gateway/service.yaml
+

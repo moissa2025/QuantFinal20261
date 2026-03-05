@@ -1,5 +1,5 @@
 [package]
-name = "kyc-service"
+name = "onboarding-service"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,12 +8,11 @@ axum = "0.7"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-sqlx = { version = "0.7", features = ["postgres", "runtime-tokio", "macros"] }
 async-nats = "0.34"
 uuid = "1"
 thiserror = "1"
 tracing = "0.1"
-common = { path = "../../libs/common" }
-tracing-subscriber = "0.3"
+tracing-subscriber = "0.3" 
 futures-util = "0.3"
+common = { path = "../../libs/common" }
 
