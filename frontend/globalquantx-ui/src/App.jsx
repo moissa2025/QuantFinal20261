@@ -1,178 +1,157 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import AppShell from "./components/layout/AppShell.jsx";
-import Home from "./pages/Home.jsx";
-import ApiDocs from "./pages/ApiDocs.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
-import Legal from "./pages/Legal.jsx";
-import Privacy from "./pages/Privacy.jsx";
-import Terms from "./pages/Terms.jsx";
-import Support from "./pages/Support.jsx";
-import Status from "./pages/Status.jsx";
-import TradingTerminal from "./pages/TradingTerminal.jsx";
-import MarketData from "./pages/MarketData.jsx";
-import Positions from "./pages/Positions.jsx";
-import Ledger from "./pages/Ledger.jsx";
-import Risk from "./pages/Risk.jsx";
-import Strategies from "./pages/Strategies.jsx";
-import InstitutionOnboarding from "./pages/InstitutionOnboarding.jsx";
-const App = () => {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+
+// Public pages
+import Landing from "./pages/public/Landing";
+import Login from "./pages/public/Login";
+import Support from "./pages/public/Support";
+import LegalPrivacy from "./pages/public/LegalPrivacy";
+import LegalTerms from "./pages/public/LegalTerms";
+import LegalRisk from "./pages/public/LegalRisk";
+
+// App pages
+import Dashboard from "./pages/app/Dashboard";
+import Portfolio from "./pages/app/Portfolio";
+import Trading from "./pages/app/Trading";
+import Market from "./pages/app/Market";
+import Ledger from "./pages/app/Ledger";
+import Positions from "./pages/app/Positions";
+import Settings from "./pages/app/Settings";
+
+// Admin pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminRisk from "./pages/admin/AdminRisk";
+import AdminLedger from "./pages/admin/AdminLedger";
+import AdminSystem from "./pages/admin/AdminSystem";
+
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        {/* PUBLIC LANDING */}
+
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<Landing />} />
-
-        {/* AUTH PAGES */}
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/legal/privacy" element={<LegalPrivacy />} />
+        <Route path="/legal/terms" element={<LegalTerms />} />
+        <Route path="/legal/risk" element={<LegalRisk />} />
 
-        {/* AUTHENTICATED AREA (WRAPPED IN APPSHELL) */}
+        {/* AUTHENTICATED ROUTES */}
         <Route
-          path="/dashboard"
+          path="/app/dashboard"
           element={
-            <AppShell>
+            <ProtectedRoute>
               <Dashboard />
-            </AppShell>
+            </ProtectedRoute>
           }
         />
-        <Route
-          path="/home"
-          element={
-            <AppShell>
-              <Home />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/trading"
-          element={
-            <AppShell>
-              <TradingTerminal />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/market-data"
-          element={
-            <AppShell>
-              <MarketData />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/positions"
-          element={
-            <AppShell>
-              <Positions />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/ledger"
-          element={
-            <AppShell>
-              <Ledger />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/risk"
-          element={
-            <AppShell>
-              <Risk />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/strategies"
-          element={
-            <AppShell>
-              <Strategies />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <AppShell>
-              <About />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <AppShell>
-              <Contact />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/legal"
-          element={
-            <AppShell>
-              <Legal />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/privacy"
-          element={
-            <AppShell>
-              <Privacy />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/terms"
-          element={
-            <AppShell>
-              <Terms />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/support"
-          element={
-            <AppShell>
-              <Support />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/status"
-          element={
-            <AppShell>
-              <Status />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/api-docs"
-          element={
-            <AppShell>
-              <ApiDocs />
-            </AppShell>
-          }
-        />
-        <Route 
-          path="/institution/onboarding" 
-  	  element={ 
-              <AppShell> 
- 		<InstitutionOnboarding /> 
-	      </AppShell> 
-             }
-           />
-      </Routes>
-    </Router>
-  );
-};
 
-export default App;
+        <Route
+          path="/app/portfolio"
+          element={
+            <ProtectedRoute>
+              <Portfolio />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/app/trading"
+          element={
+            <ProtectedRoute>
+              <Trading />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/app/market"
+          element={
+            <ProtectedRoute>
+              <Market />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/app/ledger"
+          element={
+            <ProtectedRoute>
+              <Ledger />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/app/positions"
+          element={
+            <ProtectedRoute>
+              <Positions />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/app/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN ROUTES */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <AdminUsers />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/risk"
+          element={
+            <AdminRoute>
+              <AdminRisk />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/ledger"
+          element={
+            <AdminRoute>
+              <AdminLedger />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/system"
+          element={
+            <AdminRoute>
+              <AdminSystem />
+            </AdminRoute>
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
+}
 

@@ -1,0 +1,138 @@
+:root {
+  /* Primary */
+  --primary: #0A84FF;
+  --primary-dark: #0063CC;
+  --primary-light: #4DA3FF;
+
+  /* Backgrounds */
+  --background: #0D0F12;
+  --surface: #16181D;
+  --surface-light: #1F2228;
+
+  /* Greys */
+  --gray-900: #0D0F12;
+  --gray-800: #16181D;
+  --gray-700: #1F2228;
+  --gray-600: #2A2E36;
+  --gray-500: #3A3F48;
+  --gray-400: #4C525E;
+  --gray-300: #6B7280;
+  --gray-200: #9CA3AF;
+  --gray-100: #D1D5DB;
+  --gray-50:  #F3F4F6;
+
+  /* Semantic */
+  --success: #00C853;
+  --danger: #FF3B30;
+  --warning: #FFB300;
+  --info: #4DA3FF;
+
+  /* Trading */
+  --buy: #00C853;
+  --sell: #FF3B30;
+
+  /* Typography */
+  --font-sans: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 2px 6px rgba(0,0,0,0.25);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.3);
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--gray-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  margin: 0 0 var(--space-md);
+  font-weight: 600;
+}
+
+.page-container {
+  padding: var(--space-lg);
+}
+
+.page-title {
+  font-size: 1.8rem;
+  margin-bottom: var(--space-lg);
+  color: var(--gray-50);
+}
+
+.page-content {
+  background: var(--surface);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--gray-700);
+  padding: var(--space-md);
+}
+
+.sidebar a {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--gray-200);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.sidebar a:hover {
+  background: var(--surface-light);
+  color: var(--gray-50);
+}
+.topbar {
+  height: 60px;
+  background: var(--surface-light);
+  border-bottom: 1px solid var(--gray-700);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-lg);
+  color: var(--gray-100);
+}
+.ticker-bar {
+  height: 40px;
+  background: var(--surface-light);
+  border-top: 1px solid var(--gray-700);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+[data-theme="light"] {
+  --background: #FFFFFF;
+  --surface: #F7F7F7;
+  --surface-light: #FAFAFA;
+  --gray-900: #111;
+  --gray-800: #222;
+  --gray-700: #333;
+  --gray-600: #444;
+  --gray-500: #555;
+  --gray-400: #666;
+  --gray-300: #888;
+  --gray-200: #AAA;
+  --gray-100: #CCC;
+  --gray-50:  #EEE;
+}
+

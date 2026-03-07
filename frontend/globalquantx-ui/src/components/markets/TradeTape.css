@@ -1,0 +1,32 @@
+.tradetape {
+  height: 200px;
+  overflow-y: auto;
+  background: var(--surface);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+}
+
+.trade {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.trade.buy .price {
+  color: var(--buy);
+}
+
+.trade.sell .price {
+  color: var(--sell);
+}
+
+.time {
+  color: var(--gray-400);
+  width: 60px;
+}
+
+.size {
+  color: var(--gray-200);
+}
+

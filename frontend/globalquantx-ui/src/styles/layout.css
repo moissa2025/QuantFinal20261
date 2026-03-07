@@ -1,0 +1,90 @@
+.trading-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr;
+  gap: var(--space-lg);
+}
+
+.trading-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.order-form {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.order-form h3 {
+  margin-bottom: var(--space-md);
+}
+
+.order-form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-sm);
+}
+
+.order-form-row label {
+  font-size: 0.85rem;
+  color: var(--gray-300);
+  margin-bottom: 4px;
+}
+
+.order-form-row input,
+.order-form-row select {
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  color: var(--gray-50);
+}
+
+.order-form button {
+  width: 100%;
+  margin-top: var(--space-md);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--primary);
+  color: white;
+}
+
+.order-form button:hover {
+  background: var(--primary-dark);
+}
+
+.trading-positions {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.trading-positions h3 {
+  margin-bottom: var(--space-md);
+}
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-shell-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-shell-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-lg);
+  background: var(--background);
+}
+

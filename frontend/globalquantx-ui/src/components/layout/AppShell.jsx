@@ -1,22 +1,30 @@
-import React from "react";
-import Sidebar from "./Sidebar.jsx";
-import TopBar from "./TopBar.jsx";
-import BottomTickerBar from "./BottomTickerBar.jsx";
-import Footer from "./Footer.jsx";
+import TopBar from "./TopBar";
+import Sidebar from "./Sidebar";
+import BottomTickerBar from "./BottomTickerBar";
+import Footer from "./Footer";
 
-const AppShell = ({ children }) => {
+export default function AppShell({ children }) {
   return (
     <div className="app-shell">
-      <Sidebar />
-      <main className="main">
-        <TopBar />
-        {children}
-      </main>
+
+      {/* TOP NAVIGATION */}
+      <TopBar />
+
+      {/* MAIN BODY */}
+      <div className="app-shell-body">
+        <Sidebar />
+
+        <main className="app-shell-main">
+          {children}
+        </main>
+      </div>
+
+      {/* FOOTER (optional) */}
       <Footer />
+
+      {/* GLOBAL MARKET TICKER BAR */}
       <BottomTickerBar />
     </div>
   );
-};
-
-export default AppShell;
+}
 

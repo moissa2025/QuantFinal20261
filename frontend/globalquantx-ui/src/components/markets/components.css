@@ -1,0 +1,92 @@
+.ticker {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--gray-700);
+  transition: background 0.2s ease;
+}
+
+.flash-up {
+  background: rgba(0, 200, 83, 0.15);
+}
+
+.flash-down {
+  background: rgba(255, 59, 48, 0.15);
+}
+
+.ticker-symbol {
+  color: var(--gray-200);
+  font-weight: 600;
+}
+
+.ticker-price {
+  font-family: var(--font-mono);
+  color: var(--gray-50);
+}
+.chart {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.chart-subtitle {
+  color: var(--gray-400);
+  font-size: 0.85rem;
+}
+
+.chart-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+}
+.bottom-ticker-bar {
+  height: 40px;
+  background: var(--surface-light);
+  border-top: 1px solid var(--gray-700);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-strip {
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.ticker-item .up {
+  color: var(--success);
+}
+
+.ticker-item .down {
+  color: var(--danger);
+}
+

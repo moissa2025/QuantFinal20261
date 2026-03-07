@@ -1,17 +1,24 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
-export async function createInstitutionalAccount(payload) {
-  const res = await fetch(`${API_BASE_URL}/v1/onboarding/create-account`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+export async function apiClient(path, options = {}) {
+  const token = localStorage.getItem("auth_token");
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+  };
+
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers,
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || "Failed to create account");
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error || "API request failed");
   }
 
-  return res.json();
+  return response.json();
 }
 

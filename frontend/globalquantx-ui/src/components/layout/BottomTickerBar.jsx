@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { connectMarketStream } from "../../api/marketStream";
+import MarketTicker from "../markets/MarketTicker";
 
+// --- STATIC ETF TICKERS ---
 const etfs = [
   { symbol: "EEM", price: 41.32, changePct: -0.07 },
   { symbol: "XLK", price: 210.55, changePct: 0.03 },
@@ -10,27 +13,51 @@ const etfs = [
   { symbol: "LQD", price: 108.45, changePct: 0.01 },
 ];
 
+// --- STATIC FTSE100 ROTATION ---
 const ftse100 = Array.from({ length: 100 }).map((_, i) => ({
   symbol: `FTSE${i + 1}`,
   price: (40 + Math.random() * 200).toFixed(2),
   changePct: (Math.random() * 2 - 1).toFixed(2),
 }));
 
-const BottomTickerBar = () => {
-  const [index, setIndex] = useState(0);
+export default function BottomTickerBar() {
+  const [tickers, setTickers] = useState({});
+  const [ftseIndex, setFtseIndex] = useState(0);
 
+  // --- LIVE MARKET STREAM ---
+  useEffect(() => {
+    const ws = connectMarketStream((msg) => {
+      if (msg.type === "ticker") {
+        setTickers((prev) => ({
+          ...prev,
+          [msg.symbol]: msg.price,
+        }));
+      }
+    });
+
+    return () => ws && ws.close();
+  }, []);
+
+  // --- ROTATE FTSE100 EVERY 5 SECONDS ---
   useEffect(() => {
     const id = setInterval(() => {
-      setIndex((i) => (i + 20) % 100);
+      setFtseIndex((i) => (i + 20) % 100);
     }, 5000);
     return () => clearInterval(id);
   }, []);
 
-  const ftseBatch = ftse100.slice(index, index + 20);
+  const ftseBatch = ftse100.slice(ftseIndex, ftseIndex + 20);
 
   return (
     <div className="bottom-ticker-bar">
       <div className="ticker-strip">
+
+        {/* LIVE MARKET TICKERS */}
+        {Object.entries(tickers).map(([symbol, price]) => (
+          <MarketTicker key={symbol} symbol={symbol} price={price} />
+        ))}
+
+        {/* STATIC ETF TICKERS */}
         {etfs.map((m) => (
           <div key={m.symbol} className="ticker-item">
             <span>{m.symbol}</span>
@@ -40,6 +67,8 @@ const BottomTickerBar = () => {
             </span>
           </div>
         ))}
+
+        {/* ROTATING FTSE100 TICKERS */}
         {ftseBatch.map((m) => (
           <div key={m.symbol} className="ticker-item">
             <span>{m.symbol}</span>
@@ -49,10 +78,9 @@ const BottomTickerBar = () => {
             </span>
           </div>
         ))}
+
       </div>
     </div>
   );
-};
-
-export default BottomTickerBar;
+}
 
