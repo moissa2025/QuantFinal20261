@@ -75,6 +75,7 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 name = "aml-monitoring-service"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "axum",
  "chrono",
  "serde",
@@ -1938,10 +1939,12 @@ version = "0.1.0"
 dependencies = [
  "async-nats 0.34.0",
  "axum",
+ "chrono",
  "common",
  "futures-util",
  "serde",
  "serde_json",
+ "sqlx",
  "thiserror 1.0.69",
  "tokio",
  "tracing",
@@ -2375,10 +2378,13 @@ name = "reconciliation-service"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "common",
  "serde",
  "serde_json",
+ "sqlx",
  "tokio",
+ "uuid",
 ]
 
 [[package]]

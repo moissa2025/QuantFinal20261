@@ -5,15 +5,26 @@ use tracing_subscriber::EnvFilter;
 use tokio::net::TcpListener;
 
 mod routes;
+mod db;
+
+use db::init_db;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> anyhow::Result<()> {
+    // Structured logging
     tracing_subscriber::fmt()
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
+    // Initialize database (dual mode: DATABASE_URL or Cloud SQL Proxy)
+    let pool = init_db()
+        .await
+        .expect("❌ Failed to initialize database");
+
+    // Build router with DB state
     let app = Router::new()
         .route("/risk/check", post(routes::check_risk))
+        .with_state(pool)
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)
@@ -21,10 +32,13 @@ async fn main() {
                 .allow_headers(Any),
         );
 
+    // Bind and serve
     let addr = SocketAddr::from(([0, 0, 0, 0], 8083));
-    tracing::info!("risk-service listening on {}", addr);
+    tracing::info!("🚀 risk-service listening on {}", addr);
 
-    let listener = TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let listener = TcpListener::bind(addr).await?;
+    axum::serve(listener, app).await?;
+
+    Ok(())
 }
 

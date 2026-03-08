@@ -21,11 +21,11 @@ async fn main() {
     } else {
         println!("🔧 Using Cloud SQL Proxy env vars for Kubernetes");
 
-        let user = env::var("DB_USER").expect("DB_USER must be set");
-        let pass = env::var("DB_PASSWORD").expect("DB_PASSWORD must be set");
+        let user = env::var("DB_USER").expect("kycuser");
+        let pass = env::var("DB_PASSWORD").expect("kycGos608eg");
         let host = env::var("DB_HOST").unwrap_or_else(|_| "127.0.0.1".into());
         let port = env::var("DB_PORT").unwrap_or_else(|_| "5432".into());
-        let name = env::var("DB_NAME").expect("DB_NAME must be set");
+        let name = env::var("DB_NAME").expect("kyc_db");
 
         format!("postgres://{}:{}@{}:{}/{}", user, pass, host, port, name)
     };
