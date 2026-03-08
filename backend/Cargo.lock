@@ -4086,10 +4086,16 @@ name = "wallet-service"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-nats 0.34.0",
+ "chrono",
  "common",
+ "dotenvy",
+ "futures-util",
  "serde",
  "serde_json",
+ "sqlx",
  "tokio",
+ "uuid",
 ]
 
 [[package]]

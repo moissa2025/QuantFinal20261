@@ -14,7 +14,7 @@ pub async fn init_db() -> Result<DbPool, sqlx::Error> {
             .await;
     }
 
-i    // 2. CLOUD SQL PROXY MODE (Kubernetes)
+    // 2. CLOUD SQL PROXY MODE (Kubernetes)
     println!("📌 wallet-service: Using Cloud SQL Proxy environment variables");
 
     let user = env::var("DB_USER").expect("walletuser");

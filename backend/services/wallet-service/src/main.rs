@@ -11,13 +11,19 @@ use crate::state::AppState;
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
 
-    let db_url = std::env::var("DATABASE_URL")?;
+    // DATABASE_URL is still read here, but init_db() no longer takes it as an argument
+    let _db_url = std::env::var("DATABASE_URL")?;
     let nats_url = std::env::var("NATS_URL")?;
 
-    let pool = init_db(&db_url).await;
+    // ✅ FIX APPLIED — init_db takes NO arguments
+    let pool = init_db().await?;
+
     let nats = async_nats::connect(nats_url).await?;
 
-    let state = AppState { pool, nats: nats.clone() };
+    let state = AppState {
+        pool: pool.clone(),
+        nats: nats.clone(),
+    };
 
     nats_handlers::start_nats_listeners(nats, state.pool.clone()).await;
 
