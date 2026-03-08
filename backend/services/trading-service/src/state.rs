@@ -1,12 +1,17 @@
 use std::sync::Arc;
 
 use tokio::sync::{Mutex, mpsc};
+use sqlx::PgPool;
 
 use common::trading::{Order, Position};
-use crate::engine::{matcher::{MatchingEngine, run_matching_engine_loop}, types::EngineOrder};
+use crate::engine::{
+    matcher::{MatchingEngine, run_matching_engine_loop},
+    types::EngineOrder,
+};
 
 #[derive(Clone)]
 pub struct AppState {
+    pub db: PgPool,                                 // NEW: database pool
     pub orders: Arc<Mutex<Vec<Order>>>,
     pub positions: Arc<Mutex<Vec<Position>>>,
     pub engine: MatchingEngine,
@@ -14,7 +19,7 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn new() -> Arc<Self> {
+    pub fn new(db: PgPool) -> Arc<Self> {
         let (order_tx, order_rx) = mpsc::channel::<EngineOrder>(1024);
 
         let engine = MatchingEngine::new();
@@ -26,6 +31,7 @@ impl AppState {
         });
 
         Arc::new(Self {
+            db,                                           // NEW: store DB pool
             orders: Arc::new(Mutex::new(vec![])),
             positions: Arc::new(Mutex::new(vec![])),
             engine,
