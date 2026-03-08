@@ -75,11 +75,16 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 name = "aml-monitoring-service"
 version = "0.1.0"
 dependencies = [
- "anyhow",
- "common",
+ "axum",
+ "chrono",
  "serde",
  "serde_json",
+ "sqlx",
  "tokio",
+ "tower 0.4.13",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]
@@ -102,7 +107,7 @@ name = "api-gateway"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "async-nats",
+ "async-nats 0.34.0",
  "axum",
  "axum-extra",
  "common",
@@ -147,6 +152,40 @@ dependencies = [
 
 [[package]]
 name = "async-nats"
+version = "0.33.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dbc1f1a75fd07f0f517322d103211f12d757658e91676def9a2e688774656c60"
+dependencies = [
+ "base64 0.21.7",
+ "bytes",
+ "futures",
+ "http 0.2.12",
+ "memchr",
+ "nkeys 0.3.2",
+ "nuid",
+ "once_cell",
+ "rand 0.8.5",
+ "regex",
+ "ring",
+ "rustls 0.21.12",
+ "rustls-native-certs 0.6.3",
+ "rustls-pemfile 1.0.4",
+ "rustls-webpki 0.101.7",
+ "serde",
+ "serde_json",
+ "serde_nanos",
+ "serde_repr",
+ "thiserror 1.0.69",
+ "time",
+ "tokio",
+ "tokio-retry",
+ "tokio-rustls 0.24.1",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "async-nats"
 version = "0.34.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eea7b126ebfa4db78e9e788b2a792b6329f35b4f2fdd56dbc646dedc2beec7a5"
@@ -155,14 +194,14 @@ dependencies = [
  "bytes",
  "futures",
  "memchr",
- "nkeys",
+ "nkeys 0.4.5",
  "nuid",
  "once_cell",
  "portable-atomic",
  "rand 0.8.5",
  "regex",
  "ring",
- "rustls-native-certs",
+ "rustls-native-certs 0.7.3",
  "rustls-pemfile 2.2.0",
  "rustls-webpki 0.102.8",
  "serde",
@@ -211,7 +250,7 @@ dependencies = [
  "aes-gcm",
  "anyhow",
  "argon2",
- "async-nats",
+ "async-nats 0.34.0",
  "axum",
  "base64 0.21.7",
  "chrono",
@@ -462,7 +501,7 @@ name = "common"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "async-nats",
+ "async-nats 0.34.0",
  "futures-util",
  "serde",
  "serde_json",
@@ -1510,15 +1549,15 @@ dependencies = [
 name = "kyc-service"
 version = "0.1.0"
 dependencies = [
- "async-nats",
+ "async-nats 0.33.0",
  "axum",
- "common",
+ "chrono",
  "futures-util",
  "serde",
  "serde_json",
  "sqlx",
- "thiserror 1.0.69",
  "tokio",
+ "tower 0.4.13",
  "tracing",
  "tracing-subscriber",
  "uuid",
@@ -1544,7 +1583,7 @@ name = "ledger-service"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "async-nats",
+ "async-nats 0.34.0",
  "chrono",
  "common",
  "dotenvy",
@@ -1558,9 +1597,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.182"
+version = "0.2.183"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6800badb6cb2082ffd7b6a67e6125bb39f18782f793520caee8cb8846be06112"
+checksum = "b5b646652bf6661599e1da8901b3b9522896f01e736bad5f723fe7a3a27f899d"
 
 [[package]]
 name = "libm"
@@ -1752,6 +1791,22 @@ dependencies = [
 
 [[package]]
 name = "nkeys"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aad178aad32087b19042ee36dfd450b73f5f934fbfb058b59b198684dfec4c47"
+dependencies = [
+ "byteorder",
+ "data-encoding",
+ "ed25519",
+ "ed25519-dalek",
+ "getrandom 0.2.17",
+ "log",
+ "rand 0.8.5",
+ "signatory",
+]
+
+[[package]]
+name = "nkeys"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "879011babc47a1c7fdf5a935ae3cfe94f34645ca0cac1c7f6424b36fc743d1bf"
@@ -1881,7 +1936,7 @@ dependencies = [
 name = "onboarding-service"
 version = "0.1.0"
 dependencies = [
- "async-nats",
+ "async-nats 0.34.0",
  "axum",
  "common",
  "futures-util",
@@ -2020,6 +2075,26 @@ name = "percent-encoding"
 version = "2.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
+
+[[package]]
+name = "pin-project"
+version = "1.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f1749c7ed4bcaf4c3d0a3efc28538844fb29bcdd7d2b67b2be7e20ba861ff517"
+dependencies = [
+ "pin-project-internal",
+]
+
+[[package]]
+name = "pin-project-internal"
+version = "1.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9b20ed30f105399776b9c883e68e536ef602a16ae6f596d2c473591d6ad64c6"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.117",
+]
 
 [[package]]
 name = "pin-project-lite"
@@ -2586,6 +2661,18 @@ dependencies = [
  "rustls-webpki 0.103.9",
  "subtle",
  "zeroize",
+]
+
+[[package]]
+name = "rustls-native-certs"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a9aace74cb666635c918e9c12bc0d348266037aa8eb599b5cba565709a8dff00"
+dependencies = [
+ "openssl-probe 0.1.6",
+ "rustls-pemfile 1.0.4",
+ "schannel",
+ "security-framework 2.11.1",
 ]
 
 [[package]]
@@ -3443,6 +3530,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-retry"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f57eb36ecbe0fc510036adff84824dd3c24bb781e21bfa67b69d556aa85214f"
+dependencies = [
+ "pin-project",
+ "rand 0.8.5",
+ "tokio",
+]
+
+[[package]]
 name = "tokio-rustls"
 version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3866,7 +3964,7 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 name = "user-service"
 version = "0.1.0"
 dependencies = [
- "async-nats",
+ "async-nats 0.34.0",
  "chrono",
  "common",
  "dotenvy",

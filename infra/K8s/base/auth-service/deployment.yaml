@@ -20,13 +20,36 @@ spec:
           env:
             - name: RUST_LOG
               value: info
-            - name: DATABASE_URL
-              value: postgres://postgres:postgres@localhost:5432/globalquantx
+
+            # ⭐ Correct DB env vars for Cloud SQL Proxy
+            - name: DB_HOST
+              value: "127.0.0.1"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: database
+
+            # ⭐ NATS
             - name: NATS_URL
               value: nats://nats:4222
+
           ports:
             - containerPort: 8080
 
+        # ⭐ Cloud SQL Proxy sidecar
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
           command:

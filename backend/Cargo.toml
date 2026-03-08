@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "services/auth-service",
+    "services/ledger-service",
+    "services/trading-service",
+    "services/user-service",
+    "services/risk-service",
+    "services/market-data-service",
+    "services/api-gateway",
+    "services/wallet-service",
+    "services/reconciliation-service",
+    "services/aml-monitoring-service",
+    "services/onboarding-service",
+    "services/kyc-service",
+    "libs/common"
+]
+
