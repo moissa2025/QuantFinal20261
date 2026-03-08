@@ -17,11 +17,11 @@ pub async fn init_db() -> Result<DbPool, sqlx::Error> {
     // 2. CLOUD SQL PROXY MODE (Kubernetes)
     println!("📌 reconciliation-service: Using Cloud SQL Proxy environment variables");
 
-    let user = env::var("DB_USER").expect("DB_USER must be set");
-    let pass = env::var("DB_PASSWORD").expect("DB_PASSWORD must be set");
+    let user = env::var("DB_USER").expect("reconcileuser");
+    let pass = env::var("DB_PASSWORD").expect("reconcileGos608eg");
     let host = env::var("DB_HOST").unwrap_or_else(|_| "127.0.0.1".into());
     let port = env::var("DB_PORT").unwrap_or_else(|_| "5432".into());
-    let name = env::var("DB_NAME").expect("DB_NAME must be set");
+    let name = env::var("DB_NAME").expect("reconcile_db");
 
     let url = format!(
         "postgres://{}:{}@{}:{}/{}",
