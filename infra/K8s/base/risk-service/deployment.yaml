@@ -1,3 +1,4 @@
+# k8s/base/risk-service/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,8 +19,25 @@ spec:
         - name: risk-service
           image: gcr.io/correcttradingplatform/risk-service:latest
           env:
-            - name: DATABASE_URL
-              value: postgres://postgres:postgres@localhost:5432/globalquantx
+            - name: DB_HOST
+              value: "127.0.0.1"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: risk-db-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: risk-db-secret
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: risk-db-secret
+                  key: database
             - name: NATS_URL
               value: nats://nats:4222
           ports:

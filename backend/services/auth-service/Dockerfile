@@ -2,7 +2,7 @@
 FROM --platform=linux/amd64 rust:latest as builder
 
 WORKDIR /app
-
+ENV SQLX_OFFLINE=true
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -18,7 +18,7 @@ COPY . .
 
 # Build only this service
 # IMPORTANT: replace wallet-service with the correct crate name per service
-RUN cargo build --release -p ledger-service
+RUN cargo build --release -p auth-service
 
 # Stage 2: runtime
 FROM --platform=linux/amd64 debian:bookworm-slim
@@ -27,9 +27,9 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/ledger-service /app/ledger-service
+COPY --from=builder /app/target/release/auth-service /app/auth-service
 
 ENV RUST_LOG=info
 
-CMD ["/app/ledger-service"]
+CMD ["/app/auth-service"]
 

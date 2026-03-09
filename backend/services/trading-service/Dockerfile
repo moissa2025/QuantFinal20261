@@ -1,37 +1,35 @@
-# ============================
-# 1. Build stage
-# ============================
-FROM rust:1.75 as builder
+# Stage 1: builder
+FROM --platform=linux/amd64 rust:latest as builder
 
 WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    clang \
+    cmake \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy workspace
-COPY ../../.. .
+COPY . .
 
-# Build all required binaries
-RUN cargo build --release \
-    --bin trading-service \
-    --bin market-data-service \
-    --bin risk-service \
-    --bin ledger-service
+# Build only this service
+# IMPORTANT: replace wallet-service with the correct crate name per service
+RUN cargo build --release -p trading-service
 
-# ============================
-# 2. Runtime stage
-# ============================
-FROM debian:bookworm-slim
+# Stage 2: runtime
+FROM --platform=linux/amd64 debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy binaries
-COPY --from=builder /app/target/release/trading-service .
-COPY --from=builder /app/target/release/market-data-service .
-COPY --from=builder /app/target/release/risk-service .
-COPY --from=builder /app/target/release/ledger-service .
+COPY --from=builder /app/target/release/trading-service /app/trading-service
 
-# Supervisor script to run all services
-COPY run.sh .
+ENV RUST_LOG=info
 
-RUN chmod +x run.sh
-
-CMD ["./run.sh"]
+CMD ["/app/trading-service"]
 
