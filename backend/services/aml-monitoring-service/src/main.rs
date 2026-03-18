@@ -12,29 +12,20 @@ async fn main() -> anyhow::Result<()> {
 
     println!("🚨 aml-monitoring-service starting…");
 
-    // Dual-mode DB connection:
-    // Local dev → DATABASE_URL
-    // Kubernetes → Cloud SQL Proxy env vars
-    let db_url = if let Ok(url) = env::var("DATABASE_URL") {
-        println!("Using DATABASE_URL for local development");
-        url
-    } else {
-        println!("Using Cloud SQL Proxy env vars for Kubernetes");
+    // CockroachDB Cloud ALWAYS uses DATABASE_URL.
+    // Kubernetes will inject DATABASE_URL via Secret.
+    // The sslrootcert path is already inside the URL.
+    let db_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set for CockroachDB Cloud");
 
-        let user = env::var("DB_USER").expect("amluser");
-        let pass = env::var("DB_PASSWORD").expect("amlGos608eg");
-        let host = env::var("DB_HOST").unwrap_or_else(|_| "127.0.0.1".into());
-        let port = env::var("DB_PORT").unwrap_or_else(|_| "5432".into());
-        let name = env::var("DB_NAME").expect("aml_db");
+    println!("🔐 Using CockroachDB Cloud connection string");
 
-        format!("postgres://{}:{}@{}:{}/{}", user, pass, host, port, name)
-    };
-
+    // Create the SQLx connection pool
     let db = PgPoolOptions::new()
         .max_connections(5)
         .connect(&db_url)
         .await
-        .expect("❌ Failed to connect to DB");
+        .expect("❌ Failed to connect to CockroachDB");
 
     let app = Router::new()
         .route("/health", get(routes::health))

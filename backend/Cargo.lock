@@ -1727,6 +1727,7 @@ dependencies = [
  "axum",
  "common",
  "futures-util",
+ "rustls 0.23.37",
  "serde",
  "serde_json",
  "tokio",
@@ -1736,6 +1737,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "tungstenite",
+ "webpki-roots 0.26.11",
 ]
 
 [[package]]

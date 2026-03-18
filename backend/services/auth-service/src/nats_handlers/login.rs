@@ -53,7 +53,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     //
     let user = match sqlx::query!(
         r#"SELECT id, password_hash, disabled
-           FROM users
+           FROM auth.users
            WHERE email = $1"#,
         req.email
     )
@@ -149,8 +149,8 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     let roles = match sqlx::query!(
         r#"
         SELECT r.name
-        FROM roles r
-        JOIN user_roles ur ON ur.role_id = r.id
+        FROM auth.roles r
+        JOIN auth.user_roles ur ON ur.role_id = r.id
         WHERE ur.user_id = $1
         "#,
         user.id
@@ -190,7 +190,7 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
 
     if let Err(e) = sqlx::query!(
         r#"
-        INSERT INTO refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
         VALUES ($1, $2, $3, $4, $5, $6, false)
         "#,
         Uuid::new_v4(),

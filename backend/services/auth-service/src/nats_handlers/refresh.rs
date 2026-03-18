@@ -55,7 +55,7 @@ pub async fn handle_refresh(pool: DbPool, nats: Client, msg: Message) {
     let rec = match sqlx::query!(
         r#"
         SELECT id, user_id, expires_at, revoked, ciphertext, nonce
-        FROM refresh_tokens
+        FROM auth.refresh_tokens
         WHERE token_hash = $1
         "#,
         incoming_hash
@@ -98,7 +98,7 @@ pub async fn handle_refresh(pool: DbPool, nats: Client, msg: Message) {
     // 6. Revoke old refresh token
     //
     let _ = sqlx::query!(
-        r#"UPDATE refresh_tokens SET revoked = true WHERE id = $1"#,
+        r#"UPDATE auth.refresh_tokens SET revoked = true WHERE id = $1"#,
         rec.id
     )
     .execute(&pool)
@@ -123,7 +123,7 @@ pub async fn handle_refresh(pool: DbPool, nats: Client, msg: Message) {
 
     let _ = sqlx::query!(
         r#"
-        INSERT INTO refresh_tokens (
+        INSERT INTO auth.refresh_tokens (
             id, user_id, token_hash, ciphertext, nonce, expires_at, revoked, replaced_by
         )
         VALUES ($1, $2, $3, $4, $5, $6, false, NULL)

@@ -60,7 +60,7 @@ pub async fn login(
     let row = sqlx::query(
         r#"
         SELECT id, email, password_hash, disabled
-        FROM users
+        FROM auth.users
         WHERE email = $1
         "#
     )
@@ -104,7 +104,7 @@ pub async fn login(
 
     sqlx::query!(
         r#"
-        INSERT INTO refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
         VALUES ($1, $2, $3, $4, $5, $6, false)
         "#,
         Uuid::new_v4(),
@@ -202,7 +202,7 @@ pub async fn refresh(
     let rec = sqlx::query!(
         r#"
         SELECT id, user_id, expires_at, revoked, ciphertext, nonce
-        FROM refresh_tokens
+        FROM auth.refresh_tokens
         WHERE token_hash = $1
         "#,
         incoming_hash
@@ -227,7 +227,7 @@ pub async fn refresh(
     }
 
     sqlx::query!(
-        r#"UPDATE refresh_tokens SET revoked = true WHERE id = $1"#,
+        r#"UPDATE auth.refresh_tokens SET revoked = true WHERE id = $1"#,
         rec.id
     )
     .execute(&state.db)
@@ -243,7 +243,7 @@ pub async fn refresh(
 
     sqlx::query!(
         r#"
-        INSERT INTO refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
         VALUES ($1, $2, $3, $4, $5, $6, false)
         "#,
         Uuid::new_v4(),
@@ -281,7 +281,7 @@ pub async fn register(
     Json(body): Json<RegisterRequest>,
 ) -> Result<Json<RegisterResponse>, StatusCode> {
     let existing = sqlx::query!(
-        r#"SELECT id FROM users WHERE email = $1"#,
+        r#"SELECT id FROM auth.users WHERE email = $1"#,
         body.email
     )
     .fetch_optional(&state.db)
@@ -299,7 +299,7 @@ pub async fn register(
 
     sqlx::query!(
         r#"
-        INSERT INTO users (id, email, password_hash, disabled)
+        INSERT INTO auth.users (id, email, password_hash, disabled)
         VALUES ($1, $2, $3, false)
         "#,
         user_id,

@@ -1,4 +1,4 @@
-CREATE TABLE aml_alerts (
+CREATE TABLE aml.aml_alerts (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     alert_type TEXT NOT NULL,
@@ -9,9 +9,9 @@ CREATE TABLE aml_alerts (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE aml_sar_reports (
+CREATE TABLE aml.aml_sar_reports (
     id UUID PRIMARY KEY,
-    alert_id UUID NOT NULL REFERENCES aml_alerts(id),
+    alert_id UUID NOT NULL REFERENCES aml.aml_alerts(id),
     narrative TEXT NOT NULL,
     submitted_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

@@ -15,7 +15,7 @@ pub async fn handle_logout(pool: DbPool, nats: Client, msg: Message) {
     };
 
     let _ = sqlx::query!(
-        r#"UPDATE sessions SET revoked = true WHERE session_token = $1"#,
+        r#"UPDATE auth.sessions SET revoked = true WHERE session_token = $1"#,
         req.session_token
     )
     .execute(&pool)

@@ -75,7 +75,7 @@ pub async fn create_session(
 let rec = sqlx::query_as!(
     Session,
     r#"
-    INSERT INTO sessions (
+    INSERT INTO auth.sessions (
         id, user_id, session_token,
         ip_address, user_agent, device_hash,
         expires_at, created_at, last_activity_at, revoked
@@ -123,7 +123,7 @@ pub async fn validate_session(
     let row = sqlx::query(
         r#"
         SELECT s.user_id, s.ip_address, s.device_hash, s.expires_at, s.revoked, u.email
-        FROM sessions s
+        FROM auth.sessions s
         JOIN users u ON u.id = s.user_id
         WHERE s.session_token = $1
         "#
@@ -185,7 +185,7 @@ pub async fn validate_session(
 
 pub async fn revoke_session(pool: &DbPool, token: &str) -> anyhow::Result<()> {
     sqlx::query(
-        r#"UPDATE sessions SET revoked = true WHERE session_token = $1"#
+        r#"UPDATE auth.sessions SET revoked = true WHERE session_token = $1"#
     )
     .bind(token)
     .execute(pool)

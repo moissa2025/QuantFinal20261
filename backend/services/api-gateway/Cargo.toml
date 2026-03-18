@@ -31,7 +31,7 @@ tokio-util = "0.7"
 
 headers = "0.4"
 
-sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono"] }
 
 common = { path = "../../libs/common" }
 

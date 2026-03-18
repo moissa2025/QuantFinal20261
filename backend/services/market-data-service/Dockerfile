@@ -13,11 +13,10 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy workspace
+# Copy the entire workspace
 COPY . .
 
 # Build only this service
-# IMPORTANT: replace wallet-service with the correct crate name per service
 RUN cargo build --release -p market-data-service
 
 # Stage 2: runtime
