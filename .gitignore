@@ -42,4 +42,6 @@ test*.txt
 
 # OS
 .DS_Store
+secrets/*.yaml
+!secrets/*.enc.yaml
 
