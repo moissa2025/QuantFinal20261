@@ -1,6 +1,6 @@
--- 0001_create_orders.sql
+CREATE SCHEMA IF NOT EXISTS trading;
 
-CREATE TABLE orders (
+CREATE TABLE trading.orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL,
     symbol TEXT NOT NULL,
@@ -10,11 +10,11 @@ CREATE TABLE orders (
     price NUMERIC,
     size NUMERIC NOT NULL,
     status TEXT NOT NULL DEFAULT 'NEW',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_orders_customer_id ON orders(customer_id);
-CREATE INDEX idx_orders_symbol ON orders(symbol);
-CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_orders_customer_id ON trading.orders(customer_id);
+CREATE INDEX idx_orders_symbol ON trading.orders(symbol);
+CREATE INDEX idx_orders_status ON trading.orders(status);
 

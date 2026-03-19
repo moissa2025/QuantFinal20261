@@ -26,8 +26,8 @@ pub async fn handle_get_history(
         sqlx::query_as::<_, HistoryRow>(
             r#"
             SELECT id, journal_type, reference_id, metadata
-            FROM journals
-            WHERE reference_id = $1
+            FROM ledger.journals
+            WHERE ledger.reference_id = $1
             ORDER BY id DESC
             "#,
         )
@@ -38,7 +38,7 @@ pub async fn handle_get_history(
         sqlx::query_as::<_, HistoryRow>(
             r#"
             SELECT id, journal_type, reference_id, metadata
-            FROM journals
+            FROM ledger.journals
             ORDER BY id DESC
             "#,
         )

@@ -1,6 +1,4 @@
--- 0003_create_risk_audit_log.sql
-
-CREATE TABLE risk_audit_log (
+CREATE TABLE risk.risk_audit_log (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     symbol TEXT,
@@ -12,9 +10,9 @@ CREATE TABLE risk_audit_log (
     exposure_before NUMERIC,
     exposure_after NUMERIC,
     limit_used NUMERIC,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX idx_risk_audit_user_id
-    ON risk_audit_log(user_id);
+    ON risk.risk_audit_log(user_id);
 

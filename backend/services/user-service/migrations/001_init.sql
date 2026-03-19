@@ -1,48 +1,53 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE SCHEMA IF NOT EXISTS users;
 
-CREATE TABLE users (
+-- USERS
+CREATE TABLE users.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT NOT NULL UNIQUE,
     username TEXT NOT NULL UNIQUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE user_profiles (
-    user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+-- USER PROFILES
+CREATE TABLE users.user_profiles (
+    user_id UUID PRIMARY KEY REFERENCES users.users(id) ON DELETE CASCADE,
     first_name TEXT,
     last_name TEXT,
     avatar_url TEXT,
     bio TEXT,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE user_preferences (
-    user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+-- USER PREFERENCES
+CREATE TABLE users.user_preferences (
+    user_id UUID PRIMARY KEY REFERENCES users.users(id) ON DELETE CASCADE,
     theme TEXT DEFAULT 'light',
     language TEXT DEFAULT 'en',
     timezone TEXT DEFAULT 'UTC',
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE roles (
+-- ROLES
+CREATE TABLE users.roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE,
     description TEXT
 );
 
-CREATE TABLE user_roles (
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    role_id UUID REFERENCES roles(id) ON DELETE CASCADE,
+-- USER ROLES (MANY‑TO‑MANY)
+CREATE TABLE users.user_roles (
+    user_id UUID REFERENCES users.users(id) ON DELETE CASCADE,
+    role_id UUID REFERENCES users.roles(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, role_id)
 );
 
-CREATE TABLE audit_logs (
-    id BIGSERIAL PRIMARY KEY,
-    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+-- AUDIT LOGS
+CREATE TABLE users.audit_logs (
+    id BIGINT PRIMARY KEY DEFAULT unique_rowid(),
+    user_id UUID REFERENCES users.users(id) ON DELETE SET NULL,
     action TEXT NOT NULL,
     metadata JSONB,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

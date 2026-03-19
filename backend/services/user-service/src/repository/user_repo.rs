@@ -12,7 +12,7 @@ pub async fn create_user(
 ) -> Result<User, sqlx::Error> {
     query_as::<_, User>(
         r#"
-        INSERT INTO users (email, username)
+        INSERT INTO users.users(email, username)
         VALUES ($1, $2)
         RETURNING *
         "#
@@ -31,7 +31,7 @@ pub async fn get_user(
     query_as::<_, User>(
         r#"
         SELECT *
-        FROM users
+        FROM users.users
         WHERE id = $1
         "#
     )
@@ -49,7 +49,7 @@ pub async fn update_user(
 ) -> Result<User, sqlx::Error> {
     query_as::<_, User>(
         r#"
-        UPDATE users
+        UPDATE users.users
         SET
             email = COALESCE($2, email),
             username = COALESCE($3, username),

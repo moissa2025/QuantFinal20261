@@ -30,8 +30,8 @@ pub async fn get_kyc_status(
     let record = sqlx::query_as::<_, KycRecord>(
         r#"
         SELECT *
-        FROM kyc_records
-        WHERE user_id = $1
+        FROM auth.kyc_records
+        WHERE auth.user_id = $1
         ORDER BY created_at DESC
         LIMIT 1
         "#

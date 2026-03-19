@@ -14,18 +14,21 @@ pub async fn init_db() -> Result<DbPool, sqlx::Error> {
             .await;
     }
 
-    // 2. CLOUD SQL PROXY MODE (Kubernetes)
-    println!("📌 trading-service: Using Cloud SQL Proxy environment variables");
+    // 2. COCKROACHDB MODE (Kubernetes / Cloud)
+    println!("📌 trading-service: Using CockroachDB environment variables");
 
-    let user = env::var("DB_USER").expect("tradeuser");
-    let pass = env::var("DB_PASSWORD").expect("tradeGos608eg");
+    let user = env::var("DB_USER").expect("DB_USER missing");
+    let pass = env::var("DB_PASSWORD").expect("DB_PASSWORD missing");
     let host = env::var("DB_HOST").unwrap_or_else(|_| "127.0.0.1".into());
-    let port = env::var("DB_PORT").unwrap_or_else(|_| "5432".into());
-    let name = env::var("DB_NAME").expect("trade_db");
+    let port = env::var("DB_PORT").unwrap_or_else(|_| "26257".into());
+    let name = env::var("DB_NAME").expect("DB_NAME missing");
+
+    // Cockroach Cloud requires TLS unless overridden
+    let sslmode = env::var("DB_SSLMODE").unwrap_or_else(|_| "require".into());
 
     let url = format!(
-        "postgres://{}:{}@{}:{}/{}",
-        user, pass, host, port, name
+        "postgres://{}:{}@{}:{}/{}?sslmode={}",
+        user, pass, host, port, name, sslmode
     );
 
     PgPoolOptions::new()
