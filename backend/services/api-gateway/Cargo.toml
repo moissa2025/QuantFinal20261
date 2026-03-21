@@ -38,4 +38,3 @@ common = { path = "../../libs/common" }
 # --- Utoipa stack (correct versions) ---
 utoipa = "4.2.3"
 utoipa-swagger-ui = { version = "7.1.0", features = ["axum"] }
-

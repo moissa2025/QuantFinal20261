@@ -1,0 +1,3478 @@
+-----------------------------------------
+ Building all GlobalQuantX services
+ Version: v0.0.1
+-----------------------------------------
+
+🚀 Building reconciliation-service
+    Dockerfile: Dockerfile.reconciliation-service
+    Image: europe-west2-docker.pkg.dev/globalquantx-prod/reconciliation/reconciliation-service:v0.0.1
+#0 building with "adoring_goldstine" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile.reconciliation-service
+#1 transferring dockerfile: 627B 0.0s done
+#1 DONE 0.0s
+
+#2 [linux/arm64 internal] load metadata for docker.io/library/rust:latest
+#2 ...
+
+#3 [auth] library/debian:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [auth] library/rust:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#5 [linux/amd64 internal] load metadata for docker.io/library/rust:latest
+#5 DONE 1.0s
+
+#2 [linux/arm64 internal] load metadata for docker.io/library/rust:latest
+#2 DONE 1.0s
+
+#6 [linux/amd64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#6 DONE 1.0s
+
+#7 [linux/arm64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#7 DONE 1.0s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 2B done
+#8 DONE 0.0s
+
+#9 [linux/amd64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#9 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#9 ...
+
+#10 [linux/arm64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#10 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a done
+#10 DONE 0.0s
+
+#11 [linux/amd64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#11 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 0.0s done
+#11 DONE 0.0s
+
+#12 [linux/arm64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#12 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 0.0s done
+#12 DONE 0.0s
+
+#13 [internal] load build context
+#13 transferring context: 1.11MB 0.7s done
+#13 DONE 0.7s
+
+#14 [linux/arm64 builder 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [linux/arm64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential pkg-config libssl-dev clang cmake libpq-dev     && rm -rf /var/lib/apt/lists/*
+#15 CACHED
+
+#16 [linux/amd64 builder 2/5] WORKDIR /app
+#16 CACHED
+
+#17 [linux/amd64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential pkg-config libssl-dev clang cmake libpq-dev     && rm -rf /var/lib/apt/lists/*
+#17 CACHED
+
+#18 [linux/amd64 builder 4/5] COPY . .
+#18 ...
+
+#19 [linux/arm64 builder 4/5] COPY . .
+#19 ...
+
+#18 [linux/amd64 builder 4/5] COPY . .
+#18 DONE 41.0s
+
+#19 [linux/arm64 builder 4/5] COPY . .
+#19 DONE 41.0s
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 1.432     Updating crates.io index
+#20 6.779  Downloading crates ...
+#20 6.980   Downloaded ahash v0.8.12
+#20 7.147   Downloaded utf8_iter v1.0.4
+#20 7.168   Downloaded serde_repr v0.1.20
+#20 7.244   Downloaded zeroize v1.8.2
+#20 7.275   Downloaded tinystr v0.8.2
+#20 7.320   Downloaded yoke v0.8.1
+#20 7.356   Downloaded tokio-macros v2.6.1
+#20 7.415   Downloaded writeable v0.6.2
+#20 7.452   Downloaded minimal-lexical v0.2.1
+#20 7.617   Downloaded unicode-properties v0.1.4
+#20 7.648   Downloaded zerovec v0.11.5
+#20 7.718   Downloaded url v2.5.8
+#20 7.754   Downloaded uuid v1.22.0
+#20 7.842   Downloaded unicode-normalization v0.1.25
+#20 7.873   Downloaded signatory v0.27.1
+#20 7.937   Downloaded serde_json v1.0.149
+#20 7.984   Downloaded curve25519-dalek v4.1.3
+#20 8.052   Downloaded sqlx v0.7.4
+#20 8.151   Downloaded vcpkg v0.2.15
+#20 8.567   Downloaded zmij v1.0.21
+#20 8.587   Downloaded zerocopy v0.8.40
+#20 8.681   Downloaded zerovec-derive v0.11.2
+#20 8.694   Downloaded syn v2.0.117
+#20 8.782   Downloaded time v0.3.47
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 2.101     Updating crates.io index
+#21 6.873  Downloading crates ...
+#21 6.989   Downloaded ahash v0.8.12
+#21 7.206   Downloaded openssl-probe v0.1.6
+#21 7.233   Downloaded pem-rfc7468 v0.7.0
+#21 7.273   Downloaded parking_lot_core v0.9.12
+#21 7.331   Downloaded parking_lot v0.12.5
+#21 7.397   Downloaded minimal-lexical v0.2.1
+#21 7.469   Downloaded num-bigint-dig v0.8.6
+#21 7.620   Downloaded rand_chacha v0.3.1
+#21 7.636   Downloaded libm v0.2.16
+#21 7.813   Downloaded idna v1.1.0
+#21 7.859   Downloaded tinyvec v1.10.0
+#21 7.880   Downloaded curve25519-dalek v4.1.3
+#21 7.965   Downloaded urlencoding v2.1.3
+#21 7.993   Downloaded chrono v0.4.44
+#21 8.060   Downloaded utf8_iter v1.0.4
+#21 8.068   Downloaded subtle v2.6.1
+#21 8.081   Downloaded stable_deref_trait v1.2.1
+#21 8.111   Downloaded signature v2.2.0
+#21 8.127   Downloaded sqlx-macros v0.7.4
+#21 8.135   Downloaded libc v0.2.183
+#21 8.504   Downloaded zerofrom-derive v0.1.6
+#21 8.511   Downloaded signal-hook-registry v1.4.8
+#21 8.520   Downloaded thiserror-impl v1.0.69
+#21 8.532   Downloaded rustc_version v0.4.1
+#21 8.544   Downloaded stringprep v0.1.5
+#21 8.558   Downloaded time-macros v0.2.27
+#21 8.573   Downloaded writeable v0.6.2
+#21 8.587   Downloaded tokio-rustls v0.25.0
+#21 8.603   Downloaded synstructure v0.13.2
+#21 8.694   Downloaded zerofrom v0.1.6
+#21 8.697   Downloaded sha2 v0.10.9
+#21 8.719   Downloaded zmij v1.0.21
+#21 8.744   Downloaded zerovec-derive v0.11.2
+#21 8.753   Downloaded zeroize v1.8.2
+#21 8.762   Downloaded rustls-native-certs v0.7.3
+#21 8.781   Downloaded linux-raw-sys v0.12.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 8.868   Downloaded syn v1.0.109
+#20 8.924   Downloaded rustls v0.22.4
+#20 9.006   Downloaded regex-syntax v0.8.10
+#20 9.045   Downloaded portable-atomic v1.13.1
+#20 9.089   Downloaded rustls-webpki v0.102.8
+#20 9.199   Downloaded rustix v1.1.4
+#20 9.369   Downloaded async-nats v0.34.0
+#20 9.421   Downloaded tracing v0.1.44
+#20 9.545   Downloaded regex v1.12.3
+#20 9.571   Downloaded aho-corasick v1.1.4
+#20 9.607   Downloaded unicode-segmentation v1.12.0
+#20 9.622   Downloaded sqlx-postgres v0.7.4
+#20 9.663   Downloaded sqlx-core v0.7.4
+#20 9.706   Downloaded rand v0.8.5
+#20 9.722   Downloaded futures-util v0.3.32
+#20 9.800   Downloaded unicode_categories v0.1.1
+#20 9.813   Downloaded typenum v1.19.0
+#20 9.830   Downloaded regex-automata v0.4.14
+#20 10.02   Downloaded serde_derive v1.0.228
+#20 10.07   Downloaded rsa v0.9.10
+#20 10.11   Downloaded icu_properties_data v2.1.2
+#20 10.17   Downloaded hkdf v0.12.4
+#20 10.18   Downloaded hashbrown v0.16.1
+#20 10.21   Downloaded hashbrown v0.14.5
+#20 10.26   Downloaded zerotrie v0.2.3
+#20 10.28   Downloaded libc v0.2.183
+#20 10.61   Downloaded tempfile v3.26.0
+#20 10.64   Downloaded sqlx-mysql v0.7.4
+#20 10.67   Downloaded socket2 v0.6.3
+#20 10.69   Downloaded serde v1.0.228
+#20 10.73   Downloaded proc-macro2 v1.0.106
+#20 10.74   Downloaded idna v1.1.0
+#20 10.76   Downloaded tokio v1.50.0
+#20 11.08   Downloaded unicode-ident v1.0.24
+#20 11.10   Downloaded unicode-bidi v0.3.18
+#20 11.11   Downloaded tinyvec v1.10.0
+#20 11.13   Downloaded sqlx-sqlite v0.7.4
+#20 11.15   Downloaded serde_core v1.0.228
+#20 11.16   Downloaded num-bigint-dig v0.8.6
+#20 11.19   Downloaded mio v1.1.1
+#20 11.22   Downloaded memchr v2.8.0
+#20 11.24   Downloaded indexmap v2.13.0
+#20 11.27   Downloaded ed25519-dalek v2.2.0
+#20 11.28   Downloaded icu_collections v2.1.1
+#20 11.33   Downloaded futures-intrusive v0.5.0
+#20 11.35   Downloaded der v0.7.10
+#20 11.40   Downloaded tracing-attributes v0.1.31
+#20 11.42   Downloaded tokio-stream v0.1.18
+#20 11.44   Downloaded rustls-pki-types v1.14.0
+#20 11.45   Downloaded pkcs1 v0.7.5
+#20 11.46   Downloaded icu_normalizer_data v2.1.1
+#20 11.48   Downloaded icu_normalizer v2.1.1
+#20 11.50   Downloaded flume v0.11.1
+#20 11.54   Downloaded thiserror v1.0.69
+#20 11.57   Downloaded smallvec v1.15.1
+#20 11.58   Downloaded signal-hook-registry v1.4.8
+#20 11.59   Downloaded icu_locale_core v2.1.1
+#20 11.62   Downloaded chrono v0.4.44
+#20 11.66   Downloaded cc v1.2.56
+#20 11.68   Downloaded bytes v1.11.1
+#20 11.70   Downloaded base64 v0.22.1
+#20 11.72   Downloaded base64 v0.21.7
+#20 11.75   Downloaded whoami v1.6.1
+#20 11.78   Downloaded ring v0.17.14
+#20 12.02   Downloaded tryhard v0.5.2
+#20 12.02   Downloaded shlex v1.3.0
+#20 12.03   Downloaded sha2 v0.10.9
+#20 12.04   Downloaded powerfmt v0.2.0
+#20 12.04   Downloaded nom v7.1.3
+#20 12.07   Downloaded libm v0.2.16
+#20 12.12   Downloaded getrandom v0.3.4
+#20 12.13   Downloaded futures v0.3.32
+#20 12.15   Downloaded allocator-api2 v0.2.21
+#20 12.16   Downloaded synstructure v0.13.2
+#20 12.16   Downloaded stringprep v0.1.5
+#20 12.17   Downloaded spki v0.7.3
+#20 12.17   Downloaded slab v0.4.12
+#20 12.18   Downloaded sha1 v0.10.6
+#20 12.19   Downloaded rustls-pemfile v2.2.0
+#20 12.20   Downloaded rustls-native-certs v0.7.3
+#20 12.22   Downloaded rustc_version v0.4.1
+#20 12.22   Downloaded rand_core v0.6.4
+#20 12.23   Downloaded quote v1.0.45
+#20 12.25   Downloaded ppv-lite86 v0.2.21
+#20 12.25   Downloaded potential_utf v0.1.4
+#20 12.26   Downloaded pkg-config v0.3.32
+#20 12.27   Downloaded pkcs8 v0.10.2
+#20 12.29   Downloaded parking_lot v0.12.5
+#20 12.31   Downloaded num-traits v0.2.19
+#20 12.34   Downloaded log v0.4.29
+#20 12.39   Downloaded litemap v0.8.1
+#20 12.42   Downloaded icu_provider v2.1.1
+#20 12.43   Downloaded icu_properties v2.1.2
+#20 12.44   Downloaded iana-time-zone v0.1.65
+#20 12.45   Downloaded hmac v0.12.1
+#20 12.46   Downloaded getrandom v0.4.2
+#20 12.48   Downloaded getrandom v0.2.17
+#20 12.49   Downloaded futures-channel v0.3.32
+#20 12.50   Downloaded dotenvy v0.15.7
+#20 12.51   Downloaded data-encoding v2.10.0
+#20 12.52   Downloaded crossbeam-utils v0.8.21
+#20 12.53   Downloaded const-oid v0.9.6
+#20 12.53   Downloaded bitflags v2.11.0
+#20 12.55   Downloaded anyhow v1.0.102
+#20 12.56   Downloaded zerofrom-derive v0.1.6
+#20 12.57   Downloaded zerofrom v0.1.6
+#20 12.57   Downloaded yoke-derive v0.8.1
+#20 12.58   Downloaded version_check v0.9.5
+#20 12.58   Downloaded urlencoding v2.1.3
+#20 12.59   Downloaded untrusted v0.9.0
+#20 12.60   Downloaded tokio-rustls v0.25.0
+#20 12.61   Downloaded tinyvec_macros v0.1.1
+#20 12.61   Downloaded thiserror-impl v1.0.69
+#20 12.61   Downloaded sqlformat v0.2.6
+#20 12.63   Downloaded serde_nanos v0.1.4
+#20 12.63   Downloaded semver v1.0.27
+#20 12.64   Downloaded parking_lot_core v0.9.12
+#20 12.64   Downloaded once_cell v1.21.3
+#20 12.66   Downloaded linux-raw-sys v0.12.1
+#20 13.08   Downloaded nkeys v0.4.5
+#20 13.08   Downloaded lock_api v0.4.14
+#20 13.08   Downloaded futures-executor v0.3.32
+#20 13.09   Downloaded find-msvc-tools v0.1.9
+#20 13.11   Downloaded either v1.15.0
+#20 13.11   Downloaded ed25519 v2.2.3
+#20 13.12   Downloaded displaydoc v0.2.5
+#20 13.14   Downloaded digest v0.10.7
+#20 13.15   Downloaded deranged v0.5.8
+#20 13.15   Downloaded byteorder v1.5.0
+#20 13.16   Downloaded base64ct v1.8.3
+#20 13.18   Downloaded autocfg v1.5.0
+#20 13.20   Downloaded scopeguard v1.2.0
+#20 13.21   Downloaded rand_chacha v0.3.1
+#20 13.21   Downloaded pin-project-lite v0.2.17
+#20 13.24   Downloaded pem-rfc7468 v0.7.0
+#20 13.25   Downloaded paste v1.0.15
+#20 13.26   Downloaded num-integer v0.1.46
+#20 13.27   Downloaded num-conv v0.2.0
+#20 13.27   Downloaded home v0.5.12
+#20 13.28   Downloaded hex v0.4.3
+#20 13.29   Downloaded heck v0.4.1
+#20 13.30   Downloaded hashlink v0.8.4
+#20 13.31   Downloaded generic-array v0.14.7
+#20 13.31   Downloaded futures-task v0.3.32
+#20 13.32   Downloaded futures-sink v0.3.32
+#20 13.32   Downloaded futures-macro v0.3.32
+#20 13.32   Downloaded futures-io v0.3.32
+#20 13.32   Downloaded futures-core v0.3.32
+#20 13.33   Downloaded form_urlencoded v1.2.2
+#20 13.34   Downloaded fastrand v2.3.0
+#20 13.34   Downloaded event-listener v2.5.3
+#20 13.35   Downloaded errno v0.3.14
+#20 13.35   Downloaded equivalent v1.0.2
+#20 13.36   Downloaded crypto-common v0.1.7
+#20 13.38   Downloaded crc v3.4.0
+#20 13.39   Downloaded cfg-if v1.0.4
+#20 13.39   Downloaded atoi v2.0.0
+#20 13.40   Downloaded tracing-core v0.1.36
+#20 13.41   Downloaded time-macros v0.2.27
+#20 13.41   Downloaded time-core v0.1.8
+#20 13.42   Downloaded subtle v2.6.1
+#20 13.42   Downloaded stable_deref_trait v1.2.1
+#20 13.42   Downloaded sqlx-macros-core v0.7.4
+#20 13.43   Downloaded sqlx-macros v0.7.4
+#20 13.44   Downloaded spin v0.9.8
+#20 13.45   Downloaded signature v2.2.0
+#20 13.46   Downloaded percent-encoding v2.3.2
+#20 13.46   Downloaded openssl-probe v0.1.6
+#20 13.46   Downloaded num-iter v0.1.45
+#20 13.46   Downloaded nuid v0.5.0
+#20 13.47   Downloaded md-5 v0.10.6
+#20 13.47   Downloaded lazy_static v1.5.0
+#20 13.48   Downloaded itoa v1.0.17
+#20 13.49   Downloaded idna_adapter v1.2.1
+#20 13.49   Downloaded crossbeam-queue v0.3.12
+#20 13.50   Downloaded crc-catalog v2.4.0
+#20 13.50   Downloaded cpufeatures v0.2.17
+#20 13.51   Downloaded block-buffer v0.10.4
+#20 13.56   Downloaded libsqlite3-sys v0.27.0
+#20 14.22    Compiling proc-macro2 v1.0.106
+#20 14.22    Compiling unicode-ident v1.0.24
+#20 14.22    Compiling quote v1.0.45
+#20 14.22    Compiling libc v0.2.183
+#20 14.22    Compiling version_check v0.9.5
+#20 14.22    Compiling typenum v1.19.0
+#20 14.22    Compiling cfg-if v1.0.4
+#20 14.22    Compiling serde_core v1.0.228
+#20 15.29    Compiling zerocopy v0.8.40
+#20 15.36    Compiling serde v1.0.228
+#20 16.33    Compiling generic-array v0.14.7
+#20 17.00    Compiling parking_lot_core v0.9.12
+#20 17.07    Compiling icu_properties_data v2.1.2
+#20 17.15    Compiling icu_normalizer_data v2.1.1
+#20 17.46    Compiling subtle v2.6.1
+#20 17.49    Compiling stable_deref_trait v1.2.1
+#20 17.57    Compiling getrandom v0.3.4
+#20 17.60    Compiling smallvec v1.15.1
+#20 18.31    Compiling autocfg v1.5.0
+#20 18.45    Compiling ahash v0.8.12
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 9.191   Downloaded yoke v0.8.1
+#21 9.200   Downloaded uuid v1.22.0
+#21 9.214   Downloaded serde_core v1.0.228
+#21 9.233   Downloaded proc-macro2 v1.0.106
+#21 9.258   Downloaded potential_utf v0.1.4
+#21 9.264   Downloaded powerfmt v0.2.0
+#21 9.268   Downloaded ppv-lite86 v0.2.21
+#21 9.276   Downloaded pkcs1 v0.7.5
+#21 9.295   Downloaded socket2 v0.6.3
+#21 9.307   Downloaded pin-project-lite v0.2.17
+#21 9.343   Downloaded rsa v0.9.10
+#21 9.377   Downloaded zerotrie v0.2.3
+#21 9.398   Downloaded rand v0.8.5
+#21 9.423   Downloaded url v2.5.8
+#21 9.444   Downloaded unicode_categories v0.1.1
+#21 9.453   Downloaded sqlx-postgres v0.7.4
+#21 9.488   Downloaded serde v1.0.228
+#21 9.510   Downloaded pkg-config v0.3.32
+#21 9.514   Downloaded pkcs8 v0.10.2
+#21 9.529   Downloaded unicode-segmentation v1.12.0
+#21 9.546   Downloaded zerovec v0.11.5
+#21 9.577   Downloaded sqlx-core v0.7.4
+#21 9.618   Downloaded unicode-normalization v0.1.25
+#21 9.641   Downloaded signatory v0.27.1
+#21 9.664   Downloaded percent-encoding v2.3.2
+#21 9.671   Downloaded unicode-properties v0.1.4
+#21 9.683   Downloaded sqlx v0.7.4
+#21 9.765   Downloaded unicode-ident v1.0.24
+#21 9.786   Downloaded serde_json v1.0.149
+#21 9.828   Downloaded rustls-webpki v0.102.8
+#21 10.11   Downloaded regex v1.12.3
+#21 10.15   Downloaded time v0.3.47
+#21 10.23   Downloaded zerocopy v0.8.40
+#21 10.35   Downloaded vcpkg v0.2.15
+#21 10.73   Downloaded syn v1.0.109
+#21 10.79   Downloaded syn v2.0.117
+#21 10.88   Downloaded unicode-bidi v0.3.18
+#21 10.90   Downloaded rustls v0.22.4
+#21 11.02   Downloaded tracing-core v0.1.36
+#21 11.03   Downloaded tokio-stream v0.1.18
+#21 11.06   Downloaded rustix v1.1.4
+#21 11.23   Downloaded regex-syntax v0.8.10
+#21 11.27   Downloaded sqlx-sqlite v0.7.4
+#21 11.30   Downloaded sqlx-mysql v0.7.4
+#21 11.33   Downloaded tracing v0.1.44
+#21 11.54   Downloaded serde_derive v1.0.228
+#21 11.56   Downloaded rustls-pki-types v1.14.0
+#21 11.57   Downloaded tryhard v0.5.2
+#21 11.58   Downloaded tracing-attributes v0.1.31
+#21 11.59   Downloaded tokio-macros v2.6.1
+#21 11.59   Downloaded thiserror v1.0.69
+#21 11.63   Downloaded tempfile v3.26.0
+#21 11.64   Downloaded regex-automata v0.4.14
+#21 11.73   Downloaded sqlx-macros-core v0.7.4
+#21 11.74   Downloaded sqlformat v0.2.6
+#21 11.75   Downloaded spki v0.7.3
+#21 11.78   Downloaded spin v0.9.8
+#21 11.79   Downloaded smallvec v1.15.1
+#21 11.80   Downloaded rand_core v0.6.4
+#21 11.80   Downloaded libsqlite3-sys v0.27.0
+#21 12.19   Downloaded quote v1.0.45
+#21 12.20   Downloaded paste v1.0.15
+#21 12.22   Downloaded tokio v1.50.0
+#21 12.49   Downloaded whoami v1.6.1
+#21 12.50   Downloaded tinystr v0.8.2
+#21 12.51   Downloaded shlex v1.3.0
+#21 12.52   Downloaded portable-atomic v1.13.1
+#21 12.56   Downloaded rustls-pemfile v2.2.0
+#21 12.57   Downloaded slab v0.4.12
+#21 12.57   Downloaded semver v1.0.27
+#21 12.59   Downloaded serde_repr v0.1.20
+#21 12.60   Downloaded serde_nanos v0.1.4
+#21 12.61   Downloaded yoke-derive v0.8.1
+#21 12.61   Downloaded version_check v0.9.5
+#21 12.62   Downloaded untrusted v0.9.0
+#21 12.63   Downloaded typenum v1.19.0
+#21 12.65   Downloaded tinyvec_macros v0.1.1
+#21 12.66   Downloaded time-core v0.1.8
+#21 12.67   Downloaded scopeguard v1.2.0
+#21 12.68   Downloaded sha1 v0.10.6
+#21 12.68   Downloaded async-nats v0.34.0
+#21 12.74   Downloaded icu_properties_data v2.1.2
+#21 12.81   Downloaded hkdf v0.12.4
+#21 12.82   Downloaded futures-util v0.3.32
+#21 12.89   Downloaded hashbrown v0.16.1
+#21 12.91   Downloaded nom v7.1.3
+#21 12.94   Downloaded mio v1.1.1
+#21 12.97   Downloaded indexmap v2.13.0
+#21 13.00   Downloaded hashbrown v0.14.5
+#21 13.02   Downloaded memchr v2.8.0
+#21 13.06   Downloaded icu_normalizer_data v2.1.1
+#21 13.07   Downloaded icu_normalizer v2.1.1
+#21 13.09   Downloaded icu_locale_core v2.1.1
+#21 13.14   Downloaded icu_collections v2.1.1
+#21 13.17   Downloaded futures-intrusive v0.5.0
+#21 13.22   Downloaded flume v0.11.1
+#21 13.23   Downloaded ed25519-dalek v2.2.0
+#21 13.24   Downloaded der v0.7.10
+#21 13.27   Downloaded cc v1.2.56
+#21 13.30   Downloaded bytes v1.11.1
+#21 13.32   Downloaded base64 v0.22.1
+#21 13.34   Downloaded base64 v0.21.7
+#21 13.37   Downloaded allocator-api2 v0.2.21
+#21 13.39   Downloaded ring v0.17.14
+#21 13.62   Downloaded aho-corasick v1.1.4
+#21 13.64   Downloaded icu_provider v2.1.1
+#21 13.65   Downloaded icu_properties v2.1.2
+#21 13.66   Downloaded getrandom v0.4.2
+#21 13.69   Downloaded futures-channel v0.3.32
+#21 13.70   Downloaded futures v0.3.32
+#21 13.71   Downloaded once_cell v1.21.3
+#21 13.72   Downloaded num-traits v0.2.19
+#21 13.75   Downloaded log v0.4.29
+#21 13.77   Downloaded litemap v0.8.1
+#21 13.77   Downloaded iana-time-zone v0.1.65
+#21 13.78   Downloaded hmac v0.12.1
+#21 13.79   Downloaded hashlink v0.8.4
+#21 13.80   Downloaded getrandom v0.3.4
+#21 13.80   Downloaded getrandom v0.2.17
+#21 13.81   Downloaded dotenvy v0.15.7
+#21 13.82   Downloaded deranged v0.5.8
+#21 13.83   Downloaded data-encoding v2.10.0
+#21 13.83   Downloaded crossbeam-utils v0.8.21
+#21 13.87   Downloaded const-oid v0.9.6
+#21 13.88   Downloaded byteorder v1.5.0
+#21 13.88   Downloaded bitflags v2.11.0
+#21 13.90   Downloaded anyhow v1.0.102
+#21 13.91   Downloaded num-integer v0.1.46
+#21 13.92   Downloaded nkeys v0.4.5
+#21 13.93   Downloaded md-5 v0.10.6
+#21 13.94   Downloaded lock_api v0.4.14
+#21 13.95   Downloaded lazy_static v1.5.0
+#21 13.95   Downloaded itoa v1.0.17
+#21 13.96   Downloaded idna_adapter v1.2.1
+#21 13.96   Downloaded home v0.5.12
+#21 13.96   Downloaded hex v0.4.3
+#21 13.97   Downloaded heck v0.4.1
+#21 13.97   Downloaded generic-array v0.14.7
+#21 13.98   Downloaded futures-task v0.3.32
+#21 13.98   Downloaded futures-executor v0.3.32
+#21 13.99   Downloaded futures-core v0.3.32
+#21 13.99   Downloaded form_urlencoded v1.2.2
+#21 13.99   Downloaded fastrand v2.3.0
+#21 14.00   Downloaded event-listener v2.5.3
+#21 14.00   Downloaded equivalent v1.0.2
+#21 14.00   Downloaded either v1.15.0
+#21 14.01   Downloaded ed25519 v2.2.3
+#21 14.02   Downloaded displaydoc v0.2.5
+#21 14.03   Downloaded digest v0.10.7
+#21 14.04   Downloaded curve25519-dalek-derive v0.1.1
+#21 14.04   Downloaded crypto-common v0.1.7
+#21 14.04   Downloaded crossbeam-queue v0.3.12
+#21 14.05   Downloaded crc-catalog v2.4.0
+#21 14.05   Downloaded crc v3.4.0
+#21 14.06   Downloaded cpufeatures v0.2.17
+#21 14.06   Downloaded cfg-if v1.0.4
+#21 14.07   Downloaded block-buffer v0.10.4
+#21 14.07   Downloaded base64ct v1.8.3
+#21 14.08   Downloaded autocfg v1.5.0
+#21 14.09   Downloaded atoi v2.0.0
+#21 14.10   Downloaded num-iter v0.1.45
+#21 14.10   Downloaded num-conv v0.2.0
+#21 14.10   Downloaded nuid v0.5.0
+#21 14.11   Downloaded futures-sink v0.3.32
+#21 14.11   Downloaded futures-macro v0.3.32
+#21 14.12   Downloaded futures-io v0.3.32
+#21 14.12   Downloaded find-msvc-tools v0.1.9
+#21 14.13   Downloaded errno v0.3.14
+#21 15.37    Compiling proc-macro2 v1.0.106
+#21 15.38    Compiling unicode-ident v1.0.24
+#21 15.38    Compiling quote v1.0.45
+#21 15.38    Compiling libc v0.2.183
+#21 15.38    Compiling version_check v0.9.5
+#21 15.38    Compiling typenum v1.19.0
+#21 15.38    Compiling cfg-if v1.0.4
+#21 15.39    Compiling serde_core v1.0.228
+#21 17.92    Compiling zerocopy v0.8.40
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 19.24    Compiling zmij v1.0.21
+#20 19.26    Compiling num-traits v0.2.19
+#20 19.35    Compiling syn v2.0.117
+#20 20.89    Compiling getrandom v0.2.17
+#20 21.18    Compiling thiserror v1.0.69
+#20 21.52    Compiling zeroize v1.8.2
+#20 21.55    Compiling crossbeam-utils v0.8.21
+#20 21.60    Compiling serde_json v1.0.149
+#20 21.63    Compiling memchr v2.8.0
+#20 21.94    Compiling block-buffer v0.10.4
+#20 21.97    Compiling crypto-common v0.1.7
+#20 22.10    Compiling writeable v0.6.2
+#20 22.12    Compiling scopeguard v1.2.0
+#20 22.37    Compiling digest v0.10.7
+#20 22.40    Compiling litemap v0.8.1
+#20 23.15    Compiling pin-project-lite v0.2.17
+#20 23.25    Compiling lock_api v0.4.14
+#20 23.51    Compiling once_cell v1.21.3
+#20 23.80    Compiling getrandom v0.4.2
+#20 23.97    Compiling parking_lot v0.12.5
+#20 24.11    Compiling errno v0.3.14
+#20 24.21    Compiling shlex v1.3.0
+#20 24.24    Compiling find-msvc-tools v0.1.9
+#20 24.45    Compiling futures-core v0.3.32
+#20 24.60    Compiling cc v1.2.56
+#20 24.79    Compiling signal-hook-registry v1.4.8
+#20 25.15    Compiling rand_core v0.6.4
+#20 25.27    Compiling mio v1.1.1
+#20 25.38    Compiling socket2 v0.6.3
+#20 25.74    Compiling log v0.4.29
+#20 25.95    Compiling paste v1.0.15
+#20 26.85    Compiling cpufeatures v0.2.17
+#20 26.95    Compiling ring v0.17.14
+#20 27.57    Compiling semver v1.0.27
+#20 27.72    Compiling base64ct v1.8.3
+#20 28.32    Compiling futures-sink v0.3.32
+#20 28.35    Compiling rustc_version v0.4.1
+#20 28.72    Compiling synstructure v0.13.2
+#20 28.90    Compiling futures-channel v0.3.32
+#20 29.82    Compiling pem-rfc7468 v0.7.0
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 21.26    Compiling serde v1.0.228
+#21 23.05    Compiling generic-array v0.14.7
+#21 23.67    Compiling parking_lot_core v0.9.12
+#21 24.16    Compiling icu_properties_data v2.1.2
+#21 25.08    Compiling icu_normalizer_data v2.1.1
+#21 26.77    Compiling stable_deref_trait v1.2.1
+#21 28.77    Compiling subtle v2.6.1
+#21 28.78    Compiling getrandom v0.3.4
+#21 30.87    Compiling smallvec v1.15.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 33.26    Compiling sha2 v0.10.9
+#20 35.72    Compiling rustls-pki-types v1.14.0
+#20 37.32    Compiling zerofrom-derive v0.1.6
+#20 37.98    Compiling yoke-derive v0.8.1
+#20 38.14    Compiling zerovec-derive v0.11.2
+#20 38.81    Compiling displaydoc v0.2.5
+#20 39.08    Compiling serde_derive v1.0.228
+#20 39.85    Compiling thiserror-impl v1.0.69
+#20 40.28    Compiling tracing-attributes v0.1.31
+#20 41.19    Compiling tokio-macros v2.6.1
+#20 42.12    Compiling ppv-lite86 v0.2.21
+#20 42.40    Compiling rand_chacha v0.3.1
+#20 42.50    Compiling zerofrom v0.1.6
+#20 42.85    Compiling yoke v0.8.1
+#20 43.30    Compiling zerovec v0.11.5
+#20 43.75    Compiling zerotrie v0.2.3
+#20 44.80    Compiling tinystr v0.8.2
+#20 44.89    Compiling potential_utf v0.1.4
+#20 45.32    Compiling icu_locale_core v2.1.1
+#20 45.44    Compiling icu_collections v2.1.1
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 35.39    Compiling autocfg v1.5.0
+#21 35.58    Compiling ahash v0.8.12
+#21 37.72    Compiling zmij v1.0.21
+#21 39.57    Compiling getrandom v0.2.17
+#21 44.29    Compiling serde_json v1.0.149
+#21 44.53    Compiling num-traits v0.2.19
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 46.03    Compiling futures-macro v0.3.32
+#20 47.23    Compiling bytes v1.11.1
+#20 47.84    Compiling tinyvec_macros v0.1.1
+#20 47.96    Compiling percent-encoding v2.3.2
+#20 47.99    Compiling minimal-lexical v0.2.1
+#20 48.37    Compiling icu_provider v2.1.1
+#20 48.79    Compiling itoa v1.0.17
+#20 48.79    Compiling const-oid v0.9.6
+#20 49.37    Compiling icu_properties v2.1.2
+#20 49.41    Compiling icu_normalizer v2.1.1
+#20 49.67    Compiling utf8_iter v1.0.4
+#20 50.94    Compiling allocator-api2 v0.2.21
+#20 51.16    Compiling futures-io v0.3.32
+#20 51.62    Compiling futures-task v0.3.32
+#20 52.15    Compiling slab v0.4.12
+#20 52.45    Compiling hashbrown v0.14.5
+#20 52.94    Compiling idna_adapter v1.2.1
+#20 53.09    Compiling futures-util v0.3.32
+#20 53.28    Compiling idna v1.1.0
+#20 53.97    Compiling form_urlencoded v1.2.2
+#20 54.52    Compiling der v0.7.10
+#20 54.68    Compiling nom v7.1.3
+#20 55.25    Compiling tokio v1.50.0
+#20 56.01    Compiling tinyvec v1.10.0
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 47.03    Compiling syn v2.0.117
+#21 47.39    Compiling thiserror v1.0.69
+#21 48.17    Compiling zeroize v1.8.2
+#21 48.24    Compiling crossbeam-utils v0.8.21
+#21 51.49    Compiling memchr v2.8.0
+#21 52.86    Compiling block-buffer v0.10.4
+#21 53.06    Compiling crypto-common v0.1.7
+#21 55.56    Compiling writeable v0.6.2
+#21 58.15    Compiling digest v0.10.7
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 58.34    Compiling rand v0.8.5
+#20 60.37    Compiling curve25519-dalek v4.1.3
+#20 61.26    Compiling tracing-core v0.1.36
+#20 62.74    Compiling signature v2.2.0
+#20 63.34    Compiling rustix v1.1.4
+#20 63.37    Compiling bitflags v2.11.0
+#20 63.57    Compiling untrusted v0.9.0
+#20 64.27    Compiling unicode_categories v0.1.1
+#20 65.02    Compiling equivalent v1.0.2
+#20 65.33    Compiling hashbrown v0.16.1
+#20 65.40    Compiling iana-time-zone v0.1.65
+#20 65.84    Compiling crc-catalog v2.4.0
+#20 66.00    Compiling crc v3.4.0
+#20 66.05    Compiling chrono v0.4.44
+#20 66.05    Compiling tracing v0.1.44
+#20 66.63    Compiling indexmap v2.13.0
+#20 66.81    Compiling sqlformat v0.2.6
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 59.50    Compiling litemap v0.8.1
+#21 65.03    Compiling scopeguard v1.2.0
+#21 65.28    Compiling pin-project-lite v0.2.17
+#21 68.78    Compiling lock_api v0.4.14
+#21 68.96    Compiling getrandom v0.4.2
+#21 71.72    Compiling once_cell v1.21.3
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 74.49    Compiling tokio-stream v0.1.18
+#20 76.19    Compiling crossbeam-queue v0.3.12
+#20 76.32    Compiling futures-intrusive v0.5.0
+#20 78.60    Compiling spki v0.7.3
+#20 78.88    Compiling unicode-normalization v0.1.25
+#20 79.39    Compiling either v1.15.0
+#20 80.12    Compiling url v2.5.8
+#20 82.20    Compiling hashlink v0.8.4
+#20 82.97    Compiling atoi v2.0.0
+#20 83.18    Compiling hmac v0.12.1
+#20 83.57    Compiling hex v0.4.3
+#20 83.60    Compiling syn v1.0.109
+#20 83.75    Compiling byteorder v1.5.0
+#20 84.29    Compiling linux-raw-sys v0.12.1
+#20 84.57    Compiling rustls v0.22.4
+#20 85.10    Compiling unicode-properties v0.1.4
+#20 85.67    Compiling event-listener v2.5.3
+#20 85.98    Compiling uuid v1.22.0
+#20 86.27    Compiling unicode-bidi v0.3.18
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 77.13    Compiling parking_lot v0.12.5
+#21 80.61    Compiling errno v0.3.14
+#21 81.50    Compiling futures-core v0.3.32
+#21 83.35    Compiling find-msvc-tools v0.1.9
+#21 87.67    Compiling shlex v1.3.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 87.85    Compiling stringprep v0.1.5
+#20 88.37    Compiling sqlx-core v0.7.4
+#20 90.14    Compiling hkdf v0.12.4
+#20 92.01    Compiling pkcs8 v0.10.2
+#20 93.65    Compiling rustls-webpki v0.102.8
+#20 95.17    Compiling ed25519 v2.2.3
+#20 95.82    Compiling md-5 v0.10.6
+#20 95.95    Compiling aho-corasick v1.1.4
+#20 96.17    Compiling powerfmt v0.2.0
+#20 96.88    Compiling fastrand v2.3.0
+#20 97.05    Compiling portable-atomic v1.13.1
+#20 97.88    Compiling dotenvy v0.15.7
+#20 98.77    Compiling home v0.5.12
+#20 98.91    Compiling unicode-segmentation v1.12.0
+#20 99.06    Compiling whoami v1.6.1
+#20 100.3    Compiling base64 v0.21.7
+#20 100.4    Compiling regex-syntax v0.8.10
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 90.55    Compiling synstructure v0.13.2
+#21 90.96    Compiling signal-hook-registry v1.4.8
+#21 96.86    Compiling cc v1.2.56
+#21 100.5    Compiling rand_core v0.6.4
+#21 100.8    Compiling mio v1.1.1
+#21 101.1    Compiling socket2 v0.6.3
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 101.5    Compiling sqlx-postgres v0.7.4
+#20 102.0    Compiling heck v0.4.1
+#20 104.1    Compiling tempfile v3.26.0
+#20 105.5    Compiling deranged v0.5.8
+#20 105.7    Compiling ed25519-dalek v2.2.0
+#20 109.6    Compiling signatory v0.27.1
+#20 112.6    Compiling regex-automata v0.4.14
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 104.0    Compiling zerofrom-derive v0.1.6
+#21 104.1    Compiling yoke-derive v0.8.1
+#21 106.5    Compiling zerovec-derive v0.11.2
+#21 110.0    Compiling displaydoc v0.2.5
+#21 112.9    Compiling serde_derive v1.0.228
+#21 116.6    Compiling thiserror-impl v1.0.69
+#21 118.2    Compiling tracing-attributes v0.1.31
+#21 118.3    Compiling tokio-macros v2.6.1
+#21 122.6    Compiling zerofrom v0.1.6
+#21 123.4    Compiling cpufeatures v0.2.17
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 123.5    Compiling rustls-pemfile v2.2.0
+#20 127.5    Compiling time-core v0.1.8
+#20 128.9    Compiling num-conv v0.2.0
+#20 130.5    Compiling data-encoding v2.10.0
+#20 131.3    Compiling openssl-probe v0.1.6
+#20 132.1    Compiling anyhow v1.0.102
+#20 132.1    Compiling rustls-native-certs v0.7.3
+#20 133.2    Compiling nkeys v0.4.5
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 124.0    Compiling log v0.4.29
+#21 126.7    Compiling yoke v0.8.1
+#21 130.4    Compiling paste v1.0.15
+#21 132.8    Compiling zerovec v0.11.5
+#21 133.0    Compiling zerotrie v0.2.3
+#21 133.3    Compiling ring v0.17.14
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 134.6    Compiling sqlx-macros-core v0.7.4
+#20 136.2    Compiling time v0.3.47
+#20 137.0    Compiling regex v1.12.3
+#20 140.6    Compiling tokio-rustls v0.25.0
+#20 143.0    Compiling tryhard v0.5.2
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 143.0    Compiling ppv-lite86 v0.2.21
+#21 144.6    Compiling tinystr v0.8.2
+#21 148.3    Compiling potential_utf v0.1.4
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 143.7    Compiling futures v0.3.32
+#20 143.8    Compiling nuid v0.5.0
+#20 143.9    Compiling serde_nanos v0.1.4
+#20 144.0    Compiling serde_repr v0.1.20
+#20 144.8    Compiling base64 v0.22.1
+#20 146.1    Compiling sqlx-macros v0.7.4
+#20 147.2    Compiling async-nats v0.34.0
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 150.1    Compiling icu_locale_core v2.1.1
+#21 151.7    Compiling futures-sink v0.3.32
+#21 151.7    Compiling base64ct v1.8.3
+#21 154.8    Compiling icu_collections v2.1.1
+#21 157.2    Compiling semver v1.0.27
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 160.4    Compiling sqlx v0.7.4
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 164.1    Compiling bytes v1.11.1
+#21 166.2    Compiling icu_provider v2.1.1
+#21 176.8    Compiling rustc_version v0.4.1
+#21 181.7    Compiling pem-rfc7468 v0.7.0
+#21 182.7    Compiling futures-channel v0.3.32
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 186.8    Compiling common v0.1.0 (/app/libs/common)
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 187.2    Compiling icu_normalizer v2.1.1
+#21 188.1    Compiling icu_properties v2.1.2
+#21 190.0    Compiling tokio v1.50.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#20 199.7    Compiling reconciliation-service v0.1.0 (/app/services/reconciliation-service)
+#20 200.5 warning: unused variable: `pool`
+#20 200.5  --> services/reconciliation-service/src/main.rs:9:9
+#20 200.5   |
+#20 200.5 9 |     let pool = init_db()
+#20 200.5   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_pool`
+#20 200.5   |
+#20 200.5   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+#20 200.5 
+#20 205.0 warning: `reconciliation-service` (bin "reconciliation-service") generated 1 warning (run `cargo fix --bin "reconciliation-service" -p reconciliation-service` to apply 1 suggestion)
+#20 205.0     Finished `release` profile [optimized] target(s) in 3m 24s
+#20 205.2 warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-postgres v0.7.4
+#20 205.2 note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+#20 DONE 209.7s
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 199.7    Compiling rand_chacha v0.3.1
+#21 203.3    Compiling idna_adapter v1.2.1
+#21 206.6    Compiling sha2 v0.10.9
+#21 208.3    Compiling futures-macro v0.3.32
+#21 208.4    Compiling rustls-pki-types v1.14.0
+#21 ...
+
+#22 [linux/arm64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#22 CACHED
+
+#23 [linux/arm64 stage-1 3/4] WORKDIR /app
+#23 CACHED
+
+#24 [linux/arm64 stage-1 4/4] COPY --from=builder /app/target/release/reconciliation-service /app/reconciliation-service
+#24 CACHED
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p reconciliation-service
+#21 215.0    Compiling futures-task v0.3.32
+#21 216.3    Compiling percent-encoding v2.3.2
+#21 217.6    Compiling tinyvec_macros v0.1.1
+#21 217.7    Compiling utf8_iter v1.0.4
+#21 217.7    Compiling futures-io v0.3.32
+#21 219.1    Compiling allocator-api2 v0.2.21
+#21 220.6    Compiling const-oid v0.9.6
+#21 220.6    Compiling slab v0.4.12
+#21 221.3    Compiling itoa v1.0.17
+#21 222.2    Compiling minimal-lexical v0.2.1
+#21 222.7    Compiling der v0.7.10
+#21 223.3    Compiling futures-util v0.3.32
+#21 224.9    Compiling nom v7.1.3
+#21 225.0    Compiling hashbrown v0.14.5
+#21 225.2    Compiling idna v1.1.0
+#21 229.4    Compiling form_urlencoded v1.2.2
+#21 234.2    Compiling tinyvec v1.10.0
+#21 241.1    Compiling rand v0.8.5
+#21 241.8    Compiling curve25519-dalek v4.1.3
+#21 242.9    Compiling tracing-core v0.1.36
+#21 244.5    Compiling signature v2.2.0
+#21 245.9    Compiling crc-catalog v2.4.0
+#21 248.0    Compiling hashbrown v0.16.1
+#21 248.2    Compiling rustix v1.1.4
+#21 248.9    Compiling untrusted v0.9.0
+#21 249.1    Compiling unicode_categories v0.1.1
+#21 249.3    Compiling bitflags v2.11.0
+#21 249.7    Compiling equivalent v1.0.2
+#21 250.0    Compiling iana-time-zone v0.1.65
+#21 250.4    Compiling sqlformat v0.2.6
+#21 250.6    Compiling tracing v0.1.44
+#21 251.5    Compiling indexmap v2.13.0
+#21 252.0    Compiling chrono v0.4.44
+#21 256.6    Compiling crc v3.4.0
+#21 262.5    Compiling crossbeam-queue v0.3.12
+#21 262.7    Compiling futures-intrusive v0.5.0
+#21 262.8    Compiling either v1.15.0
+#21 263.0    Compiling tokio-stream v0.1.18
+#21 263.4    Compiling unicode-normalization v0.1.25
+#21 264.6    Compiling url v2.5.8
+#21 265.6    Compiling spki v0.7.3
+#21 266.1    Compiling hashlink v0.8.4
+#21 266.7    Compiling atoi v2.0.0
+#21 268.3    Compiling curve25519-dalek-derive v0.1.1
+#21 268.4    Compiling hmac v0.12.1
+#21 269.0    Compiling byteorder v1.5.0
+#21 269.0    Compiling unicode-properties v0.1.4
+#21 269.1    Compiling uuid v1.22.0
+#21 270.1    Compiling syn v1.0.109
+#21 270.4    Compiling rustls v0.22.4
+#21 271.1    Compiling unicode-bidi v0.3.18
+#21 272.0    Compiling linux-raw-sys v0.12.1
+#21 272.3    Compiling event-listener v2.5.3
+#21 272.8    Compiling hex v0.4.3
+#21 274.6    Compiling stringprep v0.1.5
+#21 275.2    Compiling sqlx-core v0.7.4
+#21 276.9    Compiling hkdf v0.12.4
+#21 280.9    Compiling pkcs8 v0.10.2
+#21 281.3    Compiling rustls-webpki v0.102.8
+#21 282.0    Compiling ed25519 v2.2.3
+#21 282.5    Compiling md-5 v0.10.6
+#21 283.1    Compiling aho-corasick v1.1.4
+#21 284.6    Compiling portable-atomic v1.13.1
+#21 285.2    Compiling dotenvy v0.15.7
+#21 287.6    Compiling unicode-segmentation v1.12.0
+#21 287.7    Compiling home v0.5.12
+#21 289.9    Compiling base64 v0.21.7
+#21 290.3    Compiling powerfmt v0.2.0
+#21 290.4    Compiling fastrand v2.3.0
+#21 291.0    Compiling whoami v1.6.1
+#21 293.6    Compiling regex-syntax v0.8.10
+#21 295.0    Compiling sqlx-postgres v0.7.4
+#21 295.3    Compiling tempfile v3.26.0
+#21 295.8    Compiling deranged v0.5.8
+#21 299.2    Compiling heck v0.4.1
+#21 301.6    Compiling regex-automata v0.4.14
+#21 302.2    Compiling ed25519-dalek v2.2.0
+#21 308.2    Compiling signatory v0.27.1
+#21 317.0    Compiling rustls-pemfile v2.2.0
+#21 321.6    Compiling anyhow v1.0.102
+#21 322.7    Compiling data-encoding v2.10.0
+#21 324.6    Compiling openssl-probe v0.1.6
+#21 325.3    Compiling time-core v0.1.8
+#21 326.1    Compiling num-conv v0.2.0
+#21 327.1    Compiling rustls-native-certs v0.7.3
+#21 327.3    Compiling time v0.3.47
+#21 328.1    Compiling nkeys v0.4.5
+#21 334.5    Compiling sqlx-macros-core v0.7.4
+#21 334.6    Compiling regex v1.12.3
+#21 336.6    Compiling tokio-rustls v0.25.0
+#21 341.4    Compiling nuid v0.5.0
+#21 341.8    Compiling futures v0.3.32
+#21 342.2    Compiling tryhard v0.5.2
+#21 342.6    Compiling serde_nanos v0.1.4
+#21 343.0    Compiling serde_repr v0.1.20
+#21 344.7    Compiling base64 v0.22.1
+#21 346.4    Compiling sqlx-macros v0.7.4
+#21 349.9    Compiling async-nats v0.34.0
+#21 355.2    Compiling sqlx v0.7.4
+#21 357.9    Compiling common v0.1.0 (/app/libs/common)
+#21 366.6    Compiling reconciliation-service v0.1.0 (/app/services/reconciliation-service)
+#21 367.5 warning: unused variable: `pool`
+#21 367.5  --> services/reconciliation-service/src/main.rs:9:9
+#21 367.5   |
+#21 367.5 9 |     let pool = init_db()
+#21 367.5   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_pool`
+#21 367.5   |
+#21 367.5   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+#21 367.5 
+#21 371.8 warning: `reconciliation-service` (bin "reconciliation-service") generated 1 warning (run `cargo fix --bin "reconciliation-service" -p reconciliation-service` to apply 1 suggestion)
+#21 371.8     Finished `release` profile [optimized] target(s) in 6m 10s
+#21 371.8 warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-postgres v0.7.4
+#21 371.8 note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+#21 DONE 374.8s
+
+#25 [linux/amd64 stage-1 3/4] WORKDIR /app
+#25 CACHED
+
+#26 [linux/amd64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#26 CACHED
+
+#27 [linux/amd64 stage-1 4/4] COPY --from=builder /app/target/release/reconciliation-service /app/reconciliation-service
+#27 CACHED
+
+#28 exporting to image
+#28 exporting layers done
+#28 exporting manifest sha256:30852b61224be821613dec835964aa2aa96af1e738bb603a003d5449dbaf4911 done
+#28 exporting config sha256:cb74981b0171d34e44d39c1ab0aa58b73b7427525282abcbcd0848f3e2ef0e46 done
+#28 exporting attestation manifest sha256:c24b62f5a43105e388a8247327461ca5e7fa1493f54c608c6a2faf0e05320357 done
+#28 exporting manifest sha256:04ff9e9e9a87f9765877917c34790deb9440cc5eb9219cbe74cea20a7a45cde6 done
+#28 exporting config sha256:068ccb533828e68729ef868ae14b340bf57fcc6a22a8192290c1ccb517f50615 done
+#28 exporting attestation manifest sha256:ea6803c79e01f18dbfe9117dcee4770aedb142bae6e5434d48e3a0ccd13ef56e done
+#28 exporting manifest list sha256:a436998e232a439c3275c6c675d4d5f3af54cbade41659003b6b8a1963d04a0e
+#28 exporting manifest list sha256:a436998e232a439c3275c6c675d4d5f3af54cbade41659003b6b8a1963d04a0e done
+#28 DONE 0.1s
+
+#29 [auth] globalquantx-prod/reconciliation/reconciliation-service:pull,push token for europe-west2-docker.pkg.dev
+#29 DONE 0.0s
+
+🚀 Building api-gateway
+    Dockerfile: Dockerfile.api-gateway
+    Image: europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:v0.0.1
+#0 building with "adoring_goldstine" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile.api-gateway
+#1 transferring dockerfile: 734B done
+#1 DONE 0.0s
+
+#2 [auth] library/rust:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [auth] library/debian:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [linux/amd64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#4 ...
+
+#5 [linux/arm64 internal] load metadata for docker.io/library/rust:latest
+#5 DONE 0.9s
+
+#6 [linux/amd64 internal] load metadata for docker.io/library/rust:latest
+#6 DONE 0.9s
+
+#4 [linux/amd64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#4 DONE 0.9s
+
+#7 [linux/arm64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#7 DONE 1.0s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 2B done
+#8 DONE 0.0s
+
+#9 [linux/arm64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#9 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a done
+#9 DONE 0.0s
+
+#10 [linux/amd64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#10 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 done
+#10 DONE 0.0s
+
+#11 [linux/arm64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#11 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 0.0s done
+#11 DONE 0.0s
+
+#12 [linux/amd64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#12 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a done
+#12 DONE 0.0s
+
+#13 [internal] load build context
+#13 transferring context: 1.15MB 0.4s done
+#13 DONE 0.4s
+
+#14 [linux/amd64 builder 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [linux/arm64 builder 2/5] WORKDIR /app
+#15 CACHED
+
+#16 [linux/arm64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential     pkg-config     libssl-dev     clang     cmake     libpq-dev     && rm -rf /var/lib/apt/lists/*
+#16 CACHED
+
+#17 [linux/amd64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential     pkg-config     libssl-dev     clang     cmake     libpq-dev     && rm -rf /var/lib/apt/lists/*
+#17 CACHED
+
+#18 [linux/amd64 builder 4/5] COPY . .
+#18 ...
+
+#19 [linux/arm64 builder 4/5] COPY . .
+#19 DONE 23.6s
+
+#18 [linux/amd64 builder 4/5] COPY . .
+#18 DONE 23.6s
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 1.239     Updating crates.io index
+#20 7.252  Downloading crates ...
+#20 7.420   Downloaded atomic-waker v1.1.2
+#20 7.434   Downloaded atoi v2.0.0
+#20 7.446   Downloaded openssl-macros v0.1.1
+#20 7.452   Downloaded cfg-if v1.0.4
+#20 7.458   Downloaded adler2 v2.0.1
+#20 7.506   Downloaded hyper-tls v0.5.0
+#20 7.583   Downloaded signature v2.2.0
+#20 7.676   Downloaded slab v0.4.12
+#20 7.762   Downloaded signal-hook-registry v1.4.8
+#20 7.791   Downloaded tinyvec_macros v0.1.1
+#20 7.816   Downloaded tokio-macros v2.6.1
+#20 7.849   Downloaded untrusted v0.9.0
+#20 7.906   Downloaded zeroize v1.8.2
+#20 7.937   Downloaded zmij v1.0.21
+#20 7.972   Downloaded sqlx-postgres v0.7.4
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 1.477     Updating crates.io index
+#21 7.423  Downloading crates ...
+#21 7.605   Downloaded digest v0.10.7
+#21 7.682   Downloaded heck v0.4.1
+#21 7.694   Downloaded foreign-types v0.3.2
+#21 7.699   Downloaded futures-task v0.3.32
+#21 7.722   Downloaded hex v0.4.3
+#21 7.736   Downloaded generic-array v0.14.7
+#21 7.744   Downloaded futures-macro v0.3.32
+#21 7.753   Downloaded http-body v1.0.1
+#21 7.767   Downloaded http-body v0.4.6
+#21 7.791   Downloaded futures-sink v0.3.32
+#21 7.798   Downloaded atoi v2.0.0
+#21 7.807   Downloaded futures-io v0.3.32
+#21 7.810   Downloaded form_urlencoded v1.2.2
+#21 7.815   Downloaded foreign-types-shared v0.1.1
+#21 7.819   Downloaded event-listener v2.5.3
+#21 7.826   Downloaded errno v0.3.14
+#21 7.834   Downloaded crypto-common v0.1.7
+#21 7.838   Downloaded crossbeam-queue v0.3.12
+#21 7.843   Downloaded crc-catalog v2.4.0
+#21 7.862   Downloaded equivalent v1.0.2
+#21 7.876   Downloaded idna_adapter v1.2.1
+#21 7.898   Downloaded same-file v1.0.6
+#21 7.911   Downloaded lazy_static v1.5.0
+#21 7.923   Downloaded serde_repr v0.1.20
+#21 7.943   Downloaded nuid v0.5.0
+#21 7.955   Downloaded deranged v0.5.8
+#21 7.966   Downloaded byteorder v1.5.0
+#21 7.995   Downloaded dashmap v5.5.3
+#21 8.060   Downloaded stable_deref_trait v1.2.1
+#21 8.075   Downloaded httparse v1.10.1
+#21 8.123   Downloaded subtle v2.6.1
+#21 8.135   Downloaded icu_provider v2.1.1
+#21 8.155   Downloaded stringprep v0.1.5
+#21 8.164   Downloaded cookie v0.18.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 8.073   Downloaded time v0.3.47
+#20 8.206   Downloaded urlencoding v2.1.3
+#20 8.219   Downloaded rustls v0.21.12
+#20 8.307   Downloaded walkdir v2.5.0
+#20 8.317   Downloaded unicode-segmentation v1.12.0
+#20 8.336   Downloaded zerotrie v0.2.3
+#20 8.355   Downloaded utoipa-swagger-ui v7.1.0
+#20 8.364   Downloaded utoipa v4.2.3
+#20 8.377   Downloaded zerovec v0.11.5
+#20 8.442   Downloaded winnow v0.7.15
+#20 8.495   Downloaded rustix v1.1.4
+#20 8.671   Downloaded webpki-roots v0.25.4
+#20 8.704   Downloaded zip v1.1.4
+#20 8.726   Downloaded zerocopy v0.8.40
+#20 8.816   Downloaded uuid v1.22.0
+#20 8.828   Downloaded tracing-subscriber v0.3.22
+#20 8.919   Downloaded regex-automata v0.4.14
+#20 9.048   Downloaded regex-syntax v0.8.10
+#20 9.083   Downloaded unicode-normalization v0.1.25
+#20 9.139   Downloaded rustls v0.22.4
+#20 9.246   Downloaded version_check v0.9.5
+#20 9.255   Downloaded libc v0.2.183
+#20 9.511   Downloaded utf8_iter v1.0.4
+#20 9.523   Downloaded typenum v1.19.0
+#20 9.542   Downloaded rust-embed v8.11.0
+#20 9.577   Downloaded tracing v0.1.44
+#20 9.879   Downloaded openssl v0.10.75
+#20 9.954   Downloaded url v2.5.8
+#20 9.985   Downloaded unicode_categories v0.1.1
+#20 10.01   Downloaded tower-http v0.5.2
+#20 10.13   Downloaded tower v0.5.3
+#20 10.20   Downloaded tower v0.4.13
+#20 10.27   Downloaded toml_edit v0.25.4+spec-1.1.0
+#20 10.32   Downloaded tokio-util v0.7.18
+#20 10.37   Downloaded syn v2.0.117
+#20 10.51   Downloaded syn v1.0.109
+#20 10.59   Downloaded rustls-webpki v0.102.8
+#20 10.72   Downloaded portable-atomic v1.13.1
+#20 10.81   Downloaded sqlx-core v0.7.4
+#20 10.86   Downloaded sqlx v0.7.4
+#20 10.94   Downloaded serde_json v1.0.149
+#20 10.98   Downloaded rustls-webpki v0.101.7
+#20 11.08   Downloaded reqwest v0.11.27
+#20 11.14   Downloaded regex v1.12.3
+#20 11.20   Downloaded libm v0.2.16
+#20 11.28   Downloaded zerovec-derive v0.11.2
+#20 11.29   Downloaded ring v0.17.14
+#20 11.68   Downloaded num-bigint-dig v0.8.6
+#20 11.71   Downloaded nom v7.1.3
+#20 11.74   Downloaded indexmap v2.13.0
+#20 11.79   Downloaded zerofrom-derive v0.1.6
+#20 11.79   Downloaded zerofrom v0.1.6
+#20 11.79   Downloaded yoke-derive v0.8.1
+#20 11.80   Downloaded yoke v0.8.1
+#20 11.81   Downloaded writeable v0.6.2
+#20 11.82   Downloaded whoami v1.6.1
+#20 11.85   Downloaded tokio v1.50.0
+#20 12.18   Downloaded want v0.3.1
+#20 12.19   Downloaded unicode-properties v0.1.4
+#20 12.20   Downloaded unicode-ident v1.0.24
+#20 12.22   Downloaded unicode-bidi v0.3.18
+#20 12.27   Downloaded unicase v2.9.0
+#20 12.28   Downloaded tryhard v0.5.2
+#20 12.28   Downloaded try-lock v0.2.5
+#20 12.29   Downloaded tracing-serde v0.2.0
+#20 12.29   Downloaded mio v1.1.1
+#20 12.32   Downloaded tracing-log v0.2.0
+#20 12.32   Downloaded tracing-core v0.1.36
+#20 12.37   Downloaded tracing-attributes v0.1.31
+#20 12.39   Downloaded tower-service v0.3.3
+#20 12.39   Downloaded tower-layer v0.3.3
+#20 12.39   Downloaded toml_parser v1.0.9+spec-1.1.0
+#20 12.40   Downloaded toml_datetime v1.0.0+spec-1.1.0
+#20 12.41   Downloaded tokio-stream v0.1.18
+#20 12.44   Downloaded tokio-rustls v0.25.0
+#20 12.48   Downloaded tokio-rustls v0.24.1
+#20 12.49   Downloaded tokio-native-tls v0.3.1
+#20 12.49   Downloaded tinyvec v1.10.0
+#20 12.51   Downloaded time-core v0.1.8
+#20 12.51   Downloaded thread_local v1.1.9
+#20 12.52   Downloaded thiserror-impl v1.0.69
+#20 12.52   Downloaded tempfile v3.26.0
+#20 12.53   Downloaded synstructure v0.13.2
+#20 12.54   Downloaded sync_wrapper v1.0.2
+#20 12.54   Downloaded sync_wrapper v0.1.2
+#20 12.54   Downloaded linux-raw-sys v0.12.1
+#20 12.84   Downloaded subtle v2.6.1
+#20 12.84   Downloaded sqlx-sqlite v0.7.4
+#20 12.86   Downloaded sqlx-mysql v0.7.4
+#20 12.88   Downloaded sqlx-macros-core v0.7.4
+#20 12.88   Downloaded serde v1.0.228
+#20 12.93   Downloaded rsa v0.9.10
+#20 12.97   Downloaded rand v0.8.5
+#20 12.99   Downloaded openssl-sys v0.9.111
+#20 13.01   Downloaded miniz_oxide v0.8.9
+#20 13.02   Downloaded minimal-lexical v0.2.1
+#20 13.03   Downloaded tinystr v0.8.2
+#20 13.04   Downloaded time-macros v0.2.27
+#20 13.05   Downloaded thiserror v1.0.69
+#20 13.06   Downloaded stringprep v0.1.5
+#20 13.07   Downloaded stable_deref_trait v1.2.1
+#20 13.09   Downloaded sqlx-macros v0.7.4
+#20 13.11   Downloaded sqlformat v0.2.6
+#20 13.11   Downloaded signatory v0.27.1
+#20 13.12   Downloaded serde_derive v1.0.228
+#20 13.13   Downloaded serde_core v1.0.228
+#20 13.14   Downloaded ryu v1.0.23
+#20 13.15   Downloaded proc-macro2 v1.0.106
+#20 13.16   Downloaded pkcs1 v0.7.5
+#20 13.17   Downloaded parking_lot_core v0.9.12
+#20 13.17   Downloaded parking_lot v0.12.5
+#20 13.21   Downloaded once_cell v1.21.3
+#20 13.22   Downloaded num_enum v0.7.5
+#20 13.26   Downloaded num-traits v0.2.19
+#20 13.28   Downloaded log v0.4.29
+#20 13.29   Downloaded lock_api v0.4.14
+#20 13.29   Downloaded litemap v0.8.1
+#20 13.30   Downloaded encoding_rs v0.8.35
+#20 13.45   Downloaded spki v0.7.3
+#20 13.46   Downloaded spin v0.9.8
+#20 13.47   Downloaded socket2 v0.6.3
+#20 13.48   Downloaded socket2 v0.5.10
+#20 13.50   Downloaded smallvec v1.15.1
+#20 13.55   Downloaded shlex v1.3.0
+#20 13.55   Downloaded sharded-slab v0.1.7
+#20 13.57   Downloaded rustls-pki-types v1.14.0
+#20 13.58   Downloaded rustls-pemfile v2.2.0
+#20 13.60   Downloaded rustls-native-certs v0.7.3
+#20 13.60   Downloaded libsqlite3-sys v0.27.0
+#20 14.21   Downloaded utoipa-gen v4.3.1
+#20 14.23   Downloaded rand_core v0.6.4
+#20 14.23   Downloaded quote v1.0.45
+#20 14.24   Downloaded proc-macro-error v1.0.4
+#20 14.26   Downloaded ppv-lite86 v0.2.21
+#20 14.27   Downloaded pkg-config v0.3.32
+#20 14.30   Downloaded pin-project-lite v0.2.17
+#20 14.32   Downloaded pem-rfc7468 v0.7.0
+#20 14.33   Downloaded paste v1.0.15
+#20 14.34   Downloaded vcpkg v0.2.15
+#20 14.61   Downloaded num_enum_derive v0.7.5
+#20 14.61   Downloaded num-integer v0.1.46
+#20 14.62   Downloaded nu-ansi-term v0.50.3
+#20 14.63   Downloaded nkeys v0.4.5
+#20 14.63   Downloaded native-tls v0.2.18
+#20 14.64   Downloaded multer v3.1.0
+#20 14.67   Downloaded mime_guess v2.0.5
+#20 14.67   Downloaded memchr v2.8.0
+#20 14.69   Downloaded ipnet v2.12.0
+#20 14.69   Downloaded idna_adapter v1.2.1
+#20 14.69   Downloaded idna v1.1.0
+#20 14.71   Downloaded icu_properties_data v2.1.2
+#20 14.81   Downloaded hyper v1.8.1
+#20 14.85   Downloaded hyper v0.14.32
+#20 14.91   Downloaded hkdf v0.12.4
+#20 14.92   Downloaded hashbrown v0.16.1
+#20 14.94   Downloaded hashbrown v0.14.5
+#20 14.99   Downloaded h2 v0.3.27
+#20 15.02   Downloaded futures-util v0.3.32
+#20 15.08   Downloaded curve25519-dalek v4.1.3
+#20 15.13   Downloaded axum v0.7.9
+#20 15.18   Downloaded async-nats v0.34.0
+#20 15.24   Downloaded aho-corasick v1.1.4
+#20 15.29   Downloaded sha2 v0.10.9
+#20 15.30   Downloaded sha1 v0.10.6
+#20 15.31   Downloaded serde_urlencoded v0.7.1
+#20 15.31   Downloaded serde_repr v0.1.20
+#20 15.32   Downloaded serde_path_to_error v0.1.20
+#20 15.33   Downloaded serde_nanos v0.1.4
+#20 15.34   Downloaded semver v1.0.27
+#20 15.37   Downloaded sct v0.7.1
+#20 15.38   Downloaded scopeguard v1.2.0
+#20 15.39   Downloaded rustversion v1.0.22
+#20 15.40   Downloaded rustls-pemfile v1.0.4
+#20 15.41   Downloaded rustc_version v0.4.1
+#20 15.42   Downloaded rust-embed-impl v8.11.0
+#20 15.42   Downloaded rand_chacha v0.3.1
+#20 15.42   Downloaded proc-macro-error-attr v1.0.4
+#20 15.43   Downloaded potential_utf v0.1.4
+#20 15.43   Downloaded pkcs8 v0.10.2
+#20 15.46   Downloaded num-iter v0.1.45
+#20 15.46   Downloaded nuid v0.5.0
+#20 15.47   Downloaded matchit v0.7.3
+#20 15.47   Downloaded icu_provider v2.1.1
+#20 15.48   Downloaded icu_normalizer_data v2.1.1
+#20 15.49   Downloaded icu_normalizer v2.1.1
+#20 15.52   Downloaded icu_locale_core v2.1.1
+#20 15.56   Downloaded icu_collections v2.1.1
+#20 15.60   Downloaded hyper-util v0.1.20
+#20 15.64   Downloaded http v1.4.0
+#20 15.65   Downloaded http v0.2.12
+#20 15.69   Downloaded headers v0.4.1
+#20 15.71   Downloaded getrandom v0.4.2
+#20 15.72   Downloaded getrandom v0.3.4
+#20 15.74   Downloaded getrandom v0.2.17
+#20 15.77   Downloaded futures-intrusive v0.5.0
+#20 15.79   Downloaded futures v0.3.32
+#20 15.81   Downloaded flume v0.11.1
+#20 15.85   Downloaded flate2 v1.1.9
+#20 15.89   Downloaded ed25519-dalek v2.2.0
+#20 15.95   Downloaded der v0.7.10
+#20 15.98   Downloaded crc32fast v1.5.0
+#20 15.98   Downloaded cc v1.2.56
+#20 16.00   Downloaded bytes v1.11.1
+#20 16.04   Downloaded bitflags v2.11.0
+#20 16.08   Downloaded base64 v0.22.1
+#20 16.16   Downloaded base64 v0.21.7
+#20 16.18   Downloaded axum-extra v0.9.6
+#20 16.19   Downloaded allocator-api2 v0.2.21
+#20 16.23   Downloaded ahash v0.8.12
+#20 16.24   Downloaded simd-adler32 v0.3.8
+#20 16.25   Downloaded same-file v1.0.6
+#20 16.25   Downloaded rust-embed-utils v8.11.0
+#20 16.25   Downloaded proc-macro-crate v3.5.0
+#20 16.26   Downloaded pin-utils v0.1.0
+#20 16.26   Downloaded percent-encoding v2.3.2
+#20 16.26   Downloaded openssl-probe v0.1.6
+#20 16.26   Downloaded md-5 v0.10.6
+#20 16.27   Downloaded matchers v0.2.0
+#20 16.27   Downloaded itoa v1.0.17
+#20 16.27   Downloaded icu_properties v2.1.2
+#20 16.28   Downloaded httparse v1.10.1
+#20 16.29   Downloaded http-body-util v0.1.3
+#20 16.29   Downloaded hmac v0.12.1
+#20 16.31   Downloaded hex v0.4.3
+#20 16.32   Downloaded hashlink v0.8.4
+#20 16.33   Downloaded futures-executor v0.3.32
+#20 16.33   Downloaded futures-core v0.3.32
+#20 16.33   Downloaded futures-channel v0.3.32
+#20 16.34   Downloaded find-msvc-tools v0.1.9
+#20 16.35   Downloaded either v1.15.0
+#20 16.36   Downloaded ed25519 v2.2.3
+#20 16.36   Downloaded dotenvy v0.15.7
+#20 16.38   Downloaded displaydoc v0.2.5
+#20 16.41   Downloaded digest v0.10.7
+#20 16.42   Downloaded deranged v0.5.8
+#20 16.42   Downloaded data-encoding v2.10.0
+#20 16.43   Downloaded dashmap v5.5.3
+#20 16.44   Downloaded crossbeam-utils v0.8.21
+#20 16.45   Downloaded cookie v0.18.1
+#20 16.47   Downloaded const-oid v0.9.6
+#20 16.50   Downloaded byteorder v1.5.0
+#20 16.51   Downloaded block-buffer v0.10.4
+#20 16.51   Downloaded base64ct v1.8.3
+#20 16.52   Downloaded axum-macros v0.4.2
+#20 16.59   Downloaded axum-core v0.4.5
+#20 16.60   Downloaded autocfg v1.5.0
+#20 16.61   Downloaded async-trait v0.1.89
+#20 16.62   Downloaded anyhow v1.0.102
+#20 16.64   Downloaded powerfmt v0.2.0
+#20 16.65   Downloaded openssl-probe v0.2.1
+#20 16.67   Downloaded num-conv v0.2.0
+#20 16.67   Downloaded mime v0.3.17
+#20 16.67   Downloaded lazy_static v1.5.0
+#20 16.68   Downloaded hyper-rustls v0.24.2
+#20 16.69   Downloaded httpdate v1.0.3
+#20 16.69   Downloaded http-body v1.0.1
+#20 16.69   Downloaded http-body v0.4.6
+#20 16.70   Downloaded home v0.5.12
+#20 16.70   Downloaded heck v0.4.1
+#20 16.70   Downloaded generic-array v0.14.7
+#20 16.70   Downloaded futures-task v0.3.32
+#20 16.71   Downloaded futures-macro v0.3.32
+#20 16.71   Downloaded futures-io v0.3.32
+#20 16.71   Downloaded form_urlencoded v1.2.2
+#20 16.72   Downloaded foreign-types-shared v0.1.1
+#20 16.72   Downloaded fnv v1.0.7
+#20 16.72   Downloaded fastrand v2.3.0
+#20 16.72   Downloaded event-listener v2.5.3
+#20 16.73   Downloaded errno v0.3.14
+#20 16.74   Downloaded equivalent v1.0.2
+#20 16.76   Downloaded crypto-common v0.1.7
+#20 16.76   Downloaded crossbeam-queue v0.3.12
+#20 16.77   Downloaded crc-catalog v2.4.0
+#20 16.77   Downloaded crc v3.4.0
+#20 16.78   Downloaded cpufeatures v0.2.17
+#20 16.78   Downloaded headers-core v0.3.0
+#20 16.78   Downloaded futures-sink v0.3.32
+#20 16.78   Downloaded foreign-types v0.3.2
+#20 17.38    Compiling proc-macro2 v1.0.106
+#20 17.38    Compiling unicode-ident v1.0.24
+#20 17.38    Compiling quote v1.0.45
+#20 17.38    Compiling libc v0.2.183
+#20 17.39    Compiling version_check v0.9.5
+#20 17.40    Compiling cfg-if v1.0.4
+#20 17.40    Compiling serde_core v1.0.228
+#20 17.40    Compiling serde v1.0.228
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 8.216   Downloaded try-lock v0.2.5
+#21 8.221   Downloaded tinystr v0.8.2
+#21 8.239   Downloaded untrusted v0.9.0
+#21 8.255   Downloaded tracing-log v0.2.0
+#21 8.270   Downloaded utf8_iter v1.0.4
+#21 8.318   Downloaded yoke-derive v0.8.1
+#21 8.326   Downloaded zerofrom v0.1.6
+#21 8.336   Downloaded zerofrom-derive v0.1.6
+#21 8.373   Downloaded zmij v1.0.21
+#21 8.430   Downloaded typenum v1.19.0
+#21 8.461   Downloaded url v2.5.8
+#21 8.484   Downloaded zip v1.1.4
+#21 8.534   Downloaded tokio-util v0.7.18
+#21 8.593   Downloaded serde_nanos v0.1.4
+#21 8.608   Downloaded zerovec v0.11.5
+#21 8.658   Downloaded md-5 v0.10.6
+#21 8.668   Downloaded winnow v0.7.15
+#21 8.743   Downloaded want v0.3.1
+#21 8.775   Downloaded vcpkg v0.2.15
+#21 9.138   Downloaded webpki-roots v0.25.4
+#21 9.159   Downloaded zerocopy v0.8.40
+#21 9.254   Downloaded rustls-pki-types v1.14.0
+#21 9.268   Downloaded toml_parser v1.0.9+spec-1.1.0
+#21 9.280   Downloaded serde_core v1.0.228
+#21 9.296   Downloaded ryu v1.0.23
+#21 9.359   Downloaded socket2 v0.5.10
+#21 9.371   Downloaded pkcs1 v0.7.5
+#21 9.389   Downloaded num-traits v0.2.19
+#21 9.407   Downloaded proc-macro2 v1.0.106
+#21 9.414   Downloaded litemap v0.8.1
+#21 9.431   Downloaded rustls-pemfile v2.2.0
+#21 9.466   Downloaded sharded-slab v0.1.7
+#21 9.503   Downloaded serde_derive v1.0.228
+#21 9.533   Downloaded log v0.4.29
+#21 9.543   Downloaded openssl-sys v0.9.111
+#21 9.564   Downloaded toml_edit v0.25.4+spec-1.1.0
+#21 9.581   Downloaded serde v1.0.228
+#21 9.637   Downloaded memchr v2.8.0
+#21 9.673   Downloaded miniz_oxide v0.8.9
+#21 9.720   Downloaded rsa v0.9.10
+#21 9.758   Downloaded minimal-lexical v0.2.1
+#21 9.789   Downloaded nom v7.1.3
+#21 9.877   Downloaded signatory v0.27.1
+#21 9.915   Downloaded num-bigint-dig v0.8.6
+#21 9.945   Downloaded serde_json v1.0.149
+#21 10.01   Downloaded regex v1.12.3
+#21 10.13   Downloaded rustls-webpki v0.101.7
+#21 10.24   Downloaded rustls-webpki v0.102.8
+#21 10.44   Downloaded reqwest v0.11.27
+#21 10.53   Downloaded tokio v1.50.0
+#21 10.87   Downloaded portable-atomic v1.13.1
+#21 10.94   Downloaded rustls v0.21.12
+#21 11.04   Downloaded openssl v0.10.75
+#21 11.13   Downloaded libc v0.2.183
+#21 11.33   Downloaded rustls v0.22.4
+#21 11.44   Downloaded mio v1.1.1
+#21 11.47   Downloaded regex-syntax v0.8.10
+#21 11.55   Downloaded rand v0.8.5
+#21 11.57   Downloaded rustix v1.1.4
+#21 11.79   Downloaded idna v1.1.0
+#21 11.85   Downloaded rustls-native-certs v0.7.3
+#21 11.87   Downloaded rand_core v0.6.4
+#21 11.88   Downloaded pkg-config v0.3.32
+#21 11.88   Downloaded tracing v0.1.44
+#21 12.18   Downloaded paste v1.0.15
+#21 12.21   Downloaded parking_lot_core v0.9.12
+#21 12.22   Downloaded parking_lot v0.12.5
+#21 12.27   Downloaded once_cell v1.21.3
+#21 12.28   Downloaded num_enum v0.7.5
+#21 12.31   Downloaded regex-automata v0.4.14
+#21 12.47   Downloaded num-integer v0.1.46
+#21 12.48   Downloaded mime_guess v2.0.5
+#21 12.49   Downloaded lock_api v0.4.14
+#21 12.50   Downloaded walkdir v2.5.0
+#21 12.51   Downloaded version_check v0.9.5
+#21 12.51   Downloaded smallvec v1.15.1
+#21 12.53   Downloaded slab v0.4.12
+#21 12.53   Downloaded encoding_rs v0.8.35
+#21 12.67   Downloaded simd-adler32 v0.3.8
+#21 12.70   Downloaded signal-hook-registry v1.4.8
+#21 12.70   Downloaded sha2 v0.10.9
+#21 12.71   Downloaded semver v1.0.27
+#21 12.72   Downloaded sct v0.7.1
+#21 12.73   Downloaded rustversion v1.0.22
+#21 12.73   Downloaded rust-embed v8.11.0
+#21 12.75   Downloaded rustls-pemfile v1.0.4
+#21 12.76   Downloaded quote v1.0.45
+#21 12.77   Downloaded proc-macro-error v1.0.4
+#21 12.81   Downloaded pkcs8 v0.10.2
+#21 12.82   Downloaded pin-project-lite v0.2.17
+#21 12.83   Downloaded nkeys v0.4.5
+#21 12.84   Downloaded curve25519-dalek v4.1.3
+#21 12.88   Downloaded syn v2.0.117
+#21 12.96   Downloaded serde_path_to_error v0.1.20
+#21 12.97   Downloaded ppv-lite86 v0.2.21
+#21 12.97   Downloaded powerfmt v0.2.0
+#21 12.97   Downloaded pem-rfc7468 v0.7.0
+#21 12.98   Downloaded nu-ansi-term v0.50.3
+#21 13.00   Downloaded matchit v0.7.3
+#21 13.01   Downloaded tracing-serde v0.2.0
+#21 13.02   Downloaded shlex v1.3.0
+#21 13.02   Downloaded num_enum_derive v0.7.5
+#21 13.02   Downloaded native-tls v0.2.18
+#21 13.03   Downloaded multer v3.1.0
+#21 13.04   Downloaded async-nats v0.34.0
+#21 13.08   Downloaded tracing-subscriber v0.3.22
+#21 13.13   Downloaded time v0.3.47
+#21 13.17   Downloaded syn v1.0.109
+#21 13.29   Downloaded utoipa-gen v4.3.1
+#21 13.34   Downloaded rust-embed-utils v8.11.0
+#21 13.35   Downloaded proc-macro-error-attr v1.0.4
+#21 13.35   Downloaded proc-macro-crate v3.5.0
+#21 13.36   Downloaded openssl-probe v0.1.6
+#21 13.36   Downloaded num-iter v0.1.45
+#21 13.36   Downloaded serde_urlencoded v0.7.1
+#21 13.37   Downloaded hyper v0.14.32
+#21 13.44   Downloaded aho-corasick v1.1.4
+#21 13.49   Downloaded zerotrie v0.2.3
+#21 13.55   Downloaded unicode-segmentation v1.12.0
+#21 13.57   Downloaded unicode-normalization v0.1.25
+#21 13.60   Downloaded ring v0.17.14
+#21 13.89   Downloaded sqlx v0.7.4
+#21 13.96   Downloaded rustc_version v0.4.1
+#21 13.96   Downloaded hkdf v0.12.4
+#21 13.97   Downloaded futures-util v0.3.32
+#21 14.06   Downloaded unicode_categories v0.1.1
+#21 14.06   Downloaded tower-http v0.5.2
+#21 14.12   Downloaded tower v0.5.3
+#21 14.21   Downloaded tower v0.4.13
+#21 14.25   Downloaded rust-embed-impl v8.11.0
+#21 14.26   Downloaded libm v0.2.16
+#21 14.33   Downloaded icu_properties_data v2.1.2
+#21 14.41   Downloaded h2 v0.3.27
+#21 14.47   Downloaded axum v0.7.9
+#21 14.54   Downloaded sqlx-postgres v0.7.4
+#21 14.60   Downloaded signature v2.2.0
+#21 14.61   Downloaded sha1 v0.10.6
+#21 14.62   Downloaded potential_utf v0.1.4
+#21 14.62   Downloaded hyper v1.8.1
+#21 14.67   Downloaded hashbrown v0.16.1
+#21 14.70   Downloaded hashbrown v0.14.5
+#21 14.75   Downloaded zerovec-derive v0.11.2
+#21 14.76   Downloaded zeroize v1.8.2
+#21 14.77   Downloaded yoke v0.8.1
+#21 14.78   Downloaded uuid v1.22.0
+#21 14.82   Downloaded utoipa v4.2.3
+#21 14.84   Downloaded unicode-bidi v0.3.18
+#21 14.85   Downloaded percent-encoding v2.3.2
+#21 14.86   Downloaded openssl-macros v0.1.1
+#21 14.87   Downloaded unicode-ident v1.0.24
+#21 14.88   Downloaded writeable v0.6.2
+#21 14.90   Downloaded whoami v1.6.1
+#21 14.92   Downloaded unicode-properties v0.1.4
+#21 14.93   Downloaded tracing-core v0.1.36
+#21 14.94   Downloaded tinyvec v1.10.0
+#21 14.96   Downloaded sqlx-core v0.7.4
+#21 15.01   Downloaded http v0.2.12
+#21 15.02   Downloaded ed25519-dalek v2.2.0
+#21 15.04   Downloaded cc v1.2.56
+#21 15.06   Downloaded utoipa-swagger-ui v7.1.0
+#21 15.07   Downloaded tracing-attributes v0.1.31
+#21 15.09   Downloaded indexmap v2.13.0
+#21 15.12   Downloaded hyper-util v0.1.20
+#21 15.16   Downloaded urlencoding v2.1.3
+#21 15.16   Downloaded unicase v2.9.0
+#21 15.17   Downloaded tryhard v0.5.2
+#21 15.18   Downloaded tokio-stream v0.1.18
+#21 15.21   Downloaded tokio-rustls v0.24.1
+#21 15.22   Downloaded tempfile v3.26.0
+#21 15.23   Downloaded sqlx-mysql v0.7.4
+#21 15.26   Downloaded scopeguard v1.2.0
+#21 15.29   Downloaded http v1.4.0
+#21 15.31   Downloaded futures-intrusive v0.5.0
+#21 15.34   Downloaded base64 v0.22.1
+#21 15.38   Downloaded base64 v0.21.7
+#21 15.40   Downloaded toml_datetime v1.0.0+spec-1.1.0
+#21 15.40   Downloaded tokio-rustls v0.25.0
+#21 15.41   Downloaded tokio-native-tls v0.3.1
+#21 15.42   Downloaded tokio-macros v2.6.1
+#21 15.42   Downloaded time-macros v0.2.27
+#21 15.44   Downloaded synstructure v0.13.2
+#21 15.45   Downloaded pin-utils v0.1.0
+#21 15.46   Downloaded thread_local v1.1.9
+#21 15.47   Downloaded thiserror-impl v1.0.69
+#21 15.48   Downloaded thiserror v1.0.69
+#21 15.51   Downloaded sync_wrapper v1.0.2
+#21 15.51   Downloaded sqlx-sqlite v0.7.4
+#21 15.53   Downloaded icu_normalizer_data v2.1.1
+#21 15.56   Downloaded icu_normalizer v2.1.1
+#21 15.58   Downloaded icu_locale_core v2.1.1
+#21 15.63   Downloaded icu_collections v2.1.1
+#21 15.66   Downloaded headers v0.4.1
+#21 15.71   Downloaded flume v0.11.1
+#21 15.73   Downloaded flate2 v1.1.9
+#21 15.77   Downloaded der v0.7.10
+#21 15.80   Downloaded linux-raw-sys v0.12.1
+#21 16.58   Downloaded crc32fast v1.5.0
+#21 16.58   Downloaded tower-service v0.3.3
+#21 16.59   Downloaded tower-layer v0.3.3
+#21 16.59   Downloaded tinyvec_macros v0.1.1
+#21 16.59   Downloaded time-core v0.1.8
+#21 16.59   Downloaded sync_wrapper v0.1.2
+#21 16.60   Downloaded spin v0.9.8
+#21 16.60   Downloaded socket2 v0.6.3
+#21 16.60   Downloaded matchers v0.2.0
+#21 16.61   Downloaded icu_properties v2.1.2
+#21 16.62   Downloaded allocator-api2 v0.2.21
+#21 16.63   Downloaded bytes v1.11.1
+#21 16.68   Downloaded getrandom v0.2.17
+#21 16.69   Downloaded futures v0.3.32
+#21 16.71   Downloaded anyhow v1.0.102
+#21 16.72   Downloaded sqlx-macros-core v0.7.4
+#21 16.74   Downloaded sqlformat v0.2.6
+#21 16.76   Downloaded spki v0.7.3
+#21 16.77   Downloaded rand_chacha v0.3.1
+#21 16.78   Downloaded openssl-probe v0.2.1
+#21 16.78   Downloaded mime v0.3.17
+#21 16.78   Downloaded ipnet v2.12.0
+#21 16.79   Downloaded getrandom v0.4.2
+#21 16.82   Downloaded getrandom v0.3.4
+#21 16.84   Downloaded axum-extra v0.9.6
+#21 16.85   Downloaded const-oid v0.9.6
+#21 16.86   Downloaded bitflags v2.11.0
+#21 16.88   Downloaded sqlx-macros v0.7.4
+#21 16.89   Downloaded hmac v0.12.1
+#21 16.90   Downloaded futures-channel v0.3.32
+#21 16.91   Downloaded displaydoc v0.2.5
+#21 16.94   Downloaded ahash v0.8.12
+#21 16.95   Downloaded crossbeam-utils v0.8.21
+#21 16.96   Downloaded data-encoding v2.10.0
+#21 16.97   Downloaded axum-core v0.4.5
+#21 16.98   Downloaded http-body-util v0.1.3
+#21 16.98   Downloaded async-trait v0.1.89
+#21 17.00   Downloaded itoa v1.0.17
+#21 17.00   Downloaded hashlink v0.8.4
+#21 17.01   Downloaded num-conv v0.2.0
+#21 17.01   Downloaded futures-executor v0.3.32
+#21 17.01   Downloaded find-msvc-tools v0.1.9
+#21 17.02   Downloaded ed25519 v2.2.3
+#21 17.02   Downloaded dotenvy v0.15.7
+#21 17.03   Downloaded base64ct v1.8.3
+#21 17.04   Downloaded autocfg v1.5.0
+#21 17.04   Downloaded atomic-waker v1.1.2
+#21 17.04   Downloaded adler2 v2.0.1
+#21 17.05   Downloaded hyper-tls v0.5.0
+#21 17.05   Downloaded hyper-rustls v0.24.2
+#21 17.06   Downloaded httpdate v1.0.3
+#21 17.07   Downloaded home v0.5.12
+#21 17.07   Downloaded headers-core v0.3.0
+#21 17.07   Downloaded futures-core v0.3.32
+#21 17.08   Downloaded fnv v1.0.7
+#21 17.08   Downloaded fastrand v2.3.0
+#21 17.08   Downloaded either v1.15.0
+#21 17.08   Downloaded crc v3.4.0
+#21 17.09   Downloaded cpufeatures v0.2.17
+#21 17.09   Downloaded block-buffer v0.10.4
+#21 17.09   Downloaded cfg-if v1.0.4
+#21 17.10   Downloaded axum-macros v0.4.2
+#21 17.14   Downloaded curve25519-dalek-derive v0.1.1
+#21 17.20   Downloaded libsqlite3-sys v0.27.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 18.50    Compiling typenum v1.19.0
+#20 18.63    Compiling find-msvc-tools v0.1.9
+#20 19.36    Compiling generic-array v0.14.7
+#20 19.64    Compiling shlex v1.3.0
+#20 19.67    Compiling parking_lot_core v0.9.12
+#20 19.76    Compiling pin-project-lite v0.2.17
+#20 19.85    Compiling smallvec v1.15.1
+#20 19.90    Compiling cc v1.2.56
+#20 19.95    Compiling itoa v1.0.17
+#20 20.56    Compiling once_cell v1.21.3
+#20 21.21    Compiling zerocopy v0.8.40
+#20 21.37    Compiling log v0.4.29
+#20 21.39    Compiling scopeguard v1.2.0
+#20 22.54    Compiling syn v2.0.117
+#20 22.58    Compiling memchr v2.8.0
+#20 22.89    Compiling lock_api v0.4.14
+#20 23.10    Compiling futures-core v0.3.32
+#20 24.17    Compiling icu_properties_data v2.1.2
+#20 24.23    Compiling icu_normalizer_data v2.1.1
+#20 24.82    Compiling parking_lot v0.12.5
+#20 24.90    Compiling errno v0.3.14
+#20 24.90    Compiling subtle v2.6.1
+#20 25.33    Compiling signal-hook-registry v1.4.8
+#20 25.48    Compiling mio v1.1.1
+#20 25.80    Compiling socket2 v0.6.3
+#20 27.68    Compiling ring v0.17.14
+#20 27.80    Compiling futures-sink v0.3.32
+#20 28.18    Compiling getrandom v0.2.17
+#20 28.52    Compiling tracing-core v0.1.36
+#20 28.68    Compiling stable_deref_trait v1.2.1
+#20 28.76    Compiling zmij v1.0.21
+#20 28.77    Compiling futures-channel v0.3.32
+#20 28.97    Compiling serde_json v1.0.149
+#20 29.01    Compiling futures-task v0.3.32
+#20 29.46    Compiling futures-io v0.3.32
+#20 29.47    Compiling slab v0.4.12
+#20 29.49    Compiling getrandom v0.3.4
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 19.58    Compiling proc-macro2 v1.0.106
+#21 19.58    Compiling quote v1.0.45
+#21 19.58    Compiling unicode-ident v1.0.24
+#21 19.58    Compiling libc v0.2.183
+#21 19.58    Compiling version_check v0.9.5
+#21 19.59    Compiling cfg-if v1.0.4
+#21 19.59    Compiling serde_core v1.0.228
+#21 19.59    Compiling serde v1.0.228
+#21 22.34    Compiling typenum v1.19.0
+#21 24.41    Compiling find-msvc-tools v0.1.9
+#21 27.83    Compiling shlex v1.3.0
+#21 27.87    Compiling parking_lot_core v0.9.12
+#21 29.74    Compiling pin-project-lite v0.2.17
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 30.00    Compiling crypto-common v0.1.7
+#20 30.01    Compiling block-buffer v0.10.4
+#20 30.30    Compiling digest v0.10.7
+#20 30.33    Compiling thiserror v1.0.69
+#20 30.40    Compiling ahash v0.8.12
+#20 31.04    Compiling litemap v0.8.1
+#20 31.88    Compiling writeable v0.6.2
+#20 32.24    Compiling untrusted v0.9.0
+#20 32.59    Compiling cpufeatures v0.2.17
+#20 32.80    Compiling hashbrown v0.16.1
+#20 33.25    Compiling autocfg v1.5.0
+#20 33.27    Compiling equivalent v1.0.2
+#20 33.67    Compiling zeroize v1.8.2
+#20 34.03    Compiling percent-encoding v2.3.2
+#20 34.84    Compiling crossbeam-utils v0.8.21
+#20 34.96    Compiling num-traits v0.2.19
+#20 35.58    Compiling indexmap v2.13.0
+#20 36.49    Compiling httparse v1.10.1
+#20 36.67    Compiling tower-service v0.3.3
+#20 37.19    Compiling form_urlencoded v1.2.2
+#20 38.91    Compiling sha2 v0.10.9
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 30.13    Compiling generic-array v0.14.7
+#21 32.81    Compiling itoa v1.0.17
+#21 33.87    Compiling smallvec v1.15.1
+#21 33.95    Compiling once_cell v1.21.3
+#21 35.68    Compiling cc v1.2.56
+#21 36.15    Compiling zerocopy v0.8.40
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 40.82    Compiling synstructure v0.13.2
+#20 43.31    Compiling vcpkg v0.2.15
+#20 45.03    Compiling httpdate v1.0.3
+#20 45.22    Compiling pkg-config v0.3.32
+#20 46.62    Compiling rustversion v1.0.22
+#20 47.65    Compiling serde_derive v1.0.228
+#20 47.77    Compiling zerofrom-derive v0.1.6
+#20 48.51    Compiling yoke-derive v0.8.1
+#20 49.01    Compiling zerovec-derive v0.11.2
+#20 50.33    Compiling displaydoc v0.2.5
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 42.06    Compiling memchr v2.8.0
+#21 42.89    Compiling log v0.4.29
+#21 44.23    Compiling scopeguard v1.2.0
+#21 48.60    Compiling lock_api v0.4.14
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 52.77    Compiling tracing-attributes v0.1.31
+#20 52.92    Compiling tokio-macros v2.6.1
+#20 53.14    Compiling zerofrom v0.1.6
+#20 53.48    Compiling yoke v0.8.1
+#20 54.09    Compiling zerovec v0.11.5
+#20 54.56    Compiling futures-macro v0.3.32
+#20 55.05    Compiling thiserror-impl v1.0.69
+#20 56.82    Compiling tinystr v0.8.2
+#20 57.44    Compiling potential_utf v0.1.4
+#20 57.56    Compiling zerotrie v0.2.3
+#20 57.67    Compiling icu_locale_core v2.1.1
+#20 57.79    Compiling icu_collections v2.1.1
+#20 58.55    Compiling futures-util v0.3.32
+#20 58.62    Compiling tracing v0.1.44
+#20 60.52    Compiling icu_provider v2.1.1
+#20 61.11    Compiling icu_normalizer v2.1.1
+#20 61.28    Compiling icu_properties v2.1.2
+#20 61.66    Compiling utf8_iter v1.0.4
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 53.77    Compiling futures-core v0.3.32
+#21 56.33    Compiling syn v2.0.117
+#21 59.51    Compiling ring v0.17.14
+#21 60.32    Compiling icu_properties_data v2.1.2
+#21 61.81    Compiling icu_normalizer_data v2.1.1
+#21 63.26    Compiling parking_lot v0.12.5
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 63.99    Compiling bytes v1.11.1
+#20 64.20    Compiling openssl-sys v0.9.111
+#20 65.11    Compiling idna_adapter v1.2.1
+#20 65.40    Compiling idna v1.1.0
+#20 66.77    Compiling tokio v1.50.0
+#20 67.49    Compiling http v1.4.0
+#20 68.57    Compiling rand_core v0.6.4
+#20 69.53    Compiling getrandom v0.4.2
+#20 69.62    Compiling syn v1.0.109
+#20 70.33    Compiling paste v1.0.15
+#20 70.43    Compiling winnow v0.7.15
+#20 70.62    Compiling http-body v1.0.1
+#20 71.94    Compiling url v2.5.8
+#20 73.87    Compiling ppv-lite86 v0.2.21
+#20 74.25    Compiling semver v1.0.27
+#20 74.55    Compiling rustls v0.21.12
+#20 74.72    Compiling toml_datetime v1.0.0+spec-1.1.0
+#20 74.75    Compiling mime v0.3.17
+#20 75.12    Compiling base64ct v1.8.3
+#20 75.40    Compiling bitflags v2.11.0
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 65.82    Compiling errno v0.3.14
+#21 65.93    Compiling subtle v2.6.1
+#21 66.22    Compiling socket2 v0.6.3
+#21 66.51    Compiling mio v1.1.1
+#21 69.26    Compiling futures-sink v0.3.32
+#21 71.14    Compiling signal-hook-registry v1.4.8
+#21 71.91    Compiling tracing-core v0.1.36
+#21 72.48    Compiling crypto-common v0.1.7
+#21 73.21    Compiling block-buffer v0.10.4
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 75.94    Compiling pem-rfc7468 v0.7.0
+#20 76.28    Compiling rustc_version v0.4.1
+#20 76.33    Compiling rand_chacha v0.3.1
+#20 77.59    Compiling toml_parser v1.0.9+spec-1.1.0
+#20 78.26    Compiling rustls-webpki v0.101.7
+#20 79.82    Compiling toml_edit v0.25.4+spec-1.1.0
+#20 80.17    Compiling sct v0.7.1
+#20 81.24    Compiling rustls-pki-types v1.14.0
+#20 82.69    Compiling fnv v1.0.7
+#20 82.94    Compiling allocator-api2 v0.2.21
+#20 83.10    Compiling minimal-lexical v0.2.1
+#20 83.93    Compiling const-oid v0.9.6
+#20 84.15    Compiling tinyvec_macros v0.1.1
+#20 84.32    Compiling crc32fast v1.5.0
+#20 84.55    Compiling tower-layer v0.3.3
+#20 84.85    Compiling tinyvec v1.10.0
+#20 85.03    Compiling der v0.7.10
+#20 85.50    Compiling nom v7.1.3
+#20 85.63    Compiling hashbrown v0.14.5
+#20 86.10    Compiling http v0.2.12
+#20 87.80    Compiling proc-macro-crate v3.5.0
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 78.46    Compiling digest v0.10.7
+#21 78.96    Compiling getrandom v0.2.17
+#21 80.40    Compiling zmij v1.0.21
+#21 82.21    Compiling stable_deref_trait v1.2.1
+#21 83.89    Compiling futures-channel v0.3.32
+#21 83.91    Compiling serde_json v1.0.149
+#21 87.13    Compiling slab v0.4.12
+#21 88.09    Compiling futures-io v0.3.32
+#21 88.76    Compiling getrandom v0.3.4
+#21 89.01    Compiling futures-task v0.3.32
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 94.29    Compiling curve25519-dalek v4.1.3
+#20 95.29    Compiling rand v0.8.5
+#20 98.77    Compiling signature v2.2.0
+#20 99.16    Compiling aho-corasick v1.1.4
+#20 99.22    Compiling proc-macro-error-attr v1.0.4
+#20 99.70    Compiling simd-adler32 v0.3.8
+#20 99.90    Compiling rustix v1.1.4
+#20 101.2    Compiling num-conv v0.2.0
+#20 101.3    Compiling crc-catalog v2.4.0
+#20 101.5    Compiling unicode_categories v0.1.1
+#20 101.6    Compiling regex-syntax v0.8.10
+#20 101.6    Compiling foreign-types-shared v0.1.1
+#20 102.5    Compiling time-core v0.1.8
+#20 103.0    Compiling base64 v0.21.7
+#20 103.0    Compiling powerfmt v0.2.0
+#20 103.4    Compiling adler2 v2.0.1
+#20 103.7    Compiling openssl v0.10.75
+#20 104.0    Compiling rustls-pemfile v1.0.4
+#20 104.1    Compiling miniz_oxide v0.8.9
+#20 104.7    Compiling deranged v0.5.8
+#20 104.7    Compiling time-macros v0.2.27
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 96.52    Compiling thiserror v1.0.69
+#21 96.72    Compiling ahash v0.8.12
+#21 97.68    Compiling cpufeatures v0.2.17
+#21 98.98    Compiling litemap v0.8.1
+#21 99.38    Compiling synstructure v0.13.2
+#21 102.5    Compiling untrusted v0.9.0
+#21 106.4    Compiling writeable v0.6.2
+#21 109.4    Compiling autocfg v1.5.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 110.9    Compiling regex-automata v0.4.14
+#20 111.3    Compiling tokio-stream v0.1.18
+#20 113.2    Compiling sqlformat v0.2.6
+#20 115.8    Compiling foreign-types v0.3.2
+#20 116.2    Compiling crc v3.4.0
+#20 119.7    Compiling futures-intrusive v0.5.0
+#20 119.8    Compiling atoi v2.0.0
+#20 120.2    Compiling crossbeam-queue v0.3.12
+#20 121.0    Compiling num_enum_derive v0.7.5
+#20 121.4    Compiling spki v0.7.3
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 112.0    Compiling equivalent v1.0.2
+#21 112.5    Compiling hashbrown v0.16.1
+#21 115.0    Compiling serde_derive v1.0.228
+#21 115.0    Compiling zerofrom-derive v0.1.6
+#21 115.1    Compiling yoke-derive v0.8.1
+#21 116.4    Compiling zerovec-derive v0.11.2
+#21 120.5    Compiling displaydoc v0.2.5
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 122.3    Compiling hashlink v0.8.4
+#20 123.3    Compiling either v1.15.0
+#20 123.6    Compiling tokio-util v0.7.18
+#20 124.5    Compiling unicode-normalization v0.1.25
+#20 127.7    Compiling http-body-util v0.1.3
+#20 129.3    Compiling openssl-macros v0.1.1
+#20 129.4    Compiling hmac v0.12.1
+#20 131.5    Compiling proc-macro-error v1.0.4
+#20 132.0    Compiling byteorder v1.5.0
+#20 132.4    Compiling pin-utils v0.1.0
+#20 132.5    Compiling sync_wrapper v1.0.2
+#20 132.6    Compiling hex v0.4.3
+#20 132.8    Compiling zip v1.1.4
+#20 133.0    Compiling rustls v0.22.4
+#20 133.4    Compiling atomic-waker v1.1.2
+#20 133.5    Compiling event-listener v2.5.3
+#20 133.6    Compiling ryu v1.0.23
+#20 133.7    Compiling try-lock v0.2.5
+#20 134.0    Compiling linux-raw-sys v0.12.1
+#20 134.0    Compiling unicode-bidi v0.3.18
+#20 134.2    Compiling webpki-roots v0.25.4
+#20 134.3    Compiling same-file v1.0.6
+#20 135.0    Compiling native-tls v0.2.18
+#20 135.2    Compiling unicode-properties v0.1.4
+#20 135.7    Compiling walkdir v2.5.0
+#20 135.9    Compiling stringprep v0.1.5
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 125.9    Compiling tracing-attributes v0.1.31
+#21 129.1    Compiling tokio-macros v2.6.1
+#21 130.0    Compiling zerofrom v0.1.6
+#21 132.7    Compiling futures-macro v0.3.32
+#21 133.9    Compiling yoke v0.8.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 136.4    Compiling sqlx-core v0.7.4
+#20 137.2    Compiling time v0.3.47
+#20 139.2    Compiling serde_urlencoded v0.7.1
+#20 140.4    Compiling want v0.3.1
+#20 141.4    Compiling hyper v1.8.1
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 140.5    Compiling thiserror-impl v1.0.69
+#21 141.7    Compiling zerovec v0.11.5
+#21 143.9    Compiling tracing v0.1.44
+#21 144.3    Compiling futures-util v0.3.32
+#21 145.2    Compiling zerotrie v0.2.3
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 148.1    Compiling hkdf v0.12.4
+#20 149.3    Compiling flate2 v1.1.9
+#20 149.4    Compiling h2 v0.3.27
+#20 150.3    Compiling num_enum v0.7.5
+#20 150.4    Compiling pkcs8 v0.10.2
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 153.3    Compiling tinystr v0.8.2
+#21 153.6    Compiling potential_utf v0.1.4
+#21 158.6    Compiling icu_collections v2.1.1
+#21 159.6    Compiling icu_locale_core v2.1.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 153.8    Compiling ed25519 v2.2.3
+#20 154.3    Compiling http-body v0.4.6
+#20 154.4    Compiling rustls-webpki v0.102.8
+#20 154.8    Compiling async-trait v0.1.89
+#20 155.0    Compiling md-5 v0.10.6
+#20 155.6    Compiling socket2 v0.5.10
+#20 156.0    Compiling dotenvy v0.15.7
+#20 157.8    Compiling base64 v0.22.1
+#20 158.2    Compiling portable-atomic v1.13.1
+#20 159.4    Compiling fastrand v2.3.0
+#20 159.9    Compiling unicode-segmentation v1.12.0
+#20 160.1    Compiling unicase v2.9.0
+#20 160.3    Compiling openssl-probe v0.2.1
+#20 160.5    Compiling whoami v1.6.1
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 160.7    Compiling bytes v1.11.1
+#21 165.0    Compiling indexmap v2.13.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 161.1    Compiling home v0.5.12
+#20 161.4    Compiling heck v0.4.1
+#20 161.8    Compiling sqlx-postgres v0.7.4
+#20 162.4    Compiling mime_guess v2.0.5
+#20 164.0    Compiling tempfile v3.26.0
+#20 164.1    Compiling axum-core v0.4.5
+#20 166.7    Compiling hyper v0.14.32
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 167.8    Compiling num-traits v0.2.19
+#21 168.8    Compiling zeroize v1.8.2
+#21 172.6    Compiling percent-encoding v2.3.2
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 171.9    Compiling ed25519-dalek v2.2.0
+#20 173.6    Compiling regex v1.12.3
+#20 173.7    Compiling signatory v0.27.1
+#20 178.4    Compiling hyper-util v0.1.20
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 178.6    Compiling tokio v1.50.0
+#21 178.7    Compiling icu_provider v2.1.1
+#21 179.3    Compiling crossbeam-utils v0.8.21
+#21 183.0    Compiling http v1.4.0
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 180.1    Compiling rust-embed-utils v8.11.0
+#20 180.2    Compiling tower v0.5.3
+#20 181.8    Compiling rustls-pemfile v2.2.0
+#20 182.9    Compiling axum-macros v0.4.2
+#20 183.5    Compiling serde_path_to_error v0.1.20
+#20 184.7    Compiling cookie v0.18.1
+#20 185.4    Compiling multer v3.1.0
+#20 185.5    Compiling encoding_rs v0.8.35
+#20 185.7    Compiling matchit v0.7.3
+#20 186.4    Compiling data-encoding v2.10.0
+#20 186.6    Compiling openssl-probe v0.1.6
+#20 187.3    Compiling anyhow v1.0.102
+#20 190.4    Compiling axum v0.7.9
+#20 190.6    Compiling nkeys v0.4.5
+#20 194.2    Compiling rustls-native-certs v0.7.3
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 195.3    Compiling tower-service v0.3.3
+#21 195.6    Compiling httparse v1.10.1
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 195.5    Compiling rust-embed-impl v8.11.0
+#20 195.8    Compiling utoipa-swagger-ui v7.1.0
+#20 196.3    Compiling sqlx-macros-core v0.7.4
+#20 199.4    Compiling tokio-rustls v0.25.0
+#20 200.0    Compiling utoipa-gen v4.3.1
+#20 202.1    Compiling tokio-native-tls v0.3.1
+#20 202.9    Compiling tokio-rustls v0.24.1
+#20 203.2    Compiling nuid v0.5.0
+#20 203.2    Compiling tryhard v0.5.2
+#20 203.9    Compiling futures v0.3.32
+#20 204.1    Compiling headers-core v0.3.0
+#20 204.1    Compiling serde_nanos v0.1.4
+#20 204.4    Compiling serde_repr v0.1.20
+#20 204.5    Compiling sha1 v0.10.6
+#20 206.5    Compiling spin v0.9.8
+#20 206.9    Compiling lazy_static v1.5.0
+#20 209.1    Compiling sharded-slab v0.1.7
+#20 213.2    Compiling async-nats v0.34.0
+#20 213.3    Compiling headers v0.4.1
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 216.4    Compiling icu_normalizer v2.1.1
+#21 219.8    Compiling icu_properties v2.1.2
+#21 220.0    Compiling form_urlencoded v1.2.2
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 219.4    Compiling hyper-rustls v0.24.2
+#20 220.0    Compiling sqlx-macros v0.7.4
+#20 220.5    Compiling hyper-tls v0.5.0
+#20 221.4    Compiling rust-embed v8.11.0
+#20 222.2    Compiling utoipa v4.2.3
+#20 224.4    Compiling matchers v0.2.0
+#20 224.8    Compiling tracing-serde v0.2.0
+#20 225.3    Compiling tracing-log v0.2.0
+#20 225.6    Compiling thread_local v1.1.9
+#20 226.3    Compiling sync_wrapper v0.1.2
+#20 226.4    Compiling ipnet v2.12.0
+#20 226.8    Compiling nu-ansi-term v0.50.3
+#20 226.8    Compiling uuid v1.22.0
+#20 228.1    Compiling axum-extra v0.9.6
+#20 230.2    Compiling reqwest v0.11.27
+#20 230.7    Compiling tracing-subscriber v0.3.22
+#20 233.9    Compiling sqlx v0.7.4
+#20 235.9    Compiling tower-http v0.5.2
+#20 236.4    Compiling dashmap v5.5.3
+#20 240.7    Compiling tower v0.4.13
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 243.7    Compiling sha2 v0.10.9
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 249.4    Compiling common v0.1.0 (/app/libs/common)
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 250.3    Compiling idna_adapter v1.2.1
+#21 253.9    Compiling pkg-config v0.3.32
+#21 254.1    Compiling rustversion v1.0.22
+#21 254.9    Compiling utf8_iter v1.0.4
+#21 259.5    Compiling httpdate v1.0.3
+#21 260.3    Compiling vcpkg v0.2.15
+#21 262.3    Compiling idna v1.1.0
+#21 269.6    Compiling openssl-sys v0.9.111
+#21 270.1    Compiling rand_core v0.6.4
+#21 272.7    Compiling winnow v0.7.15
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 275.0    Compiling api-gateway v0.1.0 (/app/services/api-gateway)
+#20 275.6 warning: unused imports: `AuthRefreshRequest` and `AuthRefreshResponse`
+#20 275.6  --> services/api-gateway/src/auth_client_nats.rs:5:5
+#20 275.6   |
+#20 275.6 5 |     AuthRefreshRequest,
+#20 275.6   |     ^^^^^^^^^^^^^^^^^^
+#20 275.6 6 |     AuthRefreshResponse,
+#20 275.6   |     ^^^^^^^^^^^^^^^^^^^
+#20 275.6   |
+#20 275.6   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#20 275.6 
+#20 276.6 warning: function `router` is never used
+#20 276.6  --> services/api-gateway/src/routes/health.rs:3:8
+#20 276.6   |
+#20 276.6 3 | pub fn router() -> Router {
+#20 276.6   |        ^^^^^^
+#20 276.6   |
+#20 276.6   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#20 276.6 
+#20 276.6 warning: function `health` is never used
+#20 276.6  --> services/api-gateway/src/routes/health.rs:8:10
+#20 276.6   |
+#20 276.6 8 | async fn health() -> &'static str {
+#20 276.6   |          ^^^^^^
+#20 276.6 
+#20 276.6 warning: field `roles` is never read
+#20 276.6  --> services/api-gateway/src/identity.rs:6:9
+#20 276.6   |
+#20 276.6 4 | pub struct Identity {
+#20 276.6   |            -------- field in this struct
+#20 276.6 5 |     pub user_id: String,
+#20 276.6 6 |     pub roles: Vec<String>,
+#20 276.6   |         ^^^^^
+#20 276.6   |
+#20 276.6   = note: `Identity` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+#20 276.6 
+#20 276.6 warning: function `request_id_middleware` is never used
+#20 276.6  --> services/api-gateway/src/middleware/request_id.rs:9:14
+#20 276.6   |
+#20 276.6 9 | pub async fn request_id_middleware(
+#20 276.6   |              ^^^^^^^^^^^^^^^^^^^^^
+#20 276.6 
+#20 276.6 warning: field `refill_amount` is never read
+#20 276.6   --> services/api-gateway/src/middleware/rate_limit_user.rs:15:5
+#20 276.6    |
+#20 276.6 12 | pub struct UserRateLimiter {
+#20 276.6    |            --------------- field in this struct
+#20 276.6 ...
+#20 276.6 15 |     refill_amount: u32,
+#20 276.6    |     ^^^^^^^^^^^^^
+#20 276.6    |
+#20 276.6    = note: `UserRateLimiter` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+#20 276.6 
+#20 ...
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 275.5    Compiling getrandom v0.4.2
+#21 277.5    Compiling paste v1.0.15
+#21 277.8    Compiling syn v1.0.109
+#21 284.2    Compiling url v2.5.8
+#21 284.6    Compiling toml_parser v1.0.9+spec-1.1.0
+#21 285.7    Compiling http-body v1.0.1
+#21 288.8    Compiling ppv-lite86 v0.2.21
+#21 292.8    Compiling toml_datetime v1.0.0+spec-1.1.0
+#21 293.2    Compiling bitflags v2.11.0
+#21 293.3    Compiling rustls v0.21.12
+#21 293.8    Compiling base64ct v1.8.3
+#21 295.4    Compiling semver v1.0.27
+#21 296.6    Compiling mime v0.3.17
+#21 ...
+
+#20 [linux/arm64 builder 5/5] RUN cargo build --release -p api-gateway
+#20 296.8 warning: `api-gateway` (bin "api-gateway") generated 6 warnings (run `cargo fix --bin "api-gateway" -p api-gateway` to apply 1 suggestion)
+#20 296.8     Finished `release` profile [optimized] target(s) in 4m 56s
+#20 296.9 warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-postgres v0.7.4
+#20 296.9 note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+#20 DONE 300.0s
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 298.1    Compiling pem-rfc7468 v0.7.0
+#21 299.1    Compiling rustc_version v0.4.1
+#21 299.3    Compiling toml_edit v0.25.4+spec-1.1.0
+#21 ...
+
+#22 [linux/arm64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#22 CACHED
+
+#23 [linux/arm64 stage-1 3/4] WORKDIR /app
+#23 CACHED
+
+#24 [linux/arm64 stage-1 4/4] COPY --from=builder /app/target/release/api-gateway /app/api-gateway
+#24 DONE 0.3s
+
+#21 [linux/amd64 builder 5/5] RUN cargo build --release -p api-gateway
+#21 302.7    Compiling rand_chacha v0.3.1
+#21 305.7    Compiling sct v0.7.1
+#21 306.1    Compiling rustls-webpki v0.101.7
+#21 306.5    Compiling rustls-pki-types v1.14.0
+#21 308.8    Compiling const-oid v0.9.6
+#21 310.0    Compiling allocator-api2 v0.2.21
+#21 310.2    Compiling minimal-lexical v0.2.1
+#21 311.0    Compiling crc32fast v1.5.0
+#21 311.3    Compiling tower-layer v0.3.3
+#21 312.5    Compiling fnv v1.0.7
+#21 313.1    Compiling tinyvec_macros v0.1.1
+#21 313.4    Compiling hashbrown v0.14.5
+#21 313.5    Compiling tinyvec v1.10.0
+#21 313.6    Compiling nom v7.1.3
+#21 313.8    Compiling http v0.2.12
+#21 314.2    Compiling der v0.7.10
+#21 321.4    Compiling rand v0.8.5
+#21 322.6    Compiling proc-macro-crate v3.5.0
+#21 323.2    Compiling curve25519-dalek v4.1.3
+#21 328.6    Compiling signature v2.2.0
+#21 328.8    Compiling aho-corasick v1.1.4
+#21 330.1    Compiling proc-macro-error-attr v1.0.4
+#21 330.5    Compiling regex-syntax v0.8.10
+#21 331.3    Compiling powerfmt v0.2.0
+#21 331.9    Compiling rustix v1.1.4
+#21 332.9    Compiling base64 v0.21.7
+#21 335.7    Compiling adler2 v2.0.1
+#21 336.0    Compiling num-conv v0.2.0
+#21 337.4    Compiling unicode_categories v0.1.1
+#21 337.5    Compiling foreign-types-shared v0.1.1
+#21 338.0    Compiling crc-catalog v2.4.0
+#21 338.7    Compiling time-core v0.1.8
+#21 338.9    Compiling openssl v0.10.75
+#21 338.9    Compiling simd-adler32 v0.3.8
+#21 340.0    Compiling time-macros v0.2.27
+#21 341.0    Compiling miniz_oxide v0.8.9
+#21 341.1    Compiling crc v3.4.0
+#21 342.8    Compiling sqlformat v0.2.6
+#21 344.8    Compiling foreign-types v0.3.2
+#21 345.0    Compiling regex-automata v0.4.14
+#21 345.6    Compiling rustls-pemfile v1.0.4
+#21 350.3    Compiling deranged v0.5.8
+#21 351.8    Compiling tokio-stream v0.1.18
+#21 353.6    Compiling num_enum_derive v0.7.5
+#21 354.5    Compiling futures-intrusive v0.5.0
+#21 354.7    Compiling crossbeam-queue v0.3.12
+#21 355.5    Compiling atoi v2.0.0
+#21 355.5    Compiling spki v0.7.3
+#21 355.7    Compiling either v1.15.0
+#21 356.9    Compiling hashlink v0.8.4
+#21 357.3    Compiling unicode-normalization v0.1.25
+#21 358.7    Compiling http-body-util v0.1.3
+#21 359.3    Compiling tokio-util v0.7.18
+#21 360.7    Compiling hmac v0.12.1
+#21 361.1    Compiling openssl-macros v0.1.1
+#21 362.2    Compiling curve25519-dalek-derive v0.1.1
+#21 362.7    Compiling proc-macro-error v1.0.4
+#21 363.8    Compiling native-tls v0.2.18
+#21 363.9    Compiling rustls v0.22.4
+#21 364.3    Compiling zip v1.1.4
+#21 364.5    Compiling unicode-bidi v0.3.18
+#21 365.3    Compiling sync_wrapper v1.0.2
+#21 366.2    Compiling try-lock v0.2.5
+#21 366.7    Compiling same-file v1.0.6
+#21 367.3    Compiling pin-utils v0.1.0
+#21 367.9    Compiling byteorder v1.5.0
+#21 368.0    Compiling webpki-roots v0.25.4
+#21 368.1    Compiling hex v0.4.3
+#21 368.4    Compiling ryu v1.0.23
+#21 368.9    Compiling linux-raw-sys v0.12.1
+#21 370.3    Compiling atomic-waker v1.1.2
+#21 370.5    Compiling event-listener v2.5.3
+#21 371.1    Compiling unicode-properties v0.1.4
+#21 372.4    Compiling sqlx-core v0.7.4
+#21 372.6    Compiling stringprep v0.1.5
+#21 373.0    Compiling hyper v1.8.1
+#21 373.8    Compiling time v0.3.47
+#21 380.7    Compiling serde_urlencoded v0.7.1
+#21 381.7    Compiling walkdir v2.5.0
+#21 383.0    Compiling want v0.3.1
+#21 384.6    Compiling h2 v0.3.27
+#21 385.9    Compiling hkdf v0.12.4
+#21 387.7    Compiling flate2 v1.1.9
+#21 390.8    Compiling num_enum v0.7.5
+#21 391.1    Compiling pkcs8 v0.10.2
+#21 393.1    Compiling ed25519 v2.2.3
+#21 393.3    Compiling http-body v0.4.6
+#21 396.1    Compiling rustls-webpki v0.102.8
+#21 396.6    Compiling md-5 v0.10.6
+#21 397.3    Compiling async-trait v0.1.89
+#21 397.4    Compiling socket2 v0.5.10
+#21 397.8    Compiling base64 v0.22.1
+#21 398.7    Compiling unicase v2.9.0
+#21 400.6    Compiling home v0.5.12
+#21 401.1    Compiling unicode-segmentation v1.12.0
+#21 402.2    Compiling fastrand v2.3.0
+#21 403.0    Compiling whoami v1.6.1
+#21 403.8    Compiling portable-atomic v1.13.1
+#21 404.1    Compiling openssl-probe v0.2.1
+#21 404.8    Compiling dotenvy v0.15.7
+#21 406.6    Compiling tempfile v3.26.0
+#21 406.8    Compiling heck v0.4.1
+#21 407.2    Compiling sqlx-postgres v0.7.4
+#21 407.6    Compiling axum-core v0.4.5
+#21 409.2    Compiling mime_guess v2.0.5
+#21 409.4    Compiling hyper v0.14.32
+#21 411.9    Compiling ed25519-dalek v2.2.0
+#21 412.4    Compiling signatory v0.27.1
+#21 419.6    Compiling rust-embed-utils v8.11.0
+#21 420.6    Compiling regex v1.12.3
+#21 420.9    Compiling hyper-util v0.1.20
+#21 422.5    Compiling tower v0.5.3
+#21 424.3    Compiling rustls-pemfile v2.2.0
+#21 426.7    Compiling axum-macros v0.4.2
+#21 428.2    Compiling serde_path_to_error v0.1.20
+#21 429.3    Compiling multer v3.1.0
+#21 429.4    Compiling cookie v0.18.1
+#21 431.0    Compiling encoding_rs v0.8.35
+#21 431.1    Compiling anyhow v1.0.102
+#21 432.6    Compiling data-encoding v2.10.0
+#21 433.4    Compiling matchit v0.7.3
+#21 433.7    Compiling openssl-probe v0.1.6
+#21 438.0    Compiling axum v0.7.9
+#21 439.0    Compiling rustls-native-certs v0.7.3
+#21 440.6    Compiling nkeys v0.4.5
+#21 444.8    Compiling utoipa-swagger-ui v7.1.0
+#21 444.9    Compiling rust-embed-impl v8.11.0
+#21 446.4    Compiling tokio-rustls v0.25.0
+#21 446.6    Compiling sqlx-macros-core v0.7.4
+#21 446.9    Compiling utoipa-gen v4.3.1
+#21 448.2    Compiling tokio-native-tls v0.3.1
+#21 453.3    Compiling nuid v0.5.0
+#21 454.4    Compiling tokio-rustls v0.24.1
+#21 455.4    Compiling tryhard v0.5.2
+#21 455.8    Compiling headers-core v0.3.0
+#21 457.6    Compiling futures v0.3.32
+#21 457.6    Compiling serde_nanos v0.1.4
+#21 458.1    Compiling serde_repr v0.1.20
+#21 458.4    Compiling sha1 v0.10.6
+#21 460.5    Compiling lazy_static v1.5.0
+#21 462.0    Compiling spin v0.9.8
+#21 462.7    Compiling utoipa v4.2.3
+#21 463.6    Compiling async-nats v0.34.0
+#21 464.2    Compiling sharded-slab v0.1.7
+#21 466.5    Compiling headers v0.4.1
+#21 469.2    Compiling hyper-rustls v0.24.2
+#21 472.5    Compiling sqlx-macros v0.7.4
+#21 473.0    Compiling rust-embed v8.11.0
+#21 473.1    Compiling hyper-tls v0.5.0
+#21 477.7    Compiling matchers v0.2.0
+#21 477.9    Compiling tracing-serde v0.2.0
+#21 478.4    Compiling tracing-log v0.2.0
+#21 480.4    Compiling thread_local v1.1.9
+#21 480.6    Compiling nu-ansi-term v0.50.3
+#21 482.3    Compiling ipnet v2.12.0
+#21 485.1    Compiling sync_wrapper v0.1.2
+#21 485.3    Compiling common v0.1.0 (/app/libs/common)
+#21 486.4    Compiling reqwest v0.11.27
+#21 486.4    Compiling tracing-subscriber v0.3.22
+#21 487.7    Compiling axum-extra v0.9.6
+#21 488.8    Compiling sqlx v0.7.4
+#21 492.8    Compiling uuid v1.22.0
+#21 502.1    Compiling tower-http v0.5.2
+#21 504.2    Compiling dashmap v5.5.3
+#21 505.9    Compiling tower v0.4.13
+#21 536.0    Compiling api-gateway v0.1.0 (/app/services/api-gateway)
+#21 538.3 warning: unused imports: `AuthRefreshRequest` and `AuthRefreshResponse`
+#21 538.3  --> services/api-gateway/src/auth_client_nats.rs:5:5
+#21 538.3   |
+#21 538.3 5 |     AuthRefreshRequest,
+#21 538.3   |     ^^^^^^^^^^^^^^^^^^
+#21 538.3 6 |     AuthRefreshResponse,
+#21 538.3   |     ^^^^^^^^^^^^^^^^^^^
+#21 538.3   |
+#21 538.3   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#21 538.3 
+#21 540.6 warning: function `router` is never used
+#21 540.6  --> services/api-gateway/src/routes/health.rs:3:8
+#21 540.6   |
+#21 540.6 3 | pub fn router() -> Router {
+#21 540.6   |        ^^^^^^
+#21 540.6   |
+#21 540.6   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#21 540.6 
+#21 540.6 warning: function `health` is never used
+#21 540.6  --> services/api-gateway/src/routes/health.rs:8:10
+#21 540.6   |
+#21 540.6 8 | async fn health() -> &'static str {
+#21 540.6   |          ^^^^^^
+#21 540.6 
+#21 540.6 warning: field `roles` is never read
+#21 540.6  --> services/api-gateway/src/identity.rs:6:9
+#21 540.6   |
+#21 540.6 4 | pub struct Identity {
+#21 540.6   |            -------- field in this struct
+#21 540.6 5 |     pub user_id: String,
+#21 540.6 6 |     pub roles: Vec<String>,
+#21 540.6   |         ^^^^^
+#21 540.6   |
+#21 540.6   = note: `Identity` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+#21 540.6 
+#21 540.6 warning: function `request_id_middleware` is never used
+#21 540.6  --> services/api-gateway/src/middleware/request_id.rs:9:14
+#21 540.6   |
+#21 540.6 9 | pub async fn request_id_middleware(
+#21 540.6   |              ^^^^^^^^^^^^^^^^^^^^^
+#21 540.6 
+#21 540.6 warning: field `refill_amount` is never read
+#21 540.6   --> services/api-gateway/src/middleware/rate_limit_user.rs:15:5
+#21 540.6    |
+#21 540.6 12 | pub struct UserRateLimiter {
+#21 540.6    |            --------------- field in this struct
+#21 540.6 ...
+#21 540.6 15 |     refill_amount: u32,
+#21 540.6    |     ^^^^^^^^^^^^^
+#21 540.6    |
+#21 540.6    = note: `UserRateLimiter` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+#21 540.6 
+#21 554.1 warning: `api-gateway` (bin "api-gateway") generated 6 warnings (run `cargo fix --bin "api-gateway" -p api-gateway` to apply 1 suggestion)
+#21 554.1     Finished `release` profile [optimized] target(s) in 9m 13s
+#21 554.3 warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-postgres v0.7.4
+#21 554.3 note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+#21 DONE 561.8s
+
+#25 [linux/amd64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#25 CACHED
+
+#26 [linux/amd64 stage-1 3/4] WORKDIR /app
+#26 CACHED
+
+#27 [linux/amd64 stage-1 4/4] COPY --from=builder /app/target/release/api-gateway /app/api-gateway
+#27 DONE 0.2s
+
+#28 exporting to image
+#28 exporting layers
+#28 exporting layers 1.3s done
+#28 exporting manifest sha256:3ca817425b274b0e9c53af59de8adb5b05e0c4b55476b009c84d9f9cb177f64e done
+#28 exporting config sha256:956a02a1bb258d9ca57d5673ca4ef0815a301254489e20109eaf1839b35164cc done
+#28 exporting attestation manifest sha256:606db68605b900c74b5e49ae44cc431bac11bd12bef438cc682de399cbd01e11 done
+#28 exporting manifest sha256:698146d1be6c29252dd4e4ed4c6682ab29ad140ce944d7c94545b1c144f4ad38 done
+#28 exporting config sha256:67c87b9a8ecd5ff0cd9a1da022fc0fcf05a403813e6235bd9323b41967714dc7 done
+#28 exporting attestation manifest sha256:199f5eede81ce78c75857269bed12bb4a885a6170a3c097f8ebd0c8ca211d263 done
+#28 exporting manifest list sha256:0214e8f7e81dbb4f9d966eee44f273a5cc592350690fd7685c63e5534a18df46 done
+#28 DONE 1.3s
+
+#29 [auth] globalquantx-prod/api/api-gateway:pull,push token for europe-west2-docker.pkg.dev
+#29 DONE 0.0s
+
+🚀 Building auth-service
+    Dockerfile: Dockerfile.auth-service
+    Image: europe-west2-docker.pkg.dev/globalquantx-prod/auth/auth-service:v0.0.1
+#0 building with "adoring_goldstine" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile.auth-service
+#1 transferring dockerfile: 567B 0.0s done
+#1 DONE 0.0s
+
+#2 [linux/arm64 internal] load metadata for docker.io/library/rust:latest
+#2 ...
+
+#3 [auth] library/debian:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [auth] library/rust:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#5 [linux/amd64 internal] load metadata for docker.io/library/rust:latest
+#5 ...
+
+#6 [linux/arm64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#6 DONE 1.0s
+
+#5 [linux/amd64 internal] load metadata for docker.io/library/rust:latest
+#5 DONE 1.0s
+
+#7 [linux/amd64 internal] load metadata for docker.io/library/debian:bookworm-slim
+#7 DONE 1.0s
+
+#2 [linux/arm64 internal] load metadata for docker.io/library/rust:latest
+#2 DONE 1.1s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 2B 0.0s done
+#8 DONE 0.0s
+
+#9 [internal] load build context
+#9 DONE 0.0s
+
+#10 [linux/arm64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#10 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 0.0s done
+#10 DONE 0.1s
+
+#11 [linux/arm64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#11 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#11 ...
+
+#12 [linux/amd64 stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+#12 resolve docker.io/library/debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a 0.0s done
+#12 DONE 0.1s
+
+#13 [linux/arm64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [linux/amd64 stage-1 2/4] RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+#14 CACHED
+
+#15 [linux/arm64 stage-1 3/4] WORKDIR /app
+#15 CACHED
+
+#16 [linux/amd64 stage-1 3/4] WORKDIR /app
+#16 CACHED
+
+#17 [linux/amd64 builder 1/5] FROM docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237
+#17 resolve docker.io/library/rust:latest@sha256:72724f1a416c449b405a2b7ed6bac56058163e6dfb1b5ccb40839882141dd237 0.1s done
+#17 DONE 0.1s
+
+#9 [internal] load build context
+#9 transferring context: 1.21MB 1.5s done
+#9 DONE 1.6s
+
+#18 [linux/amd64 builder 2/5] WORKDIR /app
+#18 CACHED
+
+#19 [linux/amd64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential pkg-config libssl-dev clang cmake libpq-dev     && rm -rf /var/lib/apt/lists/*
+#19 CACHED
+
+#20 [linux/arm64 builder 2/5] WORKDIR /app
+#20 CACHED
+
+#21 [linux/arm64 builder 3/5] RUN apt-get update && apt-get install -y     build-essential pkg-config libssl-dev clang cmake libpq-dev     && rm -rf /var/lib/apt/lists/*
+#21 CACHED
+
+#22 [linux/arm64 builder 4/5] COPY . .
+#22 ...
+
+#23 [linux/amd64 builder 4/5] COPY . .
+#23 DONE 35.7s
+
+#22 [linux/arm64 builder 4/5] COPY . .
+#22 DONE 35.6s
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 1.741     Updating crates.io index
+#24 9.720  Downloading crates ...
+#24 9.875   Downloaded aead v0.5.2
+#24 9.927   Downloaded atoi v2.0.0
+#24 9.995   Downloaded md-5 v0.10.6
+#24 10.01   Downloaded nu-ansi-term v0.50.3
+#24 10.04   Downloaded idna_adapter v1.2.1
+#24 10.06   Downloaded percent-encoding v2.3.2
+#24 10.07   Downloaded sync_wrapper v1.0.2
+#24 10.07   Downloaded cc v1.2.56
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 1.890     Updating crates.io index
+#25 9.785  Downloading crates ...
+#25 9.987   Downloaded base64ct v1.8.3
+#25 10.05   Downloaded matchers v0.2.0
+#25 10.06   Downloaded lazy_static v1.5.0
+#25 10.08   Downloaded itoa v1.0.17
+#25 10.09   Downloaded idna_adapter v1.2.1
+#25 10.09   Downloaded home v0.5.12
+#25 10.10   Downloaded md-5 v0.10.6
+#25 10.11   Downloaded inout v0.1.4
+#25 10.12   Downloaded heck v0.4.1
+#25 10.12   Downloaded futures-sink v0.3.32
+#25 10.13   Downloaded httpdate v1.0.3
+#25 10.17   Downloaded futures-macro v0.3.32
+#25 10.18   Downloaded http-body v1.0.1
+#25 10.18   Downloaded lock_api v0.4.14
+#25 10.19   Downloaded matchit v0.7.3
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 10.11   Downloaded potential_utf v0.1.4
+#24 10.14   Downloaded rustc_version v0.4.1
+#24 10.18   Downloaded tower-layer v0.3.3
+#24 10.19   Downloaded tryhard v0.5.2
+#24 10.21   Downloaded tracing-core v0.1.36
+#24 10.26   Downloaded libc v0.2.183
+#24 10.64   Downloaded subtle v2.6.1
+#24 10.68   Downloaded stringprep v0.1.5
+#24 10.72   Downloaded zmij v1.0.21
+#24 10.74   Downloaded zerovec-derive v0.11.2
+#24 10.75   Downloaded whoami v1.6.1
+#24 10.78   Downloaded tower v0.5.3
+#24 10.90   Downloaded tower-http v0.5.2
+#24 10.97   Downloaded tracing-subscriber v0.3.22
+#24 11.03   Downloaded serde_json v1.0.149
+#24 11.09   Downloaded rustls-webpki v0.101.7
+#24 11.24   Downloaded tracing v0.1.44
+#24 11.41   Downloaded rustls-webpki v0.102.8
+#24 11.55   Downloaded url v2.5.8
+#24 11.57   Downloaded unicode-segmentation v1.12.0
+#24 11.60   Downloaded zerotrie v0.2.3
+#24 11.62   Downloaded syn v2.0.117
+#24 11.70   Downloaded zerovec v0.11.5
+#24 11.73   Downloaded rustls v0.22.4
+#24 11.85   Downloaded regex-syntax v0.8.10
+#24 11.90   Downloaded webpki-roots v0.25.4
+#24 11.93   Downloaded rustix v1.1.4
+#24 12.24   Downloaded vcpkg v0.2.15
+#24 12.69   Downloaded typenum v1.19.0
+#24 12.73   Downloaded rustls v0.21.12
+#24 12.87   Downloaded unicode-normalization v0.1.25
+#24 12.94   Downloaded unicode_categories v0.1.1
+#24 12.96   Downloaded tokio v1.50.0
+#24 13.35   Downloaded syn v1.0.109
+#24 13.45   Downloaded portable-atomic v1.13.1
+#24 13.54   Downloaded regex v1.12.3
+#24 13.57   Downloaded zerocopy v0.8.40
+#24 13.67   Downloaded time v0.3.47
+#24 13.71   Downloaded regex-automata v0.4.14
+#24 13.81   Downloaded sqlx v0.7.4
+#24 13.98   Downloaded sqlx-postgres v0.7.4
+#24 14.01   Downloaded signatory v0.27.1
+#24 14.03   Downloaded num-bigint-dig v0.8.6
+#24 14.09   Downloaded num-bigint v0.4.6
+#24 14.17   Downloaded nom v7.1.3
+#24 14.20   Downloaded sqlx-core v0.7.4
+#24 14.27   Downloaded rand v0.8.5
+#24 14.29   Downloaded mio v1.1.1
+#24 14.35   Downloaded minimal-lexical v0.2.1
+#24 14.38   Downloaded memchr v2.8.0
+#24 14.46   Downloaded sqlx-mysql v0.7.4
+#24 14.51   Downloaded serde v1.0.228
+#24 14.54   Downloaded rsa v0.9.10
+#24 14.59   Downloaded zeroize v1.8.2
+#24 14.60   Downloaded zerofrom-derive v0.1.6
+#24 14.60   Downloaded yoke-derive v0.8.1
+#24 14.60   Downloaded yoke v0.8.1
+#24 14.61   Downloaded writeable v0.6.2
+#24 14.62   Downloaded version_check v0.9.5
+#24 14.62   Downloaded uuid v1.22.0
+#24 14.67   Downloaded unicode-ident v1.0.24
+#24 14.68   Downloaded unicode-bidi v0.3.18
+#24 14.69   Downloaded tinyvec v1.10.0
+#24 14.70   Downloaded sqlx-sqlite v0.7.4
+#24 14.72   Downloaded socket2 v0.6.3
+#24 14.73   Downloaded sharded-slab v0.1.7
+#24 14.77   Downloaded serde_derive v1.0.228
+#24 14.78   Downloaded serde_core v1.0.228
+#24 14.79   Downloaded ryu v1.0.23
+#24 14.80   Downloaded parking_lot v0.12.5
+#24 14.80   Downloaded zerofrom v0.1.6
+#24 14.81   Downloaded utf8_iter v1.0.4
+#24 14.82   Downloaded urlencoding v2.1.3
+#24 14.85   Downloaded untrusted v0.9.0
+#24 14.86   Downloaded universal-hash v0.5.1
+#24 14.86   Downloaded unicode-properties v0.1.4
+#24 14.87   Downloaded sqlformat v0.2.6
+#24 14.88   Downloaded spin v0.9.8
+#24 14.88   Downloaded smallvec v1.15.1
+#24 14.89   Downloaded simple_asn1 v0.6.4
+#24 14.89   Downloaded shlex v1.3.0
+#24 14.90   Downloaded sha2 v0.10.9
+#24 14.91   Downloaded rustls-pki-types v1.14.0
+#24 14.94   Downloaded rustls-pemfile v2.2.0
+#24 14.95   Downloaded ring v0.17.14
+#24 15.42   Downloaded rustls-native-certs v0.7.3
+#24 15.47   Downloaded proc-macro2 v1.0.106
+#24 15.54   Downloaded pkcs1 v0.7.5
+#24 15.55   Downloaded log v0.4.29
+#24 15.57   Downloaded linux-raw-sys v0.12.1
+#24 16.77   Downloaded sqlx-macros-core v0.7.4
+#24 16.78   Downloaded slab v0.4.12
+#24 16.79   Downloaded signal-hook-registry v1.4.8
+#24 16.79   Downloaded sha1 v0.10.6
+#24 16.80   Downloaded serde_path_to_error v0.1.20
+#24 16.80   Downloaded semver v1.0.27
+#24 16.81   Downloaded sct v0.7.1
+#24 16.86   Downloaded rustversion v1.0.22
+#24 16.87   Downloaded rustls-pemfile v1.0.4
+#24 16.89   Downloaded rand_core v0.6.4
+#24 16.89   Downloaded quote v1.0.45
+#24 16.92   Downloaded polyval v0.6.2
+#24 16.94   Downloaded pkg-config v0.3.32
+#24 16.96   Downloaded pkcs8 v0.10.2
+#24 16.97   Downloaded pin-project-lite v0.2.17
+#24 17.03   Downloaded pem-rfc7468 v0.7.0
+#24 17.05   Downloaded pem v3.0.6
+#24 17.06   Downloaded paste v1.0.15
+#24 17.08   Downloaded password-hash v0.5.0
+#24 17.10   Downloaded parking_lot_core v0.9.12
+#24 17.11   Downloaded once_cell v1.21.3
+#24 17.15   Downloaded num-traits v0.2.19
+#24 17.17   Downloaded num-integer v0.1.46
+#24 17.19   Downloaded nkeys v0.4.5
+#24 17.20   Downloaded matchit v0.7.3
+#24 17.21   Downloaded lock_api v0.4.14
+#24 17.22   Downloaded stable_deref_trait v1.2.1
+#24 17.23   Downloaded sqlx-macros v0.7.4
+#24 17.23   Downloaded spki v0.7.3
+#24 17.24   Downloaded signature v2.2.0
+#24 17.26   Downloaded serde_urlencoded v0.7.1
+#24 17.26   Downloaded serde_repr v0.1.20
+#24 17.28   Downloaded serde_nanos v0.1.4
+#24 17.33   Downloaded scopeguard v1.2.0
+#24 17.35   Downloaded ppv-lite86 v0.2.21
+#24 17.36   Downloaded powerfmt v0.2.0
+#24 17.37   Downloaded openssl-probe v0.1.6
+#24 17.37   Downloaded num-iter v0.1.45
+#24 17.37   Downloaded num-conv v0.2.0
+#24 17.38   Downloaded tracing-log v0.2.0
+#24 17.39   Downloaded tracing-attributes v0.1.31
+#24 17.41   Downloaded tower-service v0.3.3
+#24 17.42   Downloaded tokio-stream v0.1.18
+#24 17.47   Downloaded tokio-rustls v0.25.0
+#24 17.49   Downloaded tokio-macros v2.6.1
+#24 17.49   Downloaded tinyvec_macros v0.1.1
+#24 17.50   Downloaded tinystr v0.8.2
+#24 17.51   Downloaded time-macros v0.2.27
+#24 17.52   Downloaded time-core v0.1.8
+#24 17.53   Downloaded thread_local v1.1.9
+#24 17.56   Downloaded thiserror-impl v2.0.18
+#24 17.57   Downloaded thiserror-impl v1.0.69
+#24 17.58   Downloaded thiserror v2.0.18
+#24 17.64   Downloaded thiserror v1.0.69
+#24 17.67   Downloaded tempfile v3.26.0
+#24 17.69   Downloaded synstructure v0.13.2
+#24 17.71   Downloaded rand_chacha v0.3.1
+#24 17.74   Downloaded idna v1.1.0
+#24 17.79   Downloaded icu_properties_data v2.1.2
+#24 17.91   Downloaded hyper v1.8.1
+#24 17.95   Downloaded hkdf v0.12.4
+#24 18.01   Downloaded hashbrown v0.16.1
+#24 18.05   Downloaded hashbrown v0.14.5
+#24 18.09   Downloaded futures-util v0.3.32
+#24 18.20   Downloaded chrono v0.4.44
+#24 18.28   Downloaded indexmap v2.13.0
+#24 18.32   Downloaded icu_normalizer_data v2.1.1
+#24 18.36   Downloaded icu_locale_core v2.1.1
+#24 18.41   Downloaded icu_collections v2.1.1
+#24 18.47   Downloaded hyper-util v0.1.20
+#24 18.54   Downloaded http v1.4.0
+#24 18.57   Downloaded futures-intrusive v0.5.0
+#24 18.60   Downloaded flume v0.11.1
+#24 18.65   Downloaded ed25519-dalek v2.2.0
+#24 18.67   Downloaded der v0.7.10
+#24 18.70   Downloaded curve25519-dalek v4.1.3
+#24 18.77   Downloaded axum v0.7.9
+#24 18.81   Downloaded async-nats v0.34.0
+#24 18.87   Downloaded aho-corasick v1.1.4
+#24 18.92   Downloaded aes-gcm v0.10.3
+#24 18.95   Downloaded aes v0.8.4
+#24 18.97   Downloaded pin-utils v0.1.0
+#24 18.97   Downloaded libm v0.2.16
+#24 19.05   Downloaded base64 v0.21.7
+#24 19.20   Downloaded matchers v0.2.0
+#24 19.31   Downloaded jsonwebtoken v9.3.1
+#24 19.45   Downloaded icu_provider v2.1.1
+#24 19.52   Downloaded icu_properties v2.1.2
+#24 19.59   Downloaded icu_normalizer v2.1.1
+#24 19.62   Downloaded hmac v0.12.1
+#24 19.67   Downloaded getrandom v0.4.2
+#24 19.70   Downloaded getrandom v0.3.4
+#24 19.72   Downloaded getrandom v0.2.17
+#24 19.76   Downloaded futures-channel v0.3.32
+#24 19.83   Downloaded futures v0.3.32
+#24 19.97   Downloaded data-encoding v2.10.0
+#24 20.02   Downloaded crossbeam-utils v0.8.21
+#24 20.09   Downloaded const-oid v0.9.6
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 10.21   Downloaded event-listener v2.5.3
+#25 10.22   Downloaded litemap v0.8.1
+#25 10.25   Downloaded ghash v0.5.1
+#25 10.26   Downloaded futures-core v0.3.32
+#25 10.26   Downloaded form_urlencoded v1.2.2
+#25 10.26   Downloaded equivalent v1.0.2
+#25 10.27   Downloaded base64 v0.22.1
+#25 10.31   Downloaded percent-encoding v2.3.2
+#25 10.32   Downloaded tinyvec_macros v0.1.1
+#25 10.33   Downloaded getrandom v0.2.17
+#25 10.34   Downloaded potential_utf v0.1.4
+#25 10.35   Downloaded mime v0.3.17
+#25 10.36   Downloaded tower-service v0.3.3
+#25 10.36   Downloaded rustc_version v0.4.1
+#25 10.39   Downloaded tokio-macros v2.6.1
+#25 10.40   Downloaded tryhard v0.5.2
+#25 10.41   Downloaded tempfile v3.26.0
+#25 10.46   Downloaded unicode-properties v0.1.4
+#25 10.53   Downloaded zerofrom-derive v0.1.6
+#25 10.59   Downloaded zmij v1.0.21
+#25 10.60   Downloaded uuid v1.22.0
+#25 10.64   Downloaded unicode-normalization v0.1.25
+#25 10.69   Downloaded stringprep v0.1.5
+#25 10.72   Downloaded rustls-pemfile v2.2.0
+#25 10.74   Downloaded zerotrie v0.2.3
+#25 10.79   Downloaded time v0.3.47
+#25 10.97   Downloaded tracing-log v0.2.0
+#25 10.97   Downloaded syn v2.0.117
+#25 11.08   Downloaded zerovec v0.11.5
+#25 11.12   Downloaded serde_derive v1.0.228
+#25 11.20   Downloaded num-traits v0.2.19
+#25 11.22   Downloaded sqlx-postgres v0.7.4
+#25 11.27   Downloaded vcpkg v0.2.15
+#25 11.52   Downloaded signatory v0.27.1
+#25 11.55   Downloaded zerocopy v0.8.40
+#25 11.61   Downloaded sqlx v0.7.4
+#25 11.69   Downloaded regex v1.12.3
+#25 11.72   Downloaded rustls-webpki v0.102.8
+#25 11.87   Downloaded tracing v0.1.44
+#25 12.27   Downloaded tracing-subscriber v0.3.22
+#25 12.38   Downloaded webpki-roots v0.25.4
+#25 12.46   Downloaded rustls v0.21.12
+#25 12.58   Downloaded portable-atomic v1.13.1
+#25 12.69   Downloaded rustls v0.22.4
+#25 12.80   Downloaded serde_json v1.0.149
+#25 12.88   Downloaded rustls-webpki v0.101.7
+#25 13.03   Downloaded num-bigint v0.4.6
+#25 13.06   Downloaded regex-syntax v0.8.10
+#25 13.15   Downloaded rustix v1.1.4
+#25 13.36   Downloaded num-bigint-dig v0.8.6
+#25 13.42   Downloaded libm v0.2.16
+#25 13.48   Downloaded unicode-segmentation v1.12.0
+#25 13.54   Downloaded libc v0.2.183
+#25 13.76   Downloaded serde v1.0.228
+#25 13.79   Downloaded nom v7.1.3
+#25 13.81   Downloaded minimal-lexical v0.2.1
+#25 13.90   Downloaded sqlx-core v0.7.4
+#25 13.98   Downloaded rsa v0.9.10
+#25 14.01   Downloaded rand v0.8.5
+#25 14.02   Downloaded mio v1.1.1
+#25 14.09   Downloaded memchr v2.8.0
+#25 14.20   Downloaded tokio v1.50.0
+#25 14.63   Downloaded regex-automata v0.4.14
+#25 14.69   Downloaded tracing-core v0.1.36
+#25 14.70   Downloaded sqlx-mysql v0.7.4
+#25 14.72   Downloaded socket2 v0.6.3
+#25 14.73   Downloaded sharded-slab v0.1.7
+#25 14.76   Downloaded serde_core v1.0.228
+#25 14.77   Downloaded ryu v1.0.23
+#25 14.78   Downloaded sqlx-sqlite v0.7.4
+#25 14.80   Downloaded rustls-pemfile v1.0.4
+#25 14.80   Downloaded rustls-native-certs v0.7.3
+#25 14.81   Downloaded proc-macro2 v1.0.106
+#25 14.85   Downloaded parking_lot_core v0.9.12
+#25 14.86   Downloaded parking_lot v0.12.5
+#25 14.87   Downloaded num-integer v0.1.46
+#25 14.88   Downloaded async-nats v0.34.0
+#25 14.90   Downloaded thiserror v2.0.18
+#25 14.96   Downloaded sqlx-macros-core v0.7.4
+#25 14.97   Downloaded sqlformat v0.2.6
+#25 14.98   Downloaded spin v0.9.8
+#25 15.01   Downloaded smallvec v1.15.1
+#25 15.04   Downloaded sha2 v0.10.9
+#25 15.09   Downloaded rustversion v1.0.22
+#25 15.11   Downloaded rustls-pki-types v1.14.0
+#25 15.12   Downloaded pkcs1 v0.7.5
+#25 15.14   Downloaded paste v1.0.15
+#25 15.17   Downloaded once_cell v1.21.3
+#25 15.19   Downloaded curve25519-dalek v4.1.3
+#25 15.30   Downloaded syn v1.0.109
+#25 15.42   Downloaded spki v0.7.3
+#25 15.43   Downloaded simple_asn1 v0.6.4
+#25 15.48   Downloaded semver v1.0.27
+#25 15.53   Downloaded quote v1.0.45
+#25 15.55   Downloaded powerfmt v0.2.0
+#25 15.56   Downloaded pkcs8 v0.10.2
+#25 15.59   Downloaded nkeys v0.4.5
+#25 15.60   Downloaded url v2.5.8
+#25 15.63   Downloaded slab v0.4.12
+#25 15.63   Downloaded signal-hook-registry v1.4.8
+#25 15.64   Downloaded shlex v1.3.0
+#25 15.65   Downloaded sct v0.7.1
+#25 15.69   Downloaded password-hash v0.5.0
+#25 15.70   Downloaded chrono v0.4.44
+#25 15.76   Downloaded rand_core v0.6.4
+#25 15.77   Downloaded ring v0.17.14
+#25 16.46   Downloaded ppv-lite86 v0.2.21
+#25 16.47   Downloaded num-iter v0.1.45
+#25 16.48   Downloaded nu-ansi-term v0.50.3
+#25 16.52   Downloaded serde_path_to_error v0.1.20
+#25 16.53   Downloaded polyval v0.6.2
+#25 16.54   Downloaded pkg-config v0.3.32
+#25 16.54   Downloaded pin-project-lite v0.2.17
+#25 16.60   Downloaded pem-rfc7468 v0.7.0
+#25 16.62   Downloaded pem v3.0.6
+#25 16.63   Downloaded log v0.4.29
+#25 16.65   Downloaded hkdf v0.12.4
+#25 16.70   Downloaded aho-corasick v1.1.4
+#25 16.78   Downloaded aes-gcm v0.10.3
+#25 16.80   Downloaded num-conv v0.2.0
+#25 16.80   Downloaded nuid v0.5.0
+#25 16.81   Downloaded icu_properties_data v2.1.2
+#25 16.87   Downloaded hyper v1.8.1
+#25 16.91   Downloaded hashbrown v0.16.1
+#25 16.98   Downloaded futures-util v0.3.32
+#25 17.10   Downloaded tower-http v0.5.2
+#25 17.18   Downloaded tower v0.5.3
+#25 17.26   Downloaded serde_urlencoded v0.7.1
+#25 17.26   Downloaded idna v1.1.0
+#25 17.37   Downloaded hashbrown v0.14.5
+#25 17.45   Downloaded axum v0.7.9
+#25 17.57   Downloaded zerovec-derive v0.11.2
+#25 17.58   Downloaded zeroize v1.8.2
+#25 17.59   Downloaded yoke v0.8.1
+#25 17.60   Downloaded writeable v0.6.2
+#25 17.64   Downloaded whoami v1.6.1
+#25 17.71   Downloaded version_check v0.9.5
+#25 17.75   Downloaded unicode_categories v0.1.1
+#25 17.77   Downloaded typenum v1.19.0
+#25 17.79   Downloaded subtle v2.6.1
+#25 17.80   Downloaded stable_deref_trait v1.2.1
+#25 17.81   Downloaded serde_nanos v0.1.4
+#25 17.81   Downloaded rand_chacha v0.3.1
+#25 17.82   Downloaded opaque-debug v0.3.1
+#25 17.82   Downloaded aes v0.8.4
+#25 17.89   Downloaded zerofrom v0.1.6
+#25 17.89   Downloaded yoke-derive v0.8.1
+#25 17.90   Downloaded utf8_iter v1.0.4
+#25 17.90   Downloaded urlencoding v2.1.3
+#25 17.91   Downloaded untrusted v0.9.0
+#25 17.92   Downloaded universal-hash v0.5.1
+#25 17.92   Downloaded unicode-ident v1.0.24
+#25 17.94   Downloaded unicode-bidi v0.3.18
+#25 17.96   Downloaded sqlx-macros v0.7.4
+#25 17.97   Downloaded signature v2.2.0
+#25 18.00   Downloaded serde_repr v0.1.20
+#25 18.01   Downloaded hyper-util v0.1.20
+#25 18.05   Downloaded http v1.4.0
+#25 18.08   Downloaded ed25519-dalek v2.2.0
+#25 18.11   Downloaded cc v1.2.56
+#25 18.14   Downloaded tracing-attributes v0.1.31
+#25 18.16   Downloaded tokio-stream v0.1.18
+#25 18.18   Downloaded tinyvec v1.10.0
+#25 18.20   Downloaded sha1 v0.10.6
+#25 18.22   Downloaded indexmap v2.13.0
+#25 18.27   Downloaded icu_normalizer_data v2.1.1
+#25 18.29   Downloaded icu_locale_core v2.1.1
+#25 18.37   Downloaded futures-intrusive v0.5.0
+#25 18.43   Downloaded der v0.7.10
+#25 18.47   Downloaded scopeguard v1.2.0
+#25 18.48   Downloaded icu_collections v2.1.1
+#25 18.53   Downloaded httparse v1.10.1
+#25 18.55   Downloaded flume v0.11.1
+#25 18.56   Downloaded tokio-rustls v0.25.0
+#25 18.57   Downloaded icu_properties v2.1.2
+#25 18.58   Downloaded icu_normalizer v2.1.1
+#25 18.60   Downloaded bytes v1.11.1
+#25 18.66   Downloaded tinystr v0.8.2
+#25 18.67   Downloaded time-macros v0.2.27
+#25 18.68   Downloaded time-core v0.1.8
+#25 18.68   Downloaded thread_local v1.1.9
+#25 18.69   Downloaded thiserror-impl v2.0.18
+#25 18.70   Downloaded thiserror-impl v1.0.69
+#25 18.72   Downloaded thiserror v1.0.69
+#25 18.76   Downloaded synstructure v0.13.2
+#25 18.77   Downloaded jsonwebtoken v9.3.1
+#25 18.79   Downloaded linux-raw-sys v0.12.1
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 20.10   Downloaded bytes v1.11.1
+#24 20.18   Downloaded blake2 v0.10.6
+#24 20.19   Downloaded base64 v0.22.1
+#24 20.26   Downloaded allocator-api2 v0.2.21
+#24 20.28   Downloaded opaque-debug v0.3.1
+#24 20.29   Downloaded nuid v0.5.0
+#24 20.30   Downloaded mime v0.3.17
+#24 20.31   Downloaded ipnetwork v0.20.0
+#24 20.33   Downloaded iana-time-zone v0.1.65
+#24 20.40   Downloaded httparse v1.10.1
+#24 20.46   Downloaded hashlink v0.8.4
+#24 20.50   Downloaded futures-executor v0.3.32
+#24 20.51   Downloaded find-msvc-tools v0.1.9
+#24 20.52   Downloaded either v1.15.0
+#24 20.56   Downloaded dotenvy v0.15.7
+#24 20.61   Downloaded ctr v0.9.2
+#24 20.65   Downloaded crypto-common v0.1.7
+#24 20.65   Downloaded cipher v0.4.4
+#24 20.71   Downloaded bitflags v2.11.0
+#24 20.75   Downloaded base64ct v1.8.3
+#24 20.77   Downloaded anyhow v1.0.102
+#24 20.83   Downloaded ahash v0.8.12
+#24 20.89   Downloaded http-body-util v0.1.3
+#24 20.90   Downloaded generic-array v0.14.7
+#24 20.90   Downloaded fastrand v2.3.0
+#24 20.91   Downloaded ed25519 v2.2.3
+#24 20.92   Downloaded displaydoc v0.2.5
+#24 20.94   Downloaded digest v0.10.7
+#24 20.95   Downloaded deranged v0.5.8
+#24 20.96   Downloaded crossbeam-queue v0.3.12
+#24 20.98   Downloaded byteorder v1.5.0
+#24 21.03   Downloaded axum-core v0.4.5
+#24 21.05   Downloaded autocfg v1.5.0
+#24 21.06   Downloaded litemap v0.8.1
+#24 21.08   Downloaded lazy_static v1.5.0
+#24 21.09   Downloaded http-body v1.0.1
+#24 21.09   Downloaded heck v0.4.1
+#24 21.10   Downloaded futures-task v0.3.32
+#24 21.11   Downloaded futures-io v0.3.32
+#24 21.11   Downloaded futures-core v0.3.32
+#24 21.12   Downloaded form_urlencoded v1.2.2
+#24 21.12   Downloaded event-listener v2.5.3
+#24 21.15   Downloaded equivalent v1.0.2
+#24 21.16   Downloaded crc-catalog v2.4.0
+#24 21.16   Downloaded crc v3.4.0
+#24 21.17   Downloaded cpufeatures v0.2.17
+#24 21.18   Downloaded cfg-if v1.0.4
+#24 21.23   Downloaded async-trait v0.1.89
+#24 21.25   Downloaded argon2 v0.5.3
+#24 21.27   Downloaded itoa v1.0.17
+#24 21.28   Downloaded inout v0.1.4
+#24 21.29   Downloaded httpdate v1.0.3
+#24 21.30   Downloaded home v0.5.12
+#24 21.31   Downloaded hex v0.4.3
+#24 21.32   Downloaded ghash v0.5.1
+#24 21.32   Downloaded futures-sink v0.3.32
+#24 21.43   Downloaded futures-macro v0.3.32
+#24 21.44   Downloaded errno v0.3.14
+#24 21.46   Downloaded block-buffer v0.10.4
+#24 21.47   Downloaded atomic-waker v1.1.2
+#24 21.49   Downloaded libsqlite3-sys v0.27.0
+#24 23.13    Compiling libc v0.2.183
+#24 23.14    Compiling proc-macro2 v1.0.106
+#24 23.14    Compiling quote v1.0.45
+#24 23.14    Compiling unicode-ident v1.0.24
+#24 23.14    Compiling cfg-if v1.0.4
+#24 23.14    Compiling version_check v0.9.5
+#24 23.14    Compiling typenum v1.19.0
+#24 23.14    Compiling serde_core v1.0.228
+#24 24.92    Compiling serde v1.0.228
+#24 26.69    Compiling find-msvc-tools v0.1.9
+#24 29.72    Compiling generic-array v0.14.7
+#24 30.12    Compiling shlex v1.3.0
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 20.72   Downloaded iana-time-zone v0.1.65
+#25 20.73   Downloaded getrandom v0.4.2
+#25 20.74   Downloaded getrandom v0.3.4
+#25 20.75   Downloaded icu_provider v2.1.1
+#25 20.77   Downloaded tower-layer v0.3.3
+#25 20.77   Downloaded pin-utils v0.1.0
+#25 20.78   Downloaded anyhow v1.0.102
+#25 20.81   Downloaded allocator-api2 v0.2.21
+#25 20.82   Downloaded openssl-probe v0.1.6
+#25 20.89   Downloaded futures v0.3.32
+#25 20.93   Downloaded sync_wrapper v1.0.2
+#25 20.93   Downloaded ipnetwork v0.20.0
+#25 20.95   Downloaded hmac v0.12.1
+#25 20.97   Downloaded futures-channel v0.3.32
+#25 20.98   Downloaded either v1.15.0
+#25 21.04   Downloaded dotenvy v0.15.7
+#25 21.06   Downloaded displaydoc v0.2.5
+#25 21.08   Downloaded digest v0.10.7
+#25 21.09   Downloaded deranged v0.5.8
+#25 21.11   Downloaded data-encoding v2.10.0
+#25 21.11   Downloaded ctr v0.9.2
+#25 21.12   Downloaded crossbeam-utils v0.8.21
+#25 21.16   Downloaded const-oid v0.9.6
+#25 21.18   Downloaded byteorder v1.5.0
+#25 21.23   Downloaded blake2 v0.10.6
+#25 21.25   Downloaded bitflags v2.11.0
+#25 21.28   Downloaded base64 v0.21.7
+#25 21.32   Downloaded axum-core v0.4.5
+#25 21.36   Downloaded autocfg v1.5.0
+#25 21.37   Downloaded async-trait v0.1.89
+#25 21.41   Downloaded argon2 v0.5.3
+#25 21.42   Downloaded ahash v0.8.12
+#25 21.43   Downloaded http-body-util v0.1.3
+#25 21.46   Downloaded hashlink v0.8.4
+#25 21.47   Downloaded generic-array v0.14.7
+#25 21.48   Downloaded futures-task v0.3.32
+#25 21.50   Downloaded futures-executor v0.3.32
+#25 21.51   Downloaded find-msvc-tools v0.1.9
+#25 21.52   Downloaded ed25519 v2.2.3
+#25 21.53   Downloaded cipher v0.4.4
+#25 21.56   Downloaded errno v0.3.14
+#25 21.57   Downloaded crossbeam-queue v0.3.12
+#25 21.57   Downloaded crc-catalog v2.4.0
+#25 21.58   Downloaded crc v3.4.0
+#25 21.58   Downloaded cpufeatures v0.2.17
+#25 21.59   Downloaded futures-io v0.3.32
+#25 21.59   Downloaded fastrand v2.3.0
+#25 21.63   Downloaded curve25519-dalek-derive v0.1.1
+#25 21.64   Downloaded atomic-waker v1.1.2
+#25 21.65   Downloaded atoi v2.0.0
+#25 21.65   Downloaded hex v0.4.3
+#25 21.66   Downloaded crypto-common v0.1.7
+#25 21.67   Downloaded cfg-if v1.0.4
+#25 21.67   Downloaded block-buffer v0.10.4
+#25 21.68   Downloaded aead v0.5.2
+#25 21.74   Downloaded libsqlite3-sys v0.27.0
+#25 23.86    Compiling proc-macro2 v1.0.106
+#25 23.88    Compiling unicode-ident v1.0.24
+#25 23.90    Compiling quote v1.0.45
+#25 23.90    Compiling libc v0.2.183
+#25 23.90    Compiling cfg-if v1.0.4
+#25 23.91    Compiling version_check v0.9.5
+#25 23.94    Compiling typenum v1.19.0
+#25 23.95    Compiling serde_core v1.0.228
+#25 30.23    Compiling serde v1.0.228
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 31.15    Compiling cc v1.2.56
+#24 31.27    Compiling zerocopy v0.8.40
+#24 31.58    Compiling subtle v2.6.1
+#24 36.53    Compiling parking_lot_core v0.9.12
+#24 37.66    Compiling icu_properties_data v2.1.2
+#24 37.75    Compiling smallvec v1.15.1
+#24 39.39    Compiling syn v2.0.117
+#24 39.55    Compiling getrandom v0.2.17
+#24 39.86    Compiling icu_normalizer_data v2.1.1
+#24 39.95    Compiling autocfg v1.5.0
+#24 40.12    Compiling pin-project-lite v0.2.17
+#24 40.42    Compiling rand_core v0.6.4
+#24 40.60    Compiling itoa v1.0.17
+#24 40.65    Compiling memchr v2.8.0
+#24 40.95    Compiling crypto-common v0.1.7
+#24 41.11    Compiling block-buffer v0.10.4
+#24 41.40    Compiling stable_deref_trait v1.2.1
+#24 41.50    Compiling digest v0.10.7
+#24 41.57    Compiling futures-core v0.3.32
+#24 41.58    Compiling getrandom v0.3.4
+#24 41.58    Compiling zmij v1.0.21
+#24 42.02    Compiling scopeguard v1.2.0
+#24 42.25    Compiling lock_api v0.4.14
+#24 42.52    Compiling ahash v0.8.12
+#24 42.53    Compiling serde_json v1.0.149
+#24 43.05    Compiling once_cell v1.21.3
+#24 43.12    Compiling errno v0.3.14
+#24 43.48    Compiling parking_lot v0.12.5
+#24 43.55    Compiling ring v0.17.14
+#24 43.78    Compiling time-core v0.1.8
+#24 43.78    Compiling num-conv v0.2.0
+#24 43.79    Compiling log v0.4.29
+#24 44.22    Compiling time-macros v0.2.27
+#24 44.78    Compiling signal-hook-registry v1.4.8
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 35.55    Compiling shlex v1.3.0
+#25 41.63    Compiling find-msvc-tools v0.1.9
+#25 41.80    Compiling zerocopy v0.8.40
+#25 42.75    Compiling generic-array v0.14.7
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 46.33    Compiling mio v1.1.1
+#24 46.76    Compiling socket2 v0.6.3
+#24 47.78    Compiling zeroize v1.8.2
+#24 48.20    Compiling futures-sink v0.3.32
+#24 49.22    Compiling crossbeam-utils v0.8.21
+#24 49.47    Compiling thiserror v1.0.69
+#24 52.81    Compiling untrusted v0.9.0
+#24 52.98    Compiling futures-channel v0.3.32
+#24 54.10    Compiling cpufeatures v0.2.17
+#24 54.58    Compiling litemap v0.8.1
+#24 55.24    Compiling writeable v0.6.2
+#24 57.15    Compiling tracing-core v0.1.36
+#24 58.89    Compiling num-traits v0.2.19
+#24 59.26    Compiling rustls v0.21.12
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 49.43    Compiling cc v1.2.56
+#25 53.94    Compiling subtle v2.6.1
+#25 55.86    Compiling parking_lot_core v0.9.12
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 69.23    Compiling getrandom v0.4.2
+#24 72.35    Compiling slab v0.4.12
+#24 72.55    Compiling futures-task v0.3.32
+#24 73.45    Compiling futures-io v0.3.32
+#24 73.51    Compiling base64ct v1.8.3
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 71.56    Compiling icu_normalizer_data v2.1.1
+#25 73.78    Compiling getrandom v0.2.17
+#25 82.68    Compiling smallvec v1.15.1
+#25 83.30    Compiling icu_properties_data v2.1.2
+#25 90.61    Compiling autocfg v1.5.0
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 92.10    Compiling synstructure v0.13.2
+#24 104.7    Compiling paste v1.0.15
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 105.5    Compiling syn v2.0.117
+#25 105.7    Compiling rand_core v0.6.4
+#25 110.7    Compiling pin-project-lite v0.2.17
+#25 111.5    Compiling memchr v2.8.0
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 105.6    Compiling percent-encoding v2.3.2
+#24 110.3    Compiling powerfmt v0.2.0
+#24 110.9    Compiling form_urlencoded v1.2.2
+#24 113.3    Compiling deranged v0.5.8
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 119.0    Compiling itoa v1.0.17
+#25 119.5    Compiling block-buffer v0.10.4
+#25 120.1    Compiling stable_deref_trait v1.2.1
+#25 126.9    Compiling crypto-common v0.1.7
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 119.4    Compiling zerofrom-derive v0.1.6
+#24 119.6    Compiling yoke-derive v0.8.1
+#24 121.8    Compiling serde_derive v1.0.228
+#24 127.3    Compiling zerovec-derive v0.11.2
+#24 128.6    Compiling displaydoc v0.2.5
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 130.3    Compiling futures-core v0.3.32
+#25 132.0    Compiling zmij v1.0.21
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 135.3    Compiling tracing-attributes v0.1.31
+#24 136.6    Compiling tokio-macros v2.6.1
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 136.7    Compiling getrandom v0.3.4
+#25 143.4    Compiling digest v0.10.7
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 146.2    Compiling thiserror-impl v1.0.69
+#24 147.2    Compiling zerofrom v0.1.6
+#24 147.7    Compiling yoke v0.8.1
+#24 148.1    Compiling futures-macro v0.3.32
+#24 148.5    Compiling zerovec v0.11.5
+#24 150.2    Compiling zerotrie v0.2.3
+#24 151.8    Compiling tinystr v0.8.2
+#24 152.4    Compiling icu_locale_core v2.1.1
+#24 152.7    Compiling potential_utf v0.1.4
+#24 153.2    Compiling icu_collections v2.1.1
+#24 153.4    Compiling tracing v0.1.44
+#24 153.6    Compiling futures-util v0.3.32
+#24 154.6    Compiling icu_provider v2.1.1
+#24 154.7    Compiling ppv-lite86 v0.2.21
+#24 155.4    Compiling icu_normalizer v2.1.1
+#24 155.4    Compiling icu_properties v2.1.2
+#24 156.0    Compiling bytes v1.11.1
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 146.8    Compiling ring v0.17.14
+#25 147.9    Compiling scopeguard v1.2.0
+#25 152.8    Compiling lock_api v0.4.14
+#25 152.9    Compiling ahash v0.8.12
+#25 153.1    Compiling once_cell v1.21.3
+#25 155.1    Compiling serde_json v1.0.149
+#25 156.3    Compiling errno v0.3.14
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 158.1    Compiling semver v1.0.27
+#24 161.4    Compiling tokio v1.50.0
+#24 163.0    Compiling time v0.3.47
+#24 163.0    Compiling rustc_version v0.4.1
+#24 163.1    Compiling idna_adapter v1.2.1
+#24 163.5    Compiling http v1.4.0
+#24 165.3    Compiling rand_chacha v0.3.1
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 160.2    Compiling parking_lot v0.12.5
+#25 162.1    Compiling log v0.4.29
+#25 162.6    Compiling cpufeatures v0.2.17
+#25 163.0    Compiling time-core v0.1.8
+#25 164.4    Compiling num-conv v0.2.0
+#25 167.1    Compiling signal-hook-registry v1.4.8
+#25 169.5    Compiling time-macros v0.2.27
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 171.3    Compiling pem-rfc7468 v0.7.0
+#24 175.3    Compiling sha2 v0.10.9
+#24 175.9    Compiling rustls-pki-types v1.14.0
+#24 180.4    Compiling minimal-lexical v0.2.1
+#24 180.4    Compiling const-oid v0.9.6
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 181.8    Compiling socket2 v0.6.3
+#25 185.3    Compiling mio v1.1.1
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 182.6    Compiling utf8_iter v1.0.4
+#24 183.0    Compiling tinyvec_macros v0.1.1
+#24 183.1    Compiling allocator-api2 v0.2.21
+#24 183.2    Compiling tinyvec v1.10.0
+#24 183.2    Compiling idna v1.1.0
+#24 185.3    Compiling hashbrown v0.14.5
+#24 186.8    Compiling nom v7.1.3
+#24 187.7    Compiling der v0.7.10
+#24 194.0    Compiling rand v0.8.5
+#24 195.0    Compiling http-body v1.0.1
+#24 197.7    Compiling curve25519-dalek v4.1.3
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 198.6    Compiling thiserror v1.0.69
+#25 199.4    Compiling untrusted v0.9.0
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 199.7    Compiling sct v0.7.1
+#24 199.8    Compiling rustls-webpki v0.101.7
+#24 203.3    Compiling aho-corasick v1.1.4
+#24 203.3    Compiling signature v2.2.0
+#24 204.2    Compiling rustix v1.1.4
+#24 204.6    Compiling base64 v0.21.7
+#24 204.9    Compiling crc-catalog v2.4.0
+#24 205.5    Compiling equivalent v1.0.2
+#24 205.9    Compiling iana-time-zone v0.1.65
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 206.3    Compiling synstructure v0.13.2
+#25 208.8    Compiling crossbeam-utils v0.8.21
+#25 210.1    Compiling zeroize v1.8.2
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 207.1    Compiling unicode_categories v0.1.1
+#24 207.6    Compiling bitflags v2.11.0
+#24 207.7    Compiling regex-syntax v0.8.10
+#24 207.8    Compiling hashbrown v0.16.1
+#24 209.6    Compiling sqlformat v0.2.6
+#24 210.6    Compiling indexmap v2.13.0
+#24 210.9    Compiling chrono v0.4.44
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 218.1    Compiling futures-sink v0.3.32
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 219.9    Compiling rustls-pemfile v1.0.4
+#24 221.3    Compiling crc v3.4.0
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 225.2    Compiling futures-channel v0.3.32
+#25 227.2    Compiling litemap v0.8.1
+#25 229.5    Compiling writeable v0.6.2
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 233.2    Compiling regex-automata v0.4.14
+#24 237.1    Compiling spki v0.7.3
+#24 239.3    Compiling tokio-stream v0.1.18
+#24 239.8    Compiling futures-intrusive v0.5.0
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 235.5    Compiling zerofrom-derive v0.1.6
+#25 237.4    Compiling yoke-derive v0.8.1
+#25 237.5    Compiling serde_derive v1.0.228
+#25 237.9    Compiling zerovec-derive v0.11.2
+#25 239.5    Compiling displaydoc v0.2.5
+#25 242.0    Compiling tracing-attributes v0.1.31
+#25 ...
+
+#24 [linux/arm64 builder 5/5] RUN cargo build --release -p auth-service
+#24 242.2    Compiling crossbeam-queue v0.3.12
+#24 243.1    Compiling hashlink v0.8.4
+#24 243.4    Compiling url v2.5.8
+#24 249.7    Compiling unicode-normalization v0.1.25
+#24 250.5    Compiling atoi v2.0.0
+#24 251.1    Compiling ipnetwork v0.20.0
+#24 252.1    Compiling either v1.15.0
+#24 252.5    Compiling hmac v0.12.1
+#24 252.8    Compiling tower-service v0.3.3
+#24 253.1    Compiling unicode-bidi v0.3.18
+#24 253.2    Compiling event-listener v2.5.3
+#24 254.0    Compiling unicode-properties v0.1.4
+#24 254.2    Compiling hex v0.4.3
+#24 254.8    Compiling rustls v0.22.4
+#24 255.5    Compiling linux-raw-sys v0.12.1
+#24 256.1    Compiling syn v1.0.109
+#24 ...
+
+#25 [linux/amd64 builder 5/5] RUN cargo build --release -p auth-service
+#25 256.3    Compiling tokio-macros v2.6.1
+#25 258.4    Compiling zerofrom v0.1.6
