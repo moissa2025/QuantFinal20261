@@ -31,8 +31,8 @@ tokio-util = "0.7"
 
 headers = "0.4"
 
-sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono"] }
-
+# Database
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "tls-rustls"] }
 common = { path = "../../libs/common" }
 
 # --- Utoipa stack (correct versions) ---

@@ -1,10 +1,10 @@
-# k8s/base/trading-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: trading-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: trading-service
   ports:

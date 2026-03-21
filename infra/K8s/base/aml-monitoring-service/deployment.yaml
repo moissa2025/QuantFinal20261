@@ -13,34 +13,18 @@ spec:
       labels:
         app: aml-monitoring-service
     spec:
+      nodeSelector:
+        pool: backoffice
       containers:
         - name: aml-monitoring-service
-          image: gcr.io/correcttradingplatform/aml-monitoring-service:latest
-
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/aml/aml-monitoring-service:latest
           env:
-            # Inject CockroachDB connection string
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: aml-db-url
                   key: DATABASE_URL
-
-            # NATS stays the same
             - name: NATS_URL
               value: nats://nats:4222
-
           ports:
             - containerPort: 8080
-
-          volumeMounts:
-            # Mount CockroachDB root certificate
-            - name: cockroachdb-cert
-              mountPath: /cockroach-certs
-              readOnly: true
-
-      volumes:
-        # Shared CockroachDB root certificate secret
-        - name: cockroachdb-cert
-          secret:
-            secretName: cockroachdb-root-cert
-

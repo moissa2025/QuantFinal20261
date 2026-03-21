@@ -1,10 +1,10 @@
-# k8s/base/reconciliation-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: reconciliation-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: reconciliation-service
   ports:

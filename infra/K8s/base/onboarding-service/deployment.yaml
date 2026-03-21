@@ -1,4 +1,3 @@
-# k8s/base/onboarding-service/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,11 +13,17 @@ spec:
       labels:
         app: onboarding-service
     spec:
-      serviceAccountName: cloudsql-sa
+      nodeSelector:
+        pool: core-services
       containers:
         - name: onboarding-service
-          image: gcr.io/correcttradingplatform/onboarding-service:latest
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/onboarding/onboarding-service:latest
           env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: onboarding-db-url
+                  key: DATABASE_URL
             - name: NATS_URL
               value: nats://nats:4222
           ports:

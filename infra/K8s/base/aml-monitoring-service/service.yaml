@@ -1,10 +1,10 @@
-# k8s/base/aml-monitoring-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: aml-monitoring-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: aml-monitoring-service
   ports:

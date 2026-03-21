@@ -1,10 +1,10 @@
-# k8s/base/market-data-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: market-data-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: market-data-service
   ports:

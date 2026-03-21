@@ -1,5 +1,5 @@
 # Stage 1: builder
-FROM --platform=linux/amd64 rust:latest as builder
+FROM rust:latest AS builder
 
 WORKDIR /app
 
@@ -17,11 +17,10 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 
 # Build only this service
-# IMPORTANT: replace wallet-service with the correct crate name per service
 RUN cargo build --release -p onboarding-service
 
 # Stage 2: runtime
-FROM --platform=linux/amd64 debian:bookworm-slim
+FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 

@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    autopilot.gke.io/resource-adjustment: '{"input":{"containers":[{"name":"api-gateway"}]},"output":{"containers":[{"limits":{"ephemeral-storage":"1Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"api-gateway"}]},"computeClassAtAdmission":"Default","modified":true}'
+    autopilot.gke.io/warden-version: 34.45.0-gke.3
+    deployment.kubernetes.io/revision: "7"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"api-gateway","namespace":"trading-platform"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"api-gateway"}},"template":{"metadata":{"labels":{"app":"api-gateway"}},"spec":{"containers":[{"env":[{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"url","name":"apigw-db-url"}}},{"name":"NATS_URL","value":"nats://nats:4222"}],"image":"europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:latest","name":"api-gateway","ports":[{"containerPort":8080}]}]}}}}
+  creationTimestamp: "2026-03-19T18:57:23Z"
+  generation: 7
+  name: api-gateway
+  namespace: trading-platform
+  resourceVersion: "1773952945091583014"
+  uid: ead3a78a-6ad0-4c0a-908c-a2fc7bef42f4
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: api-gateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2026-03-19T20:42:24Z"
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: url
+              name: apigw-db-url
+        - name: NATS_URL
+          value: nats://nats:4222
+        image: europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:latest
+        imagePullPolicy: Always
+        name: api-gateway
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            ephemeral-storage: 1Gi
+          requests:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccount: cloudsql-sa
+      serviceAccountName: cloudsql-sa
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.io/arch
+        operator: Equal
+        value: amd64
+status:
+  conditions:
+  - lastTransitionTime: "2026-03-19T18:57:23Z"
+    lastUpdateTime: "2026-03-19T18:57:23Z"
+    message: Deployment does not have minimum availability.
+    reason: MinimumReplicasUnavailable
+    status: "False"
+    type: Available
+  - lastTransitionTime: "2026-03-19T18:57:23Z"
+    lastUpdateTime: "2026-03-19T18:57:23Z"
+    message: 'pods "api-gateway-5c5ffd5c94-" is forbidden: error looking up service
+      account trading-platform/cloudsql-sa: serviceaccount "cloudsql-sa" not found'
+    reason: FailedCreate
+    status: "True"
+    type: ReplicaFailure
+  - lastTransitionTime: "2026-03-19T20:41:34Z"
+    lastUpdateTime: "2026-03-19T20:41:34Z"
+    message: Created new replica set "api-gateway-85646db8f4"
+    reason: NewReplicaSetCreated
+    status: "True"
+    type: Progressing
+  observedGeneration: 7
+  unavailableReplicas: 3

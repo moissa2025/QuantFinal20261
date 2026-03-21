@@ -1,0 +1,25 @@
+# Dockerfile.wallet-service
+FROM rust:latest AS builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential pkg-config libssl-dev clang cmake libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN cargo build --release -p wallet-service
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY --from=builder /app/target/release/wallet-service /app/wallet-service
+
+ENV RUST_LOG=info
+
+CMD ["/app/wallet-service"]
+

@@ -1,10 +1,10 @@
-# k8s/base/risk-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: risk-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: risk-service
   ports:

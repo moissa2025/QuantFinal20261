@@ -1,10 +1,10 @@
-# k8s/base/wallet-service/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: wallet-service
   namespace: trading-platform
 spec:
+  type: ClusterIP
   selector:
     app: wallet-service
   ports:
