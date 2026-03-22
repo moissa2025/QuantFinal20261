@@ -1,61 +1,46 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
 
-echo "🚀 Deploying GlobalQuantX Platform to GKE..."
-echo ""
+NAMESPACE="trading-platform"
 
-# Ensure namespace exists
+echo "🚀 Deploying GlobalQuantX Platform"
+echo "-----------------------------------------------------------"
+
+apply_service() {
+  SERVICE=$1
+  echo "📦 Applying $SERVICE ..."
+  kubectl apply -n $NAMESPACE -f $SERVICE/
+  echo "✅ $SERVICE applied"
+  echo ""
+}
+
+# Ensure trading-platform namespace exists
+echo "📁 Ensuring namespace exists..."
 kubectl apply -f namespace/namespace.yaml
-
-echo "📡 Deploying NATS..."
-kubectl apply -f nats/nats.yaml
-
 echo ""
-echo "🧩 Deploying CORE services..."
-kubectl apply -f api-gateway/deployment.yaml
-kubectl apply -f api-gateway/service.yaml
 
-kubectl apply -f auth-service/deployment.yaml
-kubectl apply -f auth-service/service.yaml
-
-kubectl apply -f user-service/deployment.yaml
-kubectl apply -f user-service/service.yaml
-
-kubectl apply -f onboarding-service/deployment.yaml
-kubectl apply -f onboarding-service/service.yaml
-
-kubectl apply -f kyc-service/deployment.yaml
-kubectl apply -f kyc-service/service.yaml
-
-kubectl apply -f wallet-service/deployment.yaml
-kubectl apply -f wallet-service/service.yaml
-
+# Apply NATS (it has its own namespace)
+echo "📦 Applying NATS (namespace-aware)..."
+kubectl apply -f nats/
+echo "✅ NATS applied"
 echo ""
-echo "⚡ Deploying TRADING services..."
-kubectl apply -f trading-service/deployment.yaml
-kubectl apply -f trading-service/service.yaml
 
-kubectl apply -f market-data-service/deployment.yaml
-kubectl apply -f market-data-service/service.yaml
+# Apply each microservice folder into trading-platform
+apply_service "api-gateway"
+apply_service "auth-service"
+apply_service "user-service"
+apply_service "wallet-service"
+apply_service "onboarding-service"
+apply_service "kyc-service"
+apply_service "ledger-service"
+apply_service "reconciliation-service"
+apply_service "trading-service"
+apply_service "market-data-service"
+apply_service "risk-service"
+apply_service "aml-monitoring-service"
 
-kubectl apply -f risk-service/deployment.yaml
-kubectl apply -f risk-service/service.yaml
-
-echo ""
-echo "📊 Deploying BACKOFFICE services..."
-kubectl apply -f aml-monitoring-service/deployment.yaml
-kubectl apply -f aml-monitoring-service/service.yaml
-
-kubectl apply -f ledger-service/deployment.yaml
-kubectl apply -f ledger-service/service.yaml
-
-kubectl apply -f reconciliation-service/deployment.yaml
-kubectl apply -f reconciliation-service/service.yaml
-
-echo ""
-echo "⏳ Waiting for all pods to become Ready..."
-kubectl wait --for=condition=Ready pods --all -n trading-platform --timeout=300s
-
-echo ""
-echo "🎉 All services deployed successfully!"
+echo "-----------------------------------------------------------"
+echo "🎉 All services applied successfully!"
+echo "You may now run: kubectl rollout restart deploy -n $NAMESPACE"
+echo "-----------------------------------------------------------"
 

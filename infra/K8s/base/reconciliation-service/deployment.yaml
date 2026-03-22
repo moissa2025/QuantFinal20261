@@ -17,7 +17,7 @@ spec:
         pool: backoffice
       containers:
         - name: reconciliation-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/reconciliation/reconciliation-service:latest
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/reconciliation/reconciliation-service:v0.0.1
           env:
             - name: DATABASE_URL
               valueFrom:
@@ -28,3 +28,15 @@ spec:
               value: nats://nats:4222
           ports:
             - containerPort: 8080
+
+          volumeMounts:
+            - name: cockroachdb-ca
+              mountPath: /app/root.crt
+              subPath: root.crt
+      volumes:
+        - name: cockroachdb-ca
+          secret:
+            secretName: apigw-db-url
+            items:
+              - key: ca.crt
+                path: root.crt

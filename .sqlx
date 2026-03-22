@@ -1,0 +1,2 @@
+ENV SQLX_OFFLINE=true
+

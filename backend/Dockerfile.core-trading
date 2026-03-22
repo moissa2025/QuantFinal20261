@@ -1,6 +1,7 @@
 FROM rustlang/rust:nightly as builder
 
 WORKDIR /app
+ENV SQLX_OFFLINE=true
 
 # Copy entire Rust workspace
 COPY . .
@@ -31,3 +32,9 @@ RUN chmod +x run.sh
 
 CMD ["./run.sh"]
 
+
+# Copy CockroachDB root certificate into the image
+COPY root.crt /app/root.crt
+
+# Ensure Rust / OpenSSL use it
+ENV SSL_CERT_FILE=/app/root.crt

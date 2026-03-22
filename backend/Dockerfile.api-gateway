@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+ENV SQLX_OFFLINE=true
+
 # Copy the entire workspace (all services + libs)
 COPY . .
 
@@ -33,3 +35,9 @@ ENV RUST_LOG=info
 
 CMD ["/app/api-gateway"]
 
+
+# Copy CockroachDB root certificate into the image
+COPY root.crt /app/root.crt
+
+# Ensure Rust / OpenSSL use it
+ENV SSL_CERT_FILE=/app/root.crt

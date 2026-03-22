@@ -20,3 +20,9 @@ RUN pip install --no-cache-dir httpx
 
 # Default: run your cursor pagination tests
 
+
+# Copy CockroachDB root certificate into the image
+COPY root.crt /app/root.crt
+
+# Ensure Rust / OpenSSL use it
+ENV SSL_CERT_FILE=/app/root.crt

@@ -44,4 +44,8 @@ test*.txt
 .DS_Store
 secrets/*.yaml
 !secrets/*.enc.yaml
+sqlx-data.json
+# Never commit secrets
+.env
+.env.*
 
