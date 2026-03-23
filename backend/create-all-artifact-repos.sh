@@ -1,6 +1,31 @@
 #!/bin/bash
 set -euo pipefail
 
+#!/usr/bin/env bash
+
+###############################################################################
+# ⚠️  WARNING — ARTIFACT REGISTRY OPERATION (NOT DB SECRETS)
+#
+# This script ONLY creates Artifact Registry repositories.
+# It does NOT create or modify Kubernetes secrets.
+# It does NOT touch CockroachDB credentials.
+#
+# Running this script when you intended to rotate DB secrets is a critical error.
+#
+# If you intended to run: create-all-db-secrets.sh
+# STOP NOW and exit this script immediately.
+#
+# To continue, you must type: CREATE-REPOS
+###############################################################################
+
+read -p "Type CREATE-REPOS to continue: " CONFIRM
+if [[ "$CONFIRM" != "CREATE-REPOS" ]]; then
+  echo "❌ Aborted — no repositories were created."
+  exit 1
+fi
+
+
+
 PROJECT="globalquantx-prod"
 LOCATION="europe-west2"
 

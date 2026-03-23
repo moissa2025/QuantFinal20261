@@ -17,7 +17,7 @@ COPY libs ./libs
 COPY services ./services
 
 # Build only this service
-RUN cargo build --release -p ledger-service
+RUN cargo build --release -p api-gateway
 
 # Stage 2: runtime
 FROM debian:bookworm-slim
@@ -26,10 +26,10 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/ledger-service /app/ledger-service
-COPY services/ledger-service/root.crt /app/root.crt
+COPY --from=builder /app/target/release/api-gateway /app/api-gateway
+COPY services/api-gateway/root.crt /app/root.crt
 
 ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
-CMD ["/app/ledger-service"]
+CMD ["/app/api-gateway"]

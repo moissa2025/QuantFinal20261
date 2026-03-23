@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# PURPOSE: Creates all DB secrets for all microservices.
+# WARNING: Does NOT touch Artifact Registry.
+
+
+
+if [ -z "${DB_URL:-}" ]; then
+  echo "❌ ERROR: DB_URL environment variable is not set."
+  echo "Please run: export DB_URL=\"postgresql://...\""
+  exit 1
+fi
 
 echo "🔐 Creating all DB secrets with DATABASE_URL + CA certificate..."
 echo ""
 
-# Shared DATABASE_URL for all services
-DB_URL="postgresql://mo:FUa7p0w1phYKChdQBCwehg@social-sardine-13508.jxf.gcp-europe-west2.cockroachlabs.cloud:26257/globalquantx?sslmode=verify-full"
-
-# List of all DB secrets
 SECRETS=(
   auth-db-url
   user-db-url
