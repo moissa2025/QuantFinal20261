@@ -1,0 +1,119 @@
+/*******************************
+  EXPORT LAYOUT
+*******************************/
+.export-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.export-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.export-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.export-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.export-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.export-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.export-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.export-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/*******************************
+  INPUTS
+*******************************/
+.export-item input,
+.export-item select {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  BUTTON
+*******************************/
+.export-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.export-btn:hover {
+  background: #0059c9;
+}
+
+/*******************************
+  PREVIEW
+*******************************/
+.export-preview {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/*******************************
+  HISTORY
+*******************************/
+.export-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.export-history li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+

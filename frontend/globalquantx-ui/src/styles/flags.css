@@ -1,0 +1,143 @@
+/*******************************
+  FEATURE FLAGS LAYOUT
+*******************************/
+.flags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.flags-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.flags-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.flags-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.flags-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.flags-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  ROWS & ITEMS
+*******************************/
+.flags-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.flags-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flags-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.rollout-value {
+  font-size: 12px;
+  color: #777;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.flags-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.flags-btn:hover {
+  background: #0059c9;
+}
+
+/*******************************
+  TABLE
+*******************************/
+.flags-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.flags-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.flags-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.flags-table td.positive {
+  color: #00c853;
+}
+
+.flags-table td.warning {
+  color: #ffb300;
+}
+
+/*******************************
+  LISTS
+*******************************/
+.rules-list,
+.flags-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rules-list li,
+.flags-history li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+

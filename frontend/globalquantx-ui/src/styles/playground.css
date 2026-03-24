@@ -1,0 +1,113 @@
+/*******************************
+  PLAYGROUND LAYOUT
+*******************************/
+.playground-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.playground-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.playground-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.playground-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.playground-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.playground-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.playground-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.playground-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/*******************************
+  INPUTS
+*******************************/
+.playground-item input,
+.playground-item select,
+.playground-textarea {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.playground-textarea {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 20px;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+/*******************************
+  BUTTON
+*******************************/
+.playground-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.playground-btn:hover {
+  background: #0059c9;
+}
+
+/*******************************
+  RESPONSE VIEWER
+*******************************/
+.playground-response {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+

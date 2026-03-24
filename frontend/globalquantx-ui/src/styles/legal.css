@@ -1,0 +1,29 @@
+/*******************************
+  LEGAL PAGE LAYOUT
+*******************************/
+.legal-container {
+  background: #111;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #222;
+  color: #ddd;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.legal-container h1 {
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.legal-container h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+.legal-container p {
+  line-height: 1.6;
+  color: #ccc;
+}
+

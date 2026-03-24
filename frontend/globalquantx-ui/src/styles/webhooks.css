@@ -1,0 +1,173 @@
+/*******************************
+  WEBHOOKS LAYOUT
+*******************************/
+.webhooks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.webhooks-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.webhooks-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.webhooks-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.webhooks-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.webhooks-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.webhooks-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.webhooks-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/*******************************
+  INPUTS
+*******************************/
+.webhooks-item input,
+.webhooks-item select {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.webhooks-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.webhooks-btn:hover {
+  background: #0059c9;
+}
+
+.webhooks-btn.small {
+  padding: 6px 10px;
+  font-size: 13px;
+  margin-right: 6px;
+}
+
+.webhooks-btn.danger {
+  background: #ff5252;
+}
+
+.webhooks-btn.danger:hover {
+  background: #d84343;
+}
+
+/*******************************
+  TABLE
+*******************************/
+.webhooks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.webhooks-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.webhooks-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.webhooks-table td.positive {
+  color: #00c853;
+}
+
+.webhooks-table td.warning {
+  color: #ffb300;
+}
+
+.webhooks-table td.negative {
+  color: #ff5252;
+}
+
+/*******************************
+  DELIVERY LOGS
+*******************************/
+.delivery-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.delivery-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.log-meta {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/*******************************
+  PAYLOAD
+*******************************/
+.webhooks-payload {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+

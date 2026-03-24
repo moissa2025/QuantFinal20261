@@ -1,0 +1,169 @@
+/*******************************
+  SUPPORT LAYOUT
+*******************************/
+.support-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.support-row {
+  display: flex;
+  gap: 20px;
+}
+
+/*******************************
+  KPI CARDS
+*******************************/
+.support-card {
+  flex: 1;
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.support-card h3 {
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+.metric {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.metric.positive {
+  color: #00c853;
+}
+
+.metric.negative {
+  color: #ff5252;
+}
+
+.metric.warning {
+  color: #ffb300;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.support-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.support-panel h3 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  TICKET TABLE
+*******************************/
+.support-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.support-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.support-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.support-table td.positive {
+  color: #00c853;
+}
+
+.support-table td.negative {
+  color: #ff5252;
+}
+
+.support-table td.warning {
+  color: #ffb300;
+}
+
+/*******************************
+  CONTACT PANEL
+*******************************/
+.contact-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.contact-item input {
+  padding: 8px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.support-btn {
+  padding: 8px 14px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.support-btn:hover {
+  background: #0059c9;
+}
+
+.support-btn.small {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/*******************************
+  SYSTEM STATUS
+*******************************/
+.status-list,
+.incident-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status-list li,
+.incident-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.status-list .positive {
+  color: #00c853;
+}
+
+.status-list .negative {
+  color: #ff5252;
+}
+

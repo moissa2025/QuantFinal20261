@@ -13,7 +13,6 @@ frontend/.next/
 frontend/dist/
 
 # SQLx metadata (optional)
-backend/.sqlx/
 
 # Env files
 *.env

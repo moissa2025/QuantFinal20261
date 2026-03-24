@@ -1,0 +1,133 @@
+/*******************************
+  NOTIFICATIONS LAYOUT
+*******************************/
+.notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.notifications-row {
+  display: flex;
+  gap: 20px;
+}
+
+/*******************************
+  KPI CARDS
+*******************************/
+.notifications-card {
+  flex: 1;
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.notifications-card h3 {
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+.metric {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.metric.positive {
+  color: #00c853;
+}
+
+.metric.negative {
+  color: #ff5252;
+}
+
+.metric.warning {
+  color: #ffb300;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.notifications-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.notifications-panel h3 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  NOTIFICATION LIST
+*******************************/
+.notifications-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-item {
+  padding: 14px;
+  border-bottom: 1px solid #222;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background: #0d0d0d;
+}
+
+.notification-item .notif-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.notification-item .notif-body {
+  color: #ccc;
+  margin-bottom: 6px;
+}
+
+.notification-item .notif-time {
+  font-size: 12px;
+  color: #777;
+}
+
+.notification-item.positive {
+  border-left: 4px solid #00c853;
+}
+
+.notification-item.negative {
+  border-left: 4px solid #ff5252;
+}
+
+.notification-item.warning {
+  border-left: 4px solid #ffb300;
+}
+
+/*******************************
+  FILTERS
+*******************************/
+.filter-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.filter-item select {
+  padding: 8px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+

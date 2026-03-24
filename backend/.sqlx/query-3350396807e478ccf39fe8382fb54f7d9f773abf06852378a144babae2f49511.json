@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE auth.sessions SET revoked = true WHERE session_token = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "3350396807e478ccf39fe8382fb54f7d9f773abf06852378a144babae2f49511"
+}

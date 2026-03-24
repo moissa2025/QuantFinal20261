@@ -41,20 +41,24 @@ export default function App() {
         <Route path="/legal/risk" element={<LegalRisk />} />
 
         {/* AUTHENTICATED ROUTES */}
-        <Route
-          path="/app/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/app/dashboard"
+  element={
+    <ProtectedRoute>
+      <Layout>
+        <Dashboard />
+      </Layout>
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/app/portfolio"
           element={
             <ProtectedRoute>
+             <Layout>
               <Portfolio />
+             </Layout>
             </ProtectedRoute>
           }
         />
@@ -63,7 +67,9 @@ export default function App() {
           path="/app/trading"
           element={
             <ProtectedRoute>
-              <Trading />
+             <Layout> 
+             <Trading />
+             </Layout>
             </ProtectedRoute>
           }
         />
@@ -72,7 +78,9 @@ export default function App() {
           path="/app/market"
           element={
             <ProtectedRoute>
+              <Layout>
               <Market />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -81,7 +89,9 @@ export default function App() {
           path="/app/ledger"
           element={
             <ProtectedRoute>
+              <Layout>
               <Ledger />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -90,7 +100,9 @@ export default function App() {
           path="/app/positions"
           element={
             <ProtectedRoute>
+              <Layout>
               <Positions />
+             </Layout>
             </ProtectedRoute>
           }
         />
@@ -99,7 +111,9 @@ export default function App() {
           path="/app/settings"
           element={
             <ProtectedRoute>
+              <Layout>
               <Settings />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -109,7 +123,9 @@ export default function App() {
           path="/admin/dashboard"
           element={
             <AdminRoute>
+             <Layout>
               <AdminDashboard />
+             </Layout>
             </AdminRoute>
           }
         />
@@ -118,7 +134,9 @@ export default function App() {
           path="/admin/users"
           element={
             <AdminRoute>
+              <Layout>
               <AdminUsers />
+              </Layout>
             </AdminRoute>
           }
         />
@@ -127,7 +145,9 @@ export default function App() {
           path="/admin/risk"
           element={
             <AdminRoute>
+             <Layout>
               <AdminRisk />
+             </Layout>
             </AdminRoute>
           }
         />
@@ -136,7 +156,9 @@ export default function App() {
           path="/admin/ledger"
           element={
             <AdminRoute>
+             <Layout>
               <AdminLedger />
+             </Layout>
             </AdminRoute>
           }
         />
@@ -145,7 +167,9 @@ export default function App() {
           path="/admin/system"
           element={
             <AdminRoute>
+             <Layout>
               <AdminSystem />
+            </Layout>
             </AdminRoute>
           }
         />

@@ -1,0 +1,152 @@
+/*******************************
+  TEMPLATE MANAGEMENT LAYOUT
+*******************************/
+.templates-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.templates-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.templates-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.templates-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.templates-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.templates-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  EDITOR
+*******************************/
+.templates-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.templates-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.templates-item input,
+.templates-textarea {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.templates-textarea {
+  height: 120px;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+/*******************************
+  BUTTON
+*******************************/
+.templates-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.templates-btn:hover {
+  background: #0059c9;
+}
+
+/*******************************
+  PLACEHOLDERS
+*******************************/
+.placeholder-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.placeholder-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.placeholder-list code {
+  color: #00c853;
+}
+
+/*******************************
+  PREVIEW
+*******************************/
+.preview-box {
+  background: #0d0d0d;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.preview-box h3 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.preview-box p {
+  color: #ccc;
+}
+
+/*******************************
+  HISTORY
+*******************************/
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+

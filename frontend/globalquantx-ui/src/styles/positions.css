@@ -1,0 +1,132 @@
+/*******************************
+  POSITIONS LAYOUT
+*******************************/
+.positions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.positions-row {
+  display: flex;
+  gap: 20px;
+}
+
+/*******************************
+  KPI CARDS
+*******************************/
+.positions-card {
+  flex: 1;
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.positions-card h3 {
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+.metric {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.metric.positive {
+  color: #00c853;
+}
+
+.metric.negative {
+  color: #ff5252;
+}
+
+.metric.warning {
+  color: #ffb300;
+}
+
+/*******************************
+  POSITIONS TABLE
+*******************************/
+.positions-table {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.positions-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.positions-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.positions-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.positions-table td.positive {
+  color: #00c853;
+}
+
+.positions-table td.negative {
+  color: #ff5252;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.positions-panel {
+  flex: 1;
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.positions-panel h3 {
+  margin-bottom: 12px;
+  color: #aaa;
+}
+
+/*******************************
+  PLACEHOLDER CHARTS
+*******************************/
+.chart-placeholder {
+  height: 250px;
+  background: #0d0d0d;
+  border: 1px dashed #333;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+
+/*******************************
+  RISK LIST
+*******************************/
+.risk-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.risk-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+  font-size: 14px;
+}
+

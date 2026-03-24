@@ -1,0 +1,118 @@
+/*******************************
+  BRANDING LAYOUT
+*******************************/
+.branding-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.branding-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.branding-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.branding-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.branding-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  ROWS
+*******************************/
+.branding-row {
+  display: flex;
+  gap: 20px;
+}
+
+/*******************************
+  ITEMS
+*******************************/
+.branding-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.branding-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/*******************************
+  INPUTS
+*******************************/
+.branding-item input,
+.branding-item select {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.color-value,
+.radius-value {
+  font-size: 12px;
+  color: #777;
+}
+
+/*******************************
+  LOGO UPLOAD
+*******************************/
+.branding-upload {
+  padding: 20px;
+  background: #0d0d0d;
+  border: 1px dashed #333;
+  border-radius: 6px;
+  color: #777;
+  text-align: center;
+}
+
+/*******************************
+  PREVIEW
+*******************************/
+.branding-preview {
+  padding: 20px;
+  border: 2px solid;
+  background: #0d0d0d;
+  border-radius: 6px;
+}
+
+/*******************************
+  HISTORY
+*******************************/
+.branding-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.branding-history li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+

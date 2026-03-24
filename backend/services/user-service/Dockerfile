@@ -9,12 +9,10 @@ ENV SQLX_OFFLINE=true
 
 # Copy workspace files
 COPY Cargo.toml Cargo.lock ./
-
-# Copy shared libs
+COPY .sqlx ./.sqlx
 COPY libs ./libs
-
-# Copy ALL services (workspace members)
 COPY services ./services
+COPY root.crt /app/root.crt
 
 # Build only this service
 RUN cargo build --release -p user-service
@@ -27,7 +25,7 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 WORKDIR /app
 
 COPY --from=builder /app/target/release/user-service /app/user-service
-COPY services/user-service/root.crt /app/root.crt
+COPY root.crt /app/root.crt
 
 ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info

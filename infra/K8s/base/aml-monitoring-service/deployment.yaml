@@ -36,7 +36,7 @@ spec:
       volumes:
         - name: cockroachdb-ca
           secret:
-            secretName: apigw-db-url
+            secretName: aml-db-url
             items:
               - key: ca.crt
                 path: root.crt

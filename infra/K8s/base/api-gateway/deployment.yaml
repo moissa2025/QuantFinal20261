@@ -14,10 +14,10 @@ spec:
         app: api-gateway
     spec:
       nodeSelector:
-        pool: core-services
+        pool: backoffice
       containers:
         - name: api-gateway
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:v0.0.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/aml/api-gateway:v0.0.1
           env:
             - name: DATABASE_URL
               valueFrom:
@@ -28,7 +28,6 @@ spec:
               value: nats://nats:4222
           ports:
             - containerPort: 8080
-
 
           volumeMounts:
             - name: cockroachdb-ca
