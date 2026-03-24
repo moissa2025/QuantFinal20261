@@ -1,0 +1,12 @@
+/* Smart Router Simulator */
+.sr-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.sr-header h1 { color: #fff; margin-bottom: 10px; }
+.sr-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.sr-select, .sr-item input { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.sr-row { display: flex; gap: 20px; margin-bottom: 20px; }
+.sr-btn { padding: 10px 16px; background: #0070f3; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+.sr-table { width: 100%; border-collapse: collapse; }
+.sr-table td, .sr-table th { padding: 10px 0; border-bottom: 1px solid #222; }
+.sr-path, .sr-log { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.positive { color: #00c853; } .warning { color: #ffb300; } .negative { color: #ff5252; }
+

@@ -1,0 +1,133 @@
+/*******************************
+  MARKET REPLAY & TIME‑TRAVEL
+*******************************/
+.mr-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+.mr-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.mr-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.mr-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.mr-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT & INPUTS
+*******************************/
+.mr-select,
+.mr-item input {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.mr-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mr-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.mr-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.mr-btn:hover {
+  background: #0059c9;
+}
+
+/*******************************
+  TABLE
+*******************************/
+.mr-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.mr-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.mr-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+/*******************************
+  TEXT BLOCKS
+*******************************/
+.mr-tape,
+.mr-events,
+.mr-pipeline {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/*******************************
+  ANOMALIES
+*******************************/
+.mr-anomalies {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mr-anomalies li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+

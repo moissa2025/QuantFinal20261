@@ -1,0 +1,95 @@
+/*******************************
+  CORRELATION & REGIME LAB
+*******************************/
+.corr-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+.corr-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.corr-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.corr-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.corr-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.corr-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  MATRIX
+*******************************/
+.corr-matrix,
+.corr-heatmap,
+.corr-timeline {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/*******************************
+  REGIMES
+*******************************/
+.corr-regimes,
+.corr-factors,
+.corr-log {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.corr-regimes li,
+.corr-factors li,
+.corr-log li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+}
+
+.positive {
+  color: #00c853;
+}
+
+.warning {
+  color: #ffb300;
+}
+
+.negative {
+  color: #ff5252;
+}
+

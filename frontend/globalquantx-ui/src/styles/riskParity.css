@@ -1,0 +1,8 @@
+/* Global Risk Parity Engine */
+.rp2-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.rp2-header h1 { color: #fff; margin-bottom: 10px; }
+.rp2-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.rp2-select { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.rp2-block { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.rp2-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+

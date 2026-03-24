@@ -1,0 +1,9 @@
+/* Real-Time Risk Firewall */
+.rf-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.rf-header h1 { color: #fff; margin-bottom: 10px; }
+.rf-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.rf-block { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.rf-btn { padding: 10px 16px; background: #0070f3; border: none; border-radius: 6px; color: #fff; cursor: pointer; margin-top: 10px; }
+.rf-btn.danger { background: #ff5252; }
+.rf-anom li, .rf-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+

@@ -1,0 +1,135 @@
+/*******************************
+  MATCHING ENGINE INSPECTOR
+*******************************/
+.me-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+.me-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.me-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.me-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.me-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.me-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  TABLE
+*******************************/
+.me-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.me-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.me-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+/*******************************
+  QUEUES
+*******************************/
+.me-row {
+  display: flex;
+  gap: 20px;
+}
+
+.me-queue {
+  flex: 1;
+}
+
+.me-queue-box {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/*******************************
+  EVENTS & LATENCY
+*******************************/
+.me-events,
+.me-latency {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/*******************************
+  HEALTH
+*******************************/
+.me-health {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.me-health li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+}
+
+.positive {
+  color: #00c853;
+}
+
+.warning {
+  color: #ffb300;
+}
+
+.negative {
+  color: #ff5252;
+}
+

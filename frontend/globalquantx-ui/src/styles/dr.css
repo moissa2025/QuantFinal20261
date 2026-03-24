@@ -1,0 +1,181 @@
+/*******************************
+  DISASTER RECOVERY LAYOUT
+*******************************/
+.dr-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.dr-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.dr-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.dr-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.dr-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.dr-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/*******************************
+  REGION STATUS
+*******************************/
+.dr-region-status p {
+  margin: 6px 0;
+}
+
+.positive {
+  color: #00c853;
+}
+
+.warning {
+  color: #ffb300;
+}
+
+.negative {
+  color: #ff5252;
+}
+
+/*******************************
+  WARNING BOX
+*******************************/
+.dr-warning {
+  background: #332800;
+  padding: 12px;
+  border-radius: 6px;
+  color: #ffb300;
+  margin-bottom: 20px;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.dr-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.dr-btn:hover {
+  background: #0059c9;
+}
+
+.dr-btn.small {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.dr-btn.danger {
+  background: #ff5252;
+}
+
+.dr-btn.danger:hover {
+  background: #d84343;
+}
+
+/*******************************
+  TABLE
+*******************************/
+.dr-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.dr-table th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+.dr-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+/*******************************
+  HEALTH LIST
+*******************************/
+.dr-health-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dr-health-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+}
+
+.health-meta {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/*******************************
+  HISTORY
+*******************************/
+.dr-history,
+.dr-audit {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dr-history li,
+.dr-audit li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.history-meta {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+

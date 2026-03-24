@@ -1,0 +1,8 @@
+/* Stress Scenario Generator */
+.sg-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.sg-header h1 { color: #fff; margin-bottom: 10px; }
+.sg-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.sg-select { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.sg-shock, .sg-pnl { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.sg-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+

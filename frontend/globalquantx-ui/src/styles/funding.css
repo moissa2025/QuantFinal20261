@@ -1,0 +1,10 @@
+/* Funding Rates & Carry Analytics */
+.fr-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.fr-header h1 { color: #fff; margin-bottom: 10px; }
+.fr-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.fr-select { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.fr-summary li, .fr-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+.fr-curve { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.fr-table td, .fr-table th { padding: 10px 0; border-bottom: 1px solid #222; }
+.positive { color: #00c853; } .warning { color: #ffb300; } .negative { color: #ff5252; }
+

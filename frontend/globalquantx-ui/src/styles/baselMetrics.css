@@ -1,0 +1,8 @@
+/* Basel Metrics */
+.bm-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.bm-header h1 { color: #fff; margin-bottom: 10px; }
+.bm-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.bm-select { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.bm-rwa li, .bm-ratios li, .bm-liquidity li, .bm-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+.positive { color: #00c853; }
+

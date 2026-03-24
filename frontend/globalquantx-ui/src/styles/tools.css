@@ -1,0 +1,129 @@
+/*******************************
+  INTERNAL TOOLS LAYOUT
+*******************************/
+.tools-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #ddd;
+}
+
+/*******************************
+  HEADER
+*******************************/
+.tools-header h1 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.tools-header p {
+  color: #aaa;
+}
+
+/*******************************
+  PANELS
+*******************************/
+.tools-panel {
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.tools-panel h2 {
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+/*******************************
+  SELECT
+*******************************/
+.tools-select {
+  width: 100%;
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  ITEMS
+*******************************/
+.tools-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.tools-item label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.tools-item input {
+  padding: 10px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/*******************************
+  BUTTONS
+*******************************/
+.tools-btn {
+  padding: 10px 16px;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tools-btn:hover {
+  background: #0059c9;
+}
+
+.tools-btn.danger {
+  background: #ff5252;
+}
+
+.tools-btn.danger:hover {
+  background: #d84343;
+}
+
+/*******************************
+  OUTPUT
+*******************************/
+.tools-output {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/*******************************
+  HISTORY
+*******************************/
+.tools-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tools-history li {
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
