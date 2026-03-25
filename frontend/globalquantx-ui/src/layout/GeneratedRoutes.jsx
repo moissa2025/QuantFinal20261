@@ -2,7 +2,8 @@
 // Do not edit manually.
 
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth, getLandingPathForRole } from "../context/AuthContext.jsx";
 
 import AdminAdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import AdminAdminLedger from "../pages/admin/AdminLedger.jsx";
@@ -136,10 +137,17 @@ import PublicRiskDisclosure from "../pages/public/RiskDisclosure.jsx";
 import PublicSupport from "../pages/public/Support.jsx";
 import PublicTerms from "../pages/public/Terms.jsx";
 
+function RoleLandingRedirect() {
+  const { user } = useAuth();
+  const target = getLandingPathForRole(user.role);
+  return <Navigate to={target} replace />;
+}
+
 export default function GeneratedRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<PublicLanding />} />
+      {/* Root: role-based landing */}
+      <Route path="/" element={<RoleLandingRedirect />} />
       <Route path="/pub/lnd" element={<PublicLanding />} />
       <Route path="/adm/dash" element={<AdminAdminDashboard />} />
       <Route path="/adm/led" element={<AdminAdminLedger />} />

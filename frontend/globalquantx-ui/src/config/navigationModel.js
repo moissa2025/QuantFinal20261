@@ -5,7 +5,7 @@ import { PERMISSIONS } from "./roles";
 export const NAV_SECTIONS = [
   {
     id: "admin",
-    label: "Admin",
+    label: "Control Center",
     permission: PERMISSIONS.VIEW_ADMIN,
     items: [
       { id: "adm-dash", label: "Dashboard", path: "/adm/dash" },
@@ -17,7 +17,7 @@ export const NAV_SECTIONS = [
   },
   {
     id: "trading",
-    label: "Trading",
+    label: "Trading Desk",
     permission: PERMISSIONS.VIEW_TRADING,
     items: [
       { id: "app-mkt", label: "Market", path: "/app/mkt" },
@@ -28,7 +28,7 @@ export const NAV_SECTIONS = [
   },
   {
     id: "analytics",
-    label: "Analytics",
+    label: "Analytics Lab",
     permission: PERMISSIONS.VIEW_ANALYTICS,
     items: [
       { id: "adm-dec", label: "Alpha Decay", path: "/adm/alp/dec" },
@@ -38,10 +38,10 @@ export const NAV_SECTIONS = [
   },
   {
     id: "public",
-    label: "Public",
+    label: "Public Pages",
     permission: PERMISSIONS.VIEW_PUBLIC,
     items: [
-      { id: "pub-lnd", label: "Landing", path: "/pub/lnd" },
+      { id: "pub-lnd", label: "Home", path: "/pub/lnd" },
       { id: "pub-lgn", label: "Login", path: "/pub/lgn" },
       { id: "pub-lpr", label: "Legal Privacy", path: "/pub/lpr" },
       { id: "pub-ter", label: "Legal Terms", path: "/pub/ter" },
@@ -50,7 +50,6 @@ export const NAV_SECTIONS = [
   },
 ];
 
-// Flattened list for global search / command palette
 export const NAV_ITEMS_FLAT = NAV_SECTIONS.flatMap((section) =>
   section.items.map((item) => ({
     ...item,

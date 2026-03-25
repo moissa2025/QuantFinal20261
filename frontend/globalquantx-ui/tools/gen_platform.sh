@@ -8,7 +8,7 @@ CONFIG_DIR="$ROOT/config"
 
 mkdir -p "$LAYOUT_DIR" "$CONTEXT_DIR" "$CONFIG_DIR"
 
-echo "🚀 Generating platform: routes + RBAC + nav + AppShell + sidebar + command palette + themes"
+echo "🚀 Generating platform: routes + RBAC + nav + AppShell + command palette + themes + role landing"
 
 ###############################################
 # Helpers for short codes
@@ -129,7 +129,7 @@ export function hasPermission(role, permission) {
 EOF
 
 ###############################################
-# 2) Navigation model
+# 2) Navigation model (labels refined)
 ###############################################
 cat > "$CONFIG_DIR/navigationModel.js" << 'EOF'
 // src/config/navigationModel.js
@@ -139,7 +139,7 @@ import { PERMISSIONS } from "./roles";
 export const NAV_SECTIONS = [
   {
     id: "admin",
-    label: "Admin",
+    label: "Control Center",
     permission: PERMISSIONS.VIEW_ADMIN,
     items: [
       { id: "adm-dash", label: "Dashboard", path: "/adm/dash" },
@@ -151,7 +151,7 @@ export const NAV_SECTIONS = [
   },
   {
     id: "trading",
-    label: "Trading",
+    label: "Trading Desk",
     permission: PERMISSIONS.VIEW_TRADING,
     items: [
       { id: "app-mkt", label: "Market", path: "/app/mkt" },
@@ -162,7 +162,7 @@ export const NAV_SECTIONS = [
   },
   {
     id: "analytics",
-    label: "Analytics",
+    label: "Analytics Lab",
     permission: PERMISSIONS.VIEW_ANALYTICS,
     items: [
       { id: "adm-dec", label: "Alpha Decay", path: "/adm/alp/dec" },
@@ -172,10 +172,10 @@ export const NAV_SECTIONS = [
   },
   {
     id: "public",
-    label: "Public",
+    label: "Public Pages",
     permission: PERMISSIONS.VIEW_PUBLIC,
     items: [
-      { id: "pub-lnd", label: "Landing", path: "/pub/lnd" },
+      { id: "pub-lnd", label: "Home", path: "/pub/lnd" },
       { id: "pub-lgn", label: "Login", path: "/pub/lgn" },
       { id: "pub-lpr", label: "Legal Privacy", path: "/pub/lpr" },
       { id: "pub-ter", label: "Legal Terms", path: "/pub/ter" },
@@ -184,7 +184,6 @@ export const NAV_SECTIONS = [
   },
 ];
 
-// Flattened list for global search / command palette
 export const NAV_ITEMS_FLAT = NAV_SECTIONS.flatMap((section) =>
   section.items.map((item) => ({
     ...item,
@@ -195,7 +194,7 @@ export const NAV_ITEMS_FLAT = NAV_SECTIONS.flatMap((section) =>
 EOF
 
 ###############################################
-# 3) AuthContext
+# 3) AuthContext with role-based landing helper
 ###############################################
 cat > "$CONTEXT_DIR/AuthContext.jsx" << 'EOF'
 // src/context/AuthContext.jsx
@@ -210,7 +209,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState({
     id: "demo-user",
     name: "Demo User",
-    role: ROLES.ADMIN, // change to test: TRADER, CLIENT, PUBLIC, etc.
+    role: ROLES.ADMIN, // change to test: TRADER, CLIENT, SUPPORT, PUBLIC
   });
 
   const value = useMemo(
@@ -229,10 +228,27 @@ export function useAuth() {
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }
+
+// Role-based landing mapping
+export function getLandingPathForRole(role) {
+  switch (role) {
+    case ROLES.ADMIN:
+      return "/adm/dash";   // Admin → Dashboard
+    case ROLES.TRADER:
+      return "/app/mkt";    // Trader → Market
+    case ROLES.CLIENT:
+      return "/app/pfl";    // Client → Portfolio
+    case ROLES.SUPPORT:
+      return "/adm/usr";    // Support → Users
+    case ROLES.PUBLIC:
+    default:
+      return "/pub/lnd";    // Public → Home
+  }
+}
 EOF
 
 ###############################################
-# 4) CommandPalette (⌘+K, search, navigate)
+# 4) CommandPalette (unchanged behavior)
 ###############################################
 cat > "$LAYOUT_DIR/CommandPalette.jsx" << 'EOF'
 // src/layout/CommandPalette.jsx
@@ -324,7 +340,7 @@ export default function CommandPalette({ open, onClose }) {
 EOF
 
 ###############################################
-# 5) Sidebar
+# 5) Sidebar (labels already updated via NAV_SECTIONS)
 ###############################################
 cat > "$LAYOUT_DIR/Sidebar.jsx" << 'EOF'
 // src/layout/Sidebar.jsx
@@ -402,13 +418,13 @@ export default function Sidebar() {
 EOF
 
 ###############################################
-# 6) AppShell with theme switcher + shortcuts
+# 6) AppShell (same, but labels now match model)
 ###############################################
 cat > "$LAYOUT_DIR/AppShell.jsx" << 'EOF'
 // src/layout/AppShell.jsx
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import CommandPalette from "./CommandPalette.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -422,18 +438,16 @@ export default function AppShell({ children }) {
   const [cmdOpen, setCmdOpen] = useState(false);
   const navigate = useNavigate();
   const [lastKey, setLastKey] = useState(null);
+  const location = useLocation();
 
-  // Keyboard shortcuts: ⌘+K, g d, g m
   useEffect(() => {
     const handler = (e) => {
-      // ⌘+K or Ctrl+K → command palette
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setCmdOpen((prev) => !prev);
         return;
       }
 
-      // Simple key chord: g then d / m
       const key = e.key.toLowerCase();
       if (lastKey === "g" && key === "d") {
         navigate("/adm/dash");
@@ -479,16 +493,10 @@ export default function AppShell({ children }) {
                 <option value="bloomberg">Bloomberg-Black</option>
               </select>
             </div>
-            <button
-              className="app-header-icon"
-              title="Notifications"
-            >
+            <button className="app-header-icon" title="Notifications">
               🔔
             </button>
-            <button
-              className="app-header-icon"
-              title="Quick actions"
-            >
+            <button className="app-header-icon" title="Quick actions">
               ⚡
             </button>
             <div className="app-header-user">
@@ -527,7 +535,7 @@ export default function Layout({ children }) {
 EOF
 
 ###############################################
-# 8) os-shell.css (themes + command palette)
+# 8) os-shell.css (unchanged from previous version)
 ###############################################
 cat > "$LAYOUT_DIR/os-shell.css" << 'EOF'
 /* src/layout/os-shell.css */
@@ -862,7 +870,7 @@ cat > "$LAYOUT_DIR/os-shell.css" << 'EOF'
 EOF
 
 ###############################################
-# 9) GeneratedRoutes.jsx
+# 9) GeneratedRoutes.jsx with root + short-codes
 ###############################################
 OUT_ROUTES="$LAYOUT_DIR/GeneratedRoutes.jsx"
 rm -f "$OUT_ROUTES"
@@ -872,7 +880,8 @@ cat > "$OUT_ROUTES" << 'EOF'
 // Do not edit manually.
 
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth, getLandingPathForRole } from "../context/AuthContext.jsx";
 EOF
 
 echo "" >> "$OUT_ROUTES"
@@ -886,7 +895,7 @@ COMPONENTS=()
 for FILE in $FILES; do
   REL=${FILE#../src/}
   IMPORT_PATH="../${REL%.jsx}"
-  CATEGORY=$(echo "$REL" | cut -d'/' -f2) # admin | app | public
+  CATEGORY=$(echo "$REL" | cut -d'/' -f2)
   SUBPATH=$(dirname "${REL#pages/$CATEGORY/}")
   NAME=$(basename "$REL" .jsx)
 
@@ -905,16 +914,23 @@ done
 
 cat >> "$OUT_ROUTES" << 'EOF'
 
+function RoleLandingRedirect() {
+  const { user } = useAuth();
+  const target = getLandingPathForRole(user.role);
+  return <Navigate to={target} replace />;
+}
+
 export default function GeneratedRoutes() {
   return (
     <Routes>
+      {/* Root: role-based landing */}
+      <Route path="/" element={<RoleLandingRedirect />} />
 EOF
 
-# Root route → Landing
+# Explicit /pub/lnd mapping if Landing exists
 for ITEM in "${COMPONENTS[@]}"; do
   IFS="|" read CATEGORY SUBPATH NAME COMPONENT_NAME <<< "$ITEM"
   if [[ "$CATEGORY" == "public" && "$NAME" == "Landing" ]]; then
-    echo "      <Route path=\"/\" element={<${COMPONENT_NAME} />} />" >> "$OUT_ROUTES"
     echo "      <Route path=\"/pub/lnd\" element={<${COMPONENT_NAME} />} />" >> "$OUT_ROUTES"
   fi
 done
@@ -943,5 +959,5 @@ cat >> "$OUT_ROUTES" << 'EOF'
 }
 EOF
 
-echo "🎉 Platform generation complete: routes + RBAC + nav + AppShell + sidebar + command palette + themes"
+echo "🎉 Platform generation complete with role-based landing + refined labels"
 

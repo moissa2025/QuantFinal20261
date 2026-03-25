@@ -1,7 +1,7 @@
 // src/layout/AppShell.jsx
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import CommandPalette from "./CommandPalette.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -15,18 +15,16 @@ export default function AppShell({ children }) {
   const [cmdOpen, setCmdOpen] = useState(false);
   const navigate = useNavigate();
   const [lastKey, setLastKey] = useState(null);
+  const location = useLocation();
 
-  // Keyboard shortcuts: ⌘+K, g d, g m
   useEffect(() => {
     const handler = (e) => {
-      // ⌘+K or Ctrl+K → command palette
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setCmdOpen((prev) => !prev);
         return;
       }
 
-      // Simple key chord: g then d / m
       const key = e.key.toLowerCase();
       if (lastKey === "g" && key === "d") {
         navigate("/adm/dash");
@@ -72,16 +70,10 @@ export default function AppShell({ children }) {
                 <option value="bloomberg">Bloomberg-Black</option>
               </select>
             </div>
-            <button
-              className="app-header-icon"
-              title="Notifications"
-            >
+            <button className="app-header-icon" title="Notifications">
               🔔
             </button>
-            <button
-              className="app-header-icon"
-              title="Quick actions"
-            >
+            <button className="app-header-icon" title="Quick actions">
               ⚡
             </button>
             <div className="app-header-user">
