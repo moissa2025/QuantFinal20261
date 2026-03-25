@@ -1,10 +1,14 @@
-import Page from "../../components/layout/Page";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function AdminLedger() {
   return (
-    <Page title="Admin Ledger">
-      <p>View system-level ledger entries.</p>
-    </Page>
+    <DockablePanel title="AdminLedger">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

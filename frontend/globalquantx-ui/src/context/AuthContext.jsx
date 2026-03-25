@@ -1,120 +1,31 @@
-import { createContext, useEffect, useState } from "react";
+// src/context/AuthContext.jsx
 
-export const AuthContext = createContext(null);
+import React, { createContext, useContext, useState, useMemo } from "react";
+import { ROLES } from "../config/roles";
 
-export default function AuthProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState(null);
-  const [sessionExpired, setSessionExpired] = useState(false);
+const AuthContext = createContext(null);
 
-  //
-  // 1. Decode token + check expiry
-  //
-  useEffect(() => {
-    if (!token) {
-      setUser(null);
-      return;
-    }
+export function AuthProvider({ children }) {
+  // TODO: hydrate from real auth backend
+  const [user, setUser] = useState({
+    id: "demo-user",
+    name: "Demo User",
+    role: ROLES.ADMIN, // change to test: TRADER, CLIENT, PUBLIC, etc.
+  });
 
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const exp = payload.exp * 1000;
-
-      if (Date.now() >= exp) {
-        handleLogout(true);
-        return;
-      }
-
-      setUser(payload);
-    } catch (err) {
-      console.error("Invalid token:", err);
-      handleLogout(true);
-    }
-  }, [token]);
-
-  //
-  // 2. Login handler
-  //
-  function handleLogin(newToken) {
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
-    setSessionExpired(false);
-  }
-
-  //
-  // 3. Logout handler
-  //
-  function handleLogout(expired = false) {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
-
-    if (expired) {
-      setSessionExpired(true);
-    }
-  }
-
-  //
-  // 4. Refresh token (only works if backend supports refresh tokens)
-  //
-  async function refreshToken() {
-    try {
-      const res = await fetch("/api/auth/refresh", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!res.ok) throw new Error("Refresh failed");
-
-      const data = await res.json();
-      handleLogin(data.token);
-    } catch (err) {
-      console.error("Refresh token error:", err);
-      handleLogout(true);
-    }
-  }
-
-  //
-  // 5. Auto-refresh scheduling
-  //
-  useEffect(() => {
-    if (!token) return;
-
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const exp = payload.exp * 1000;
-
-      // Refresh 1 minute before expiry
-      const refreshAt = exp - 60_000;
-      const delay = refreshAt - Date.now();
-
-      if (delay <= 0) {
-        refreshToken();
-        return;
-      }
-
-      const id = setTimeout(refreshToken, delay);
-      return () => clearTimeout(id);
-    } catch {
-      handleLogout(true);
-    }
-  }, [token]);
-
-  //
-  // 6. Provide context
-  //
-  return (
-    <AuthContext.Provider
-      value={{
-        token,
-        user,
-        sessionExpired,
-        login: handleLogin,
-        logout: handleLogout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      setUser,
+    }),
+    [user]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}

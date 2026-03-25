@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 
+// New OS‑level layout
+import Layout from "./layout/Layout";
+
 // Public pages
 import Landing from "./pages/public/Landing";
 import Login from "./pages/public/Login";
@@ -11,7 +14,7 @@ import LegalPrivacy from "./pages/public/LegalPrivacy";
 import LegalTerms from "./pages/public/LegalTerms";
 import LegalRisk from "./pages/public/LegalRisk";
 
-// App pages
+// App pages (authenticated)
 import Dashboard from "./pages/app/Dashboard";
 import Portfolio from "./pages/app/Portfolio";
 import Trading from "./pages/app/Trading";
@@ -27,6 +30,21 @@ import AdminRisk from "./pages/admin/AdminRisk";
 import AdminLedger from "./pages/admin/AdminLedger";
 import AdminSystem from "./pages/admin/AdminSystem";
 
+// Super‑modules
+import GlobalCommandCenter from "./pages/admin/GlobalCommandCenter";
+import StrategySuperLab from "./pages/admin/StrategySuperLab";
+import ExecutionSuperConsole from "./pages/admin/ExecutionSuperConsole";
+import MacroMicroFusionBoard from "./pages/admin/MacroMicroFusionBoard";
+import LiqVolObservatory from "./pages/admin/LiqVolObservatory";
+
+// Advanced modules (DE → DJ)
+import RegimeAtlas from "./pages/admin/RegimeAtlas";
+import AlphaDecaySurface from "./pages/admin/AlphaDecaySurface";
+import ExecutionScenarioLab from "./pages/admin/ExecutionScenarioLab";
+import StrategyDrift from "./pages/admin/StrategyDrift";
+import VolInteraction from "./pages/admin/VolInteraction";
+import LiquidityFracture from "./pages/admin/LiquidityFracture";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -41,24 +59,24 @@ export default function App() {
         <Route path="/legal/risk" element={<LegalRisk />} />
 
         {/* AUTHENTICATED ROUTES */}
-<Route
-  path="/app/dashboard"
-  element={
-    <ProtectedRoute>
-      <Layout>
-        <Dashboard />
-      </Layout>
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/app/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/app/portfolio"
           element={
             <ProtectedRoute>
-             <Layout>
-              <Portfolio />
-             </Layout>
+              <Layout>
+                <Portfolio />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -67,9 +85,9 @@ export default function App() {
           path="/app/trading"
           element={
             <ProtectedRoute>
-             <Layout> 
-             <Trading />
-             </Layout>
+              <Layout>
+                <Trading />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -79,7 +97,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Layout>
-              <Market />
+                <Market />
               </Layout>
             </ProtectedRoute>
           }
@@ -90,7 +108,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Layout>
-              <Ledger />
+                <Ledger />
               </Layout>
             </ProtectedRoute>
           }
@@ -101,8 +119,8 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Layout>
-              <Positions />
-             </Layout>
+                <Positions />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -112,7 +130,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Layout>
-              <Settings />
+                <Settings />
               </Layout>
             </ProtectedRoute>
           }
@@ -123,9 +141,9 @@ export default function App() {
           path="/admin/dashboard"
           element={
             <AdminRoute>
-             <Layout>
-              <AdminDashboard />
-             </Layout>
+              <Layout>
+                <AdminDashboard />
+              </Layout>
             </AdminRoute>
           }
         />
@@ -135,7 +153,7 @@ export default function App() {
           element={
             <AdminRoute>
               <Layout>
-              <AdminUsers />
+                <AdminUsers />
               </Layout>
             </AdminRoute>
           }
@@ -145,9 +163,9 @@ export default function App() {
           path="/admin/risk"
           element={
             <AdminRoute>
-             <Layout>
-              <AdminRisk />
-             </Layout>
+              <Layout>
+                <AdminRisk />
+              </Layout>
             </AdminRoute>
           }
         />
@@ -156,9 +174,9 @@ export default function App() {
           path="/admin/ledger"
           element={
             <AdminRoute>
-             <Layout>
-              <AdminLedger />
-             </Layout>
+              <Layout>
+                <AdminLedger />
+              </Layout>
             </AdminRoute>
           }
         />
@@ -167,9 +185,132 @@ export default function App() {
           path="/admin/system"
           element={
             <AdminRoute>
-             <Layout>
-              <AdminSystem />
-            </Layout>
+              <Layout>
+                <AdminSystem />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        {/* SUPER‑MODULES */}
+        <Route
+          path="/admin/global-command-center"
+          element={
+            <AdminRoute>
+              <Layout>
+                <GlobalCommandCenter />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/strategy-superlab"
+          element={
+            <AdminRoute>
+              <Layout>
+                <StrategySuperLab />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/execution-superconsole"
+          element={
+            <AdminRoute>
+              <Layout>
+                <ExecutionSuperConsole />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/macro-micro-fusion"
+          element={
+            <AdminRoute>
+              <Layout>
+                <MacroMicroFusionBoard />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/liqvol-observatory"
+          element={
+            <AdminRoute>
+              <Layout>
+                <LiqVolObservatory />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        {/* ADVANCED MODULES (DE → DJ) */}
+        <Route
+          path="/admin/regime-atlas"
+          element={
+            <AdminRoute>
+              <Layout>
+                <RegimeAtlas />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/alpha-decay"
+          element={
+            <AdminRoute>
+              <Layout>
+                <AlphaDecaySurface />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/execution-scenario"
+          element={
+            <AdminRoute>
+              <Layout>
+                <ExecutionScenarioLab />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/strategy-drift"
+          element={
+            <AdminRoute>
+              <Layout>
+                <StrategyDrift />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/vol-interaction"
+          element={
+            <AdminRoute>
+              <Layout>
+                <VolInteraction />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/liquidity-fracture"
+          element={
+            <AdminRoute>
+              <Layout>
+                <LiquidityFracture />
+              </Layout>
             </AdminRoute>
           }
         />

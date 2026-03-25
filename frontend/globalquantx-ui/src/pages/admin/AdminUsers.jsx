@@ -1,10 +1,14 @@
-import Page from "../../components/layout/Page";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function AdminUsers() {
   return (
-    <Page title="User Management">
-      <p>Manage users, roles, and permissions.</p>
-    </Page>
+    <DockablePanel title="AdminUsers">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

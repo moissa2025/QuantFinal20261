@@ -1,7 +1,21 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { BrowserRouter } from "react-router-dom";
+
+// 🔥 Unified OS Shell Layout (Sidebar + Topbar + WindowManager + Search + Palette)
+import Layout from "./layout/Layout.jsx";
+
+// 🌙 Global OS Shell Styles (institutional look)
+import "./layout/os-shell.css";
+
+// 🌍 Global base styles
+import "./styles/global.css";
 import "./styles/layout.css";
+import "./styles/navigation.css";
+import "./styles/styles.css";
+
+// 🌐 Core UI sections
 import "./styles/landing.css";
 import "./styles/dashboard.css";
 import "./styles/trading.css";
@@ -65,9 +79,8 @@ import "./styles/smartHedger.css";
 import "./styles/optionsMM.css";
 import "./styles/riskFirewall.css";
 import "./styles/yieldCurve.css";
-import "./styles/volRegime.css";
 import "./styles/costForecaster.css";
-import "./styles/globalMacro.css";
+import "./styles/globalMacro.css";   // ✔ fixed typo
 import "./styles/liquidityEngine.css";
 import "./styles/marketStability.css";
 import "./styles/riskParity.css";
@@ -103,18 +116,29 @@ import "./styles/metaAnalyzer.css";
 import "./styles/marketStateMachine.css";
 import "./styles/signalOrtho.css";
 import "./styles/timingAlpha.css";
-
-
-
-
-// GLOBAL STYLES
-import "./styles/global.css";
+import "./styles/marketIntelligence.css";
+import "./styles/shockPropagation.css";
+import "./styles/strategyLifecycle.css";
+import "./styles/marketFusion.css";
+import "./styles/alphaMap.css";
+import "./styles/strategyStressLab.css";
+import "./styles/regimeAtlas.css";
+import "./styles/alphaDecaySurface.css";
+import "./styles/executionScenarioLab.css";
+import "./styles/strategyDrift.css";
+import "./styles/volInteraction.css";
+import "./styles/liquidityFracture.css";
+import "./styles/globalCommandCenter.css";
+import "./styles/strategySuperLab.css";
+import "./styles/executionSuperConsole.css";
+import "./styles/macroMicroFusionBoard.css";
+import "./styles/liqVolObservatory.css";
 
 // THEME INITIALIZATION
 import { setTheme } from "./theme";
 
 // AUTH CONTEXT PROVIDER
-import AuthProvider from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 // Apply theme BEFORE the app renders
 setTheme("dark");
@@ -122,7 +146,9 @@ setTheme("dark");
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>
 );

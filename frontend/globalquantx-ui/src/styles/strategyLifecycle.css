@@ -1,0 +1,8 @@
+/* Systematic Strategy Lifecycle Manager */
+.da-container { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px; color: #ddd; }
+.da-header h1 { color: #fff; margin-bottom: 10px; }
+.da-panel { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+.da-select { padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #fff; width: 100%; }
+.da-block { background: #0d0d0d; border: 1px solid #333; padding: 16px; border-radius: 6px; font-family: monospace; }
+.da-log li { padding: 12px 0; border-bottom: 1px solid #222; }
+

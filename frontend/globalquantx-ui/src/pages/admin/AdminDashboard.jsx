@@ -1,10 +1,14 @@
-import Page from "../../components/layout/Page";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function AdminDashboard() {
   return (
-    <Page title="Admin Dashboard">
-      <p>System overview and admin tools.</p>
-    </Page>
+    <DockablePanel title="AdminDashboard">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

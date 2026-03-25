@@ -1,0 +1,12 @@
+.lvo-container { display:flex; flex-direction:column; gap:24px; max-width:1200px; margin:0 auto; padding:20px; color:#ddd; }
+.lvo-header h1 { color:#fff; margin-bottom:6px; }
+.lvo-panel { background:#111; padding:18px; border-radius:8px; border:1px solid:#222; }
+.lvo-panel h2 { margin-bottom:10px; color:#fff; font-size:15px; }
+.lvo-select { padding:10px; background:#0d0d0d; border:1px solid:#333; border-radius:6px; color:#fff; width:100%; }
+.lvo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.lvo-column { display:flex; flex-direction:column; gap:16px; }
+.lvo-block { background:#0d0d0d; border:1px solid:#333; padding:12px; border-radius:6px; font-family:monospace; font-size:13px; }
+.lvo-log-panel { margin-top:10px; }
+.lvo-log { list-style:none; margin:0; padding:0; }
+.lvo-log li { padding:10px 0; border-bottom:1px solid:#222; font-size:13px; }
+

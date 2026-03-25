@@ -1,0 +1,268 @@
+/* -----------------------------------------------------------
+   YOUR ORIGINAL NAVIGATION.CSS (UNCHANGED)
+----------------------------------------------------------- */
+
+.nav-shell {
+  display: flex;
+  height: 100vh;
+  background: #0b0b0b;
+  color: #ddd;
+}
+
+.nav-sidebar {
+  width: 260px;
+  background: #0e0e0e;
+  border-right: 1px solid #222;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.nav-title {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.nav-section {
+  margin-bottom: 24px;
+}
+
+.nav-section h3 {
+  color: #aaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.nav-section a {
+  display: block;
+  padding: 8px 0;
+  color: #ddd;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-section a:hover {
+  color: #fff;
+}
+
+.nav-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* -----------------------------------------------------------
+   EXTENSIONS BELOW — NEW FEATURES ADDED SAFELY
+----------------------------------------------------------- */
+
+/* ACTIVE LINK */
+.nav-link-active {
+  color: var(--accent);
+}
+
+/* MAIN AREA */
+.nav-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOPBAR */
+.nav-topbar {
+  height: 48px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--bg-topbar);
+}
+
+.nav-topbar-title {
+  font-size: 14px;
+  color: var(--fg-muted);
+}
+
+.nav-topbar-right {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-topbar-btn {
+  background: var(--bg-button);
+  border: 1px solid var(--border-subtle);
+  color: var(--fg-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topbar-btn:hover {
+  border-color: var(--accent);
+}
+
+/* -----------------------------------------------------------
+   LAYOUT GRID SYSTEM
+----------------------------------------------------------- */
+
+.layout-grid .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.layout-grid .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.layout-grid .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* -----------------------------------------------------------
+   COMMAND PALETTE (⌘K / Ctrl+K)
+----------------------------------------------------------- */
+
+.cp-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  z-index: 1000;
+}
+
+.cp-modal {
+  width: 520px;
+  background: var(--bg-surface);
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.cp-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  color: var(--fg-main);
+  font-size: 14px;
+  outline: none;
+}
+
+.cp-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.cp-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--fg-main);
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.cp-item:hover {
+  background: var(--bg-hover);
+}
+
+.cp-path {
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.cp-empty {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+/* -----------------------------------------------------------
+   NOTIFICATION CENTER
+----------------------------------------------------------- */
+
+.nc-container {
+  position: fixed;
+  right: 16px;
+  top: 56px;
+  width: 280px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  padding: 10px 12px;
+  z-index: 900;
+}
+
+.nc-container h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--fg-strong);
+}
+
+.nc-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nc-container li {
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* -----------------------------------------------------------
+   THEME ENGINE (DARK / LIGHT)
+----------------------------------------------------------- */
+
+:root {
+  --bg-main: #050505;
+  --bg-sidebar: #0b0b0b;
+  --bg-topbar: #080808;
+  --bg-surface: #101010;
+  --bg-input: #0d0d0d;
+  --bg-button: #111111;
+  --bg-hover: #181818;
+
+  --fg-main: #d4d4d4;
+  --fg-muted: #8a8a8a;
+  --fg-strong: #ffffff;
+
+  --border-subtle: #262626;
+  --accent: #38bdf8;
+}
+
+:root[data-theme="light"] {
+  --bg-main: #f5f5f5;
+  --bg-sidebar: #ffffff;
+  --bg-topbar: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-input: #f3f3f3;
+  --bg-button: #f3f3f3;
+  --bg-hover: #ececec;
+
+  --fg-main: #222222;
+  --fg-muted: #777777;
+  --fg-strong: #000000;
+
+  --border-subtle: #dddddd;
+  --accent: #2563eb;
+}
+

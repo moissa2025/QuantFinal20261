@@ -1,19 +1,14 @@
-import { useSearchParams } from "react-router-dom";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function Login() {
-  const [params] = useSearchParams();
-  const expired = params.get("expired");
-
   return (
-    <div className="login-page">
-      {expired && (
-        <div className="session-expired-banner">
-          Your session has expired. Please log in again.
-        </div>
-      )}
-
-      {/* existing login form */}
-    </div>
+    <DockablePanel title="Login">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

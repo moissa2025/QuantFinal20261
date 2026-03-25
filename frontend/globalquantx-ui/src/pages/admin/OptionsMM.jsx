@@ -1,82 +1,14 @@
-import { useState } from "react";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function OptionsMM() {
-  const [strike, setStrike] = useState("ATM");
-
   return (
-    <div className="omm-container">
-
-      <div className="omm-header">
-        <h1>Options Market‑Making Engine</h1>
-        <p>Skew, wings, vanna, and vol‑arb quoting.</p>
-      </div>
-
-      {/* STRIKE SELECTOR */}
-      <div className="omm-panel">
-        <h2>Select Strike</h2>
-
-        <select className="omm-select" value={strike} onChange={(e) => setStrike(e.target.value)}>
-          <option>OTM Put</option>
-          <option>ATM</option>
-          <option>OTM Call</option>
-        </select>
-      </div>
-
-      {/* QUOTES */}
-      <div className="omm-panel">
-        <h2>Quotes</h2>
-
-        <pre className="omm-block">
-{strike === "ATM" && `Bid IV:  70%
-Ask IV:  72%
-Skew:    Neutral`}
-
-{strike === "OTM Put" && `Bid IV:  82%
-Ask IV:  85%
-Skew:    Put‑Heavy`}
-
-{strike === "OTM Call" && `Bid IV:  65%
-Ask IV:  67%
-Skew:    Call‑Light`}
-        </pre>
-      </div>
-
-      {/* GREEKS */}
-      <div className="omm-panel">
-        <h2>Greeks Exposure</h2>
-
-        <pre className="omm-block">
-{`Delta:   -12.4
-Gamma:   +0.42
-Vega:    +18.1
-Vanna:   -4.2`}
-        </pre>
-      </div>
-
-      {/* VOL ARB */}
-      <div className="omm-panel">
-        <h2>Vol‑Arb Signal</h2>
-
-        <pre className="omm-block">
-{`Fair IV:     71.2%
-Quoted IV:    72.0%
-
-Edge:         +0.8% (sell vol)`}
-        </pre>
-      </div>
-
-      {/* LOG */}
-      <div className="omm-panel">
-        <h2>Market‑Making Log</h2>
-
-        <ul className="omm-log">
-          <li>Skew computed</li>
-          <li>Greeks updated</li>
-          <li>Vol‑arb signal generated</li>
-        </ul>
-      </div>
-
-    </div>
+    <DockablePanel title="OptionsMM">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

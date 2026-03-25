@@ -1,4 +1,14 @@
-export default function Support() {
-  return <div>Support Page</div>;
-}
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
+export default function Support() {
+  return (
+    <DockablePanel title="Support">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
+  );
+}

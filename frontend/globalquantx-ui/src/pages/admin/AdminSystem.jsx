@@ -1,10 +1,14 @@
-import Page from "../../components/layout/Page";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function AdminSystem() {
   return (
-    <Page title="System Monitoring">
-      <p>Monitor system health and microservices.</p>
-    </Page>
+    <DockablePanel title="AdminSystem">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-

@@ -1,10 +1,14 @@
-import Page from "../../components/layout/Page";
+import DockablePanel from "../../layout/DockablePanel.jsx";
+import Page from "../../layout/Page.jsx";
 
 export default function AdminRisk() {
   return (
-    <Page title="Risk Controls">
-      <p>Configure platform risk parameters.</p>
-    </Page>
+    <DockablePanel title="AdminRisk">
+      <Page>
+        <section>
+          {/* TODO: paste original content here */}
+        </section>
+      </Page>
+    </DockablePanel>
   );
 }
-
