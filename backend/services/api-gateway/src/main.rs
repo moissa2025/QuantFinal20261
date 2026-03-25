@@ -86,6 +86,13 @@ pub fn app(state: Arc<AppState>) -> Router {
 
         // -------------------------------
         // PROTECTED ROUTES
+	.nest(
+    		"/market-data",
+    		Router::new()
+        		.route("/snapshot", get(routes::market_proxy::proxy_snapshot))
+        		.route("/stream", get(routes::market_proxy::proxy_stream))
+        		.with_state(state.clone())
+	)	
         // -------------------------------
         .nest(
             "/v1/orders",

@@ -9,3 +9,4 @@ pub mod ledger;
 pub mod balances;
 pub mod auth;
 
+pub mod market_proxy;

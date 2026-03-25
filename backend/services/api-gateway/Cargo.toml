@@ -6,35 +6,44 @@ edition = "2021"
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 
-axum = { version = "0.7", features = ["macros", "json"] }
+# Axum 0.7 with WebSocket support
+axum = { version = "0.7", features = ["macros", "json", "ws"] }
 axum-extra = { version = "0.9", features = ["cookie", "typed-header"] }
 
+# HTTP + WebSocket proxy dependencies
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+futures-util = "0.3"
+tokio-tungstenite = "0.21"
+tungstenite = "0.21"
+
+# tower stack
 tower = "0.4"
 tower-http = { version = "0.5", features = ["trace", "cors"] }
 
+# serialization
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
+# tracing
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
 
-reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
-
+# NATS
 async-nats = "0.34"
 
+# utils
 uuid = { version = "1", features = ["v4", "serde"] }
 thiserror = "1"
 anyhow = "1"
-
 dashmap = "5"
 tokio-util = "0.7"
-
 headers = "0.4"
 
 # Database
 sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "tls-rustls"] }
 common = { path = "../../libs/common" }
 
-# --- Utoipa stack (correct versions) ---
+# OpenAPI
 utoipa = "4.2.3"
 utoipa-swagger-ui = { version = "7.1.0", features = ["axum"] }
+
