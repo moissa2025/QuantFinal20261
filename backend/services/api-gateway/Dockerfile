@@ -21,6 +21,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY .sqlx ./.sqlx
 COPY libs ./libs
 COPY services ./services
+
 COPY root.crt /app/root.crt
 
 # Build only this service

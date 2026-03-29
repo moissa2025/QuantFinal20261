@@ -17,7 +17,7 @@ pub async fn proxy_auth(
     let client = Client::new();
 
     let url = format!(
-        "http://auth-service.trading-platform.svc.cluster.local:9001/{}",
+        "http://auth-service:8080/{}",
         path
     );
 

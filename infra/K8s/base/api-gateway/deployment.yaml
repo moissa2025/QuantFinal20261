@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: gcr.io/globalquantx-prod/api-gateway:v0.0.4
+          image: gcr.io/globalquantx-prod/api-gateway:v0.1.1
           imagePullPolicy: Always
 
           env:
