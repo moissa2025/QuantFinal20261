@@ -1,7 +1,7 @@
 use axum::{
     routing::get,
     extract::State,
-    Json, Router
+    Json, Router,
 };
 use serde_json::json;
 

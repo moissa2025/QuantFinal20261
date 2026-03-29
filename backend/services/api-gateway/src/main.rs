@@ -67,10 +67,18 @@ pub fn app(state: Arc<AppState>) -> Router {
     Router::new()
         .merge(
             SwaggerUi::new("/swagger-ui")
-                // FIXED: removed duplicate .url("/openapi.json", ...)
                 .url("/openapi.json", openapi.clone())
         )
 
+        // 🔥 AUTH PROXY — MUST COME BEFORE /v1/auth
+        .nest(
+            "/auth",
+            Router::new()
+                .route("/*path", axum::routing::any(routes::auth_proxy::proxy_auth))
+                .with_state(state.clone())
+        )
+
+        // 🔥 DIRECT AUTH ENDPOINTS
         .nest(
             "/v1/auth",
             Router::new()
@@ -90,10 +98,7 @@ pub fn app(state: Arc<AppState>) -> Router {
             "/v1/orders",
             orders::router()
                 .layer(from_fn_with_state(state.clone(), auth_middleware))
-                .layer(from_fn_with_state(
-                    state.user_limiter.clone(),
-                    per_user_rate_limit,
-                )),
+                .layer(from_fn_with_state(state.user_limiter.clone(), per_user_rate_limit)),
         )
         .nest(
             "/v1/users",
@@ -130,9 +135,11 @@ pub fn app(state: Arc<AppState>) -> Router {
             balances::router()
                 .layer(from_fn_with_state(state.clone(), auth_middleware)),
         )
+
         .route("/health", get(|| async { "OK" }))
         .route("/", get(|| async { "GlobalQuantX API Gateway" }))
         .with_state(state)
+
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(|req: &axum::http::Request<_>| {

@@ -1,3 +1,4 @@
+pub mod auth_proxy;
 pub mod health;
 pub mod users;
 pub mod orders;
