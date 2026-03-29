@@ -1,3 +1,4 @@
+use std::env;
 use std::error::Error;
 
 use crate::auth_client_http::AuthClient;
@@ -22,15 +23,37 @@ pub struct AppState {
 
 impl AppState {
     pub async fn new() -> Result<Self, Box<dyn Error>> {
-        let nats = NatsClient::connect("nats://127.0.0.1:4222".into()).await?;
+        //
+        // NATS
+        //
+        let nats_url = env::var("NATS_URL")
+            .unwrap_or_else(|_| "nats://nats:4222".into());
+        let nats = NatsClient::connect(nats_url).await?;
 
         let auth_nats = AuthNatsClient::new(nats.clone());
 
-        let auth_client = AuthClient::new("http://localhost:9001".into());
-        let user_client = UserClient::new("http://localhost:9000".into());
+        //
+        // AUTH SERVICE (HTTP)
+        //
+        let auth_url = env::var("AUTH_SERVICE_URL")
+            .unwrap_or_else(|_| "http://auth-service:8080".into());
+        let auth_client = AuthClient::new(auth_url);
 
+        //
+        // USER SERVICE (HTTP)
+        //
+        let user_url = env::var("USER_SERVICE_URL")
+            .unwrap_or_else(|_| "http://user-service:8080".into());
+        let user_client = UserClient::new(user_url);
+
+        //
+        // RATE LIMITER
+        //
         let user_limiter = UserRateLimiter::new();
 
+        //
+        // DATABASE (CockroachDB)
+        //
         let db = DbPool::connect_from_env().await?;
 
         Ok(Self {

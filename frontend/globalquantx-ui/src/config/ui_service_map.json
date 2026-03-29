@@ -1,0 +1,149 @@
+{
+  "pages": {
+    "public/Landing": {
+      "services": [],
+      "routes": [],
+      "role": "PUBLIC"
+    },
+    "public/Login": {
+      "services": ["auth"],
+      "routes": ["/auth/login", "/auth/session"],
+      "role": "PUBLIC"
+    },
+    "public/Support": {
+      "services": [],
+      "routes": [],
+      "role": "PUBLIC"
+    },
+    "public/LegalPrivacy": {
+      "services": [],
+      "routes": [],
+      "role": "PUBLIC"
+    },
+    "public/LegalTerms": {
+      "services": [],
+      "routes": [],
+      "role": "PUBLIC"
+    },
+
+    "app/Dashboard": {
+      "services": ["trading", "risk", "ledger", "market", "system"],
+      "routes": [
+        "/trading/positions",
+        "/trading/orders",
+        "/risk/exposures",
+        "/ledger/balances",
+        "/market/tickers",
+        "/system/health"
+      ],
+      "role": "TRADER"
+    },
+    "app/Market": {
+      "services": ["market"],
+      "routes": ["/market/tickers", "/market/orderbook", "/market/liquidity"],
+      "role": "TRADER"
+    },
+    "app/OrderEntry": {
+      "services": ["trading", "risk"],
+      "routes": ["/trading/orders", "/risk/pretrade"],
+      "role": "TRADER"
+    },
+    "app/Portfolio": {
+      "services": ["ledger", "trading", "risk"],
+      "routes": ["/ledger/balances", "/trading/positions", "/risk/exposures"],
+      "role": "CLIENT"
+    },
+    "app/Positions": {
+      "services": ["trading"],
+      "routes": ["/trading/positions"],
+      "role": "TRADER"
+    },
+    "app/Ledger": {
+      "services": ["ledger"],
+      "routes": ["/ledger/accounts", "/ledger/journal", "/ledger/entries"],
+      "role": "TRADER"
+    },
+    "app/SystemStatus": {
+      "services": ["system"],
+      "routes": ["/system/health", "/system/services"],
+      "role": "ADMIN"
+    },
+    "app/Notifications": {
+      "services": ["notifications"],
+      "routes": ["/notifications/events"],
+      "role": "TRADER"
+    },
+    "app/Trading": {
+      "services": ["trading", "market", "risk"],
+      "routes": [
+        "/trading/orders",
+        "/trading/positions",
+        "/market/tickers",
+        "/risk/exposures"
+      ],
+      "role": "TRADER"
+    },
+
+    "admin/AdminDashboard": {
+      "services": [
+        "auth",
+        "user",
+        "ledger",
+        "risk",
+        "reconciliation",
+        "onboarding",
+        "system"
+      ],
+      "routes": [
+        "/auth/users",
+        "/user/profiles",
+        "/ledger/balances",
+        "/risk/limits",
+        "/reconciliation/runs",
+        "/onboarding/sessions",
+        "/system/health"
+      ],
+      "role": "ADMIN"
+    },
+    "admin/AdminLedger": {
+      "services": ["ledger", "reconciliation"],
+      "routes": [
+        "/ledger/journal",
+        "/ledger/entries",
+        "/reconciliation/runs"
+      ],
+      "role": "ADMIN"
+    },
+    "admin/AdminRisk": {
+      "services": ["risk"],
+      "routes": ["/risk/limits", "/risk/exposures"],
+      "role": "ADMIN"
+    },
+    "admin/AdminSystem": {
+      "services": ["system"],
+      "routes": ["/system/health", "/system/services"],
+      "role": "ADMIN"
+    },
+    "admin/AdminUsers": {
+      "services": ["auth", "user"],
+      "routes": ["/auth/users", "/auth/roles", "/user/profiles"],
+      "role": "ADMIN"
+    }
+  },
+  "services": {
+    "auth": { "basePath": "/api/auth" },
+    "user": { "basePath": "/api/user" },
+    "ledger": { "basePath": "/api/ledger" },
+    "trading": { "basePath": "/api/trading" },
+    "market": { "basePath": "/api/market" },
+    "risk": { "basePath": "/api/risk" },
+    "reconciliation": { "basePath": "/api/reconciliation" },
+    "onboarding": { "basePath": "/api/onboarding" },
+    "aml": { "basePath": "/api/aml" },
+    "kyc": { "basePath": "/api/kyc" },
+    "wallet": { "basePath": "/api/wallet" },
+    "system": { "basePath": "/api/system" },
+    "notifications": { "basePath": "/api/notifications" }
+  }
+}
+

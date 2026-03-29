@@ -1,0 +1,6 @@
+[
+  { "service": "auth", "status": "UP", "latencyMs": 12, "lastCheck": "2025-01-01T10:00:00Z" },
+  { "service": "trading", "status": "UP", "latencyMs": 18, "lastCheck": "2025-01-01T10:00:00Z" },
+  { "service": "ledger", "status": "DEGRADED", "latencyMs": 85, "lastCheck": "2025-01-01T10:00:00Z" },
+  { "service": "risk", "status": "UP", "latencyMs": 20, "lastCheck": "2025-01-01T10:00:00Z" }
+]

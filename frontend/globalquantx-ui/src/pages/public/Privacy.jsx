@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function Privacy() {
   return (
-    <DockablePanel title="Privacy">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-public page-privacy">
+      <div className="page-header">
+        <h1>Privacy</h1>
+        <p>High-level privacy overview for clients and prospects.</p>
+      </div>
+      <div className="page-body">
+        <p>A concise overview of how GlobalQuantX approaches privacy, security, and data minimization.</p>
+      </div>
+    </div>
   );
 }

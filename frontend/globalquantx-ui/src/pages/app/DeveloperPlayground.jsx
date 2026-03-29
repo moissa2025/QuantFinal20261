@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function DeveloperPlayground() {
   return (
-    <DockablePanel title="DeveloperPlayground">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-developerplayground">
+      <div className="page-header">
+        <h1>Developer Playground</h1>
+        <p>Experiment with APIs and integrations in a safe sandbox.</p>
+      </div>
+      <div className="page-body">
+        <p>Use this area to test API calls, webhooks, and integration flows.</p>
+      </div>
+    </div>
   );
 }

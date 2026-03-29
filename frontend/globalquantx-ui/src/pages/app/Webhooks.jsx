@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function Webhooks() {
   return (
-    <DockablePanel title="Webhooks">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-webhooks">
+      <div className="page-header">
+        <h1>Webhooks</h1>
+        <p>Outbound event delivery configuration.</p>
+      </div>
+      <div className="page-body">
+        <p>Configure and monitor outbound webhooks for downstream systems.</p>
+      </div>
+    </div>
   );
 }

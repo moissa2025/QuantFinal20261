@@ -13,31 +13,34 @@ spec:
       labels:
         app: user-service
     spec:
-      nodeSelector:
-        pool: core-services
       containers:
         - name: user-service
           image: europe-west2-docker.pkg.dev/globalquantx-prod/user/user-service:v0.0.1
+          imagePullPolicy: Always
+
           env:
+            # CockroachDB connection string (already includes sslmode + sslrootcert=/app/root.crt)
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: user-db-url
                   key: DATABASE_URL
+
+            # NATS cluster DNS
             - name: NATS_URL
-              value: nats://nats:4222
+              value: "nats://nats:4222"
+
           ports:
             - containerPort: 8080
 
-
           volumeMounts:
-            - name: cockroachdb-ca
+            # CockroachDB Cloud CA cert mounted at /app/root.crt
+            - name: cockroachdb-cloud-ca
               mountPath: /app/root.crt
               subPath: root.crt
+
       volumes:
-        - name: cockroachdb-ca
+        - name: cockroachdb-cloud-ca
           secret:
-            secretName: apigw-db-url
-            items:
-              - key: ca.crt
-                path: root.crt
+            secretName: cockroachdb-cloud-ca
+

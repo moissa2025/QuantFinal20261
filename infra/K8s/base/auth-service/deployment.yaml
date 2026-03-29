@@ -13,11 +13,9 @@ spec:
       labels:
         app: auth-service
     spec:
-      nodeSelector:
-        pool: core-services
       containers:
         - name: auth-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/auth/auth-service:v0.0.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/auth/auth-service:v0.0.6
           env:
             - name: DATABASE_URL
               valueFrom:
@@ -27,17 +25,32 @@ spec:
             - name: NATS_URL
               value: nats://nats:4222
           ports:
-            - containerPort: 8080
+            - containerPort: 9001
 
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
           volumeMounts:
             - name: cockroachdb-ca
               mountPath: /app/root.crt
               subPath: root.crt
+
       volumes:
         - name: cockroachdb-ca
           secret:
-            secretName: apigw-db-url
+            secretName: auth-db-url
             items:
               - key: ca.crt
                 path: root.crt
+

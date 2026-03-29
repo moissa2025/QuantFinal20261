@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function Portfolio() {
   return (
-    <DockablePanel title="Portfolio">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-portfolio">
+      <div className="page-header">
+        <h1>Portfolio</h1>
+        <p>Holdings, exposures, and performance over time.</p>
+      </div>
+      <div className="page-body">
+        <p>Review portfolio composition, exposures by asset class, and performance attribution.</p>
+      </div>
+    </div>
   );
 }

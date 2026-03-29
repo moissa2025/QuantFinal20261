@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"auth-service","namespace":"trading-platform"},"spec":{"ports":[{"port":8080,"targetPort":8080}],"selector":{"app":"auth-service"},"type":"ClusterIP"}}
+  creationTimestamp: "2026-03-21T20:27:57Z"
+  name: auth-service
+  namespace: trading-platform
+  resourceVersion: "1774124877697727012"
+  uid: 7bf2997e-98eb-49d8-a52f-197a8a5dd537
+spec:
+  clusterIP: 34.118.234.178
+  clusterIPs:
+  - 34.118.234.178
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: auth-service
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

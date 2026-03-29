@@ -34,9 +34,13 @@ async fn main() -> anyhow::Result<()> {
     //
     // 1. Connect to NATS
     //
-    let nats = async_nats::connect("localhost:4222")
-        .await
-        .expect("failed to connect to NATS");
+    // 1. Connect to NATS
+    let nats_url = std::env::var("NATS_URL")
+    	.unwrap_or_else(|_| "nats://nats.trading-platform.svc.cluster.local:4222".to_string());
+
+    let nats = async_nats::connect(&nats_url)
+    	.await
+    	.expect("failed to connect to NATS");
 
     //
     // 2. Connect to Postgres

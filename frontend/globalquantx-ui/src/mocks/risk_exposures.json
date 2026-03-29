@@ -1,0 +1,4 @@
+[
+  { "id": "rx-1", "book": "EQ-BOOK-1", "symbol": "AAPL", "delta": 120000, "currency": "USD" },
+  { "id": "rx-2", "book": "FX-BOOK-2", "symbol": "EURUSD", "delta": -500000, "currency": "USD" }
+]

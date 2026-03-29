@@ -1,7 +1,7 @@
 // src/layout/AppShell.jsx
 
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import CommandPalette from "./CommandPalette.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,6 @@ export default function AppShell({ children }) {
   const [cmdOpen, setCmdOpen] = useState(false);
   const navigate = useNavigate();
   const [lastKey, setLastKey] = useState(null);
-  const location = useLocation();
 
   useEffect(() => {
     const handler = (e) => {
@@ -71,7 +70,7 @@ export default function AppShell({ children }) {
               </select>
             </div>
             <button className="app-header-icon" title="Notifications">
-              🔔
+              •
             </button>
             <button className="app-header-icon" title="Quick actions">
               ⚡
@@ -86,7 +85,7 @@ export default function AppShell({ children }) {
                   .slice(0, 2)}
               </div>
             </div>
-            <span className="app-header-pill">CMD: ⌘K · g d · g m</span>
+            <span className="app-header-pill">CMD: ⌘/Ctrl+K · g d · g m</span>
           </div>
         </header>
         <main className="app-content">{children}</main>

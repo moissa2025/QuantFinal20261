@@ -1,0 +1,5 @@
+[
+  { "id": "u-1", "email": "alice@example.com", "role": "ADMIN", "status": "ACTIVE" },
+  { "id": "u-2", "email": "bob@example.com", "role": "TRADER", "status": "ACTIVE" },
+  { "id": "u-3", "email": "carol@example.com", "role": "CLIENT", "status": "SUSPENDED" }
+]

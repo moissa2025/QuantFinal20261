@@ -34,15 +34,15 @@ export function useAuth() {
 export function getLandingPathForRole(role) {
   switch (role) {
     case ROLES.ADMIN:
-      return "/adm/dash";   // Admin → Dashboard
+      return "/adm/dash"; // Admin -> Dashboard
     case ROLES.TRADER:
-      return "/app/mkt";    // Trader → Market
+      return "/app/mkt"; // Trader -> Market
     case ROLES.CLIENT:
-      return "/app/pfl";    // Client → Portfolio
+      return "/app/pfl"; // Client -> Portfolio
     case ROLES.SUPPORT:
-      return "/adm/usr";    // Support → Users
+      return "/adm/usr"; // Support -> Users
     case ROLES.PUBLIC:
     default:
-      return "/pub/lnd";    // Public → Home
+      return "/pub/lnd"; // Public -> Home
   }
 }

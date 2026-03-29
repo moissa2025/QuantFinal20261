@@ -1,3 +1,5 @@
+use axum::response::IntoResponse;
+
 use axum::{
     extract::{ConnectInfo, State},
     http::{HeaderMap, StatusCode},
@@ -70,8 +72,8 @@ pub async fn login(
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     let Some(row) = row else {
-        return Err(StatusCode::UNAUTHORIZED);
-    };
+    	return Err(StatusCode::UNAUTHORIZED);
+	};
 
     let user_id: Uuid = row.get("id");
     let email: String = row.get("email");
@@ -289,7 +291,7 @@ pub async fn register(
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     if existing.is_some() {
-        return Err(StatusCode::UNAUTHORIZED);
+    	return Err(StatusCode::CONFLICT); // 409
     }
 
     let password_hash = hash_password(&body.password)

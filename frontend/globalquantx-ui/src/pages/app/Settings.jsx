@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function Settings() {
   return (
-    <DockablePanel title="Settings">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-settings">
+      <div className="page-header">
+        <h1>Settings</h1>
+        <p>User and workspace configuration.</p>
+      </div>
+      <div className="page-body">
+        <p>Configure preferences, notifications, and workspace-level settings.</p>
+      </div>
+    </div>
   );
 }

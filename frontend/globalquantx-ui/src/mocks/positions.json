@@ -1,0 +1,16 @@
+[
+  {
+    "id": "pos-1",
+    "symbol": "BTCUSD",
+    "quantity": 1.25,
+    "pnl": 1234.56,
+    "currency": "USD"
+  },
+  {
+    "id": "pos-2",
+    "symbol": "ETHUSD",
+    "quantity": 10.0,
+    "pnl": -234.10,
+    "currency": "USD"
+  }
+]

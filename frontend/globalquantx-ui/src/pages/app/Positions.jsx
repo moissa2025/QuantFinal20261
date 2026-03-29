@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function Positions() {
   return (
-    <DockablePanel title="Positions">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-positions">
+      <div className="page-header">
+        <h1>Positions</h1>
+        <p>Intraday and end-of-day positions across instruments.</p>
+      </div>
+      <div className="page-body">
+        <p>Track net and gross positions, sensitivities, and concentration across books.</p>
+      </div>
+    </div>
   );
 }

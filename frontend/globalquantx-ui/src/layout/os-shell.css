@@ -33,7 +33,6 @@
 .theme-bloomberg {
   background: #000000;
 }
-
 .theme-bloomberg .sidebar {
   background: #050505;
   border-right-color: #202020;
@@ -53,7 +52,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
@@ -73,12 +71,10 @@
   text-transform: uppercase;
   color: #f9fafb;
 }
-
 .sidebar-subtitle {
   font-size: 11px;
   color: #6b7280;
 }
-
 .sidebar-sections {
   margin-top: 12px;
   display: flex;
@@ -127,7 +123,6 @@
   text-decoration: none;
   border-radius: 4px;
 }
-
 .sidebar-item:hover {
   background: #0b1020;
   color: #e5e7eb;
@@ -164,12 +159,10 @@
   font-size: 16px;
   font-weight: 500;
 }
-
 .app-header-subtitle {
   font-size: 12px;
   color: #9ca3af;
 }
-
 .app-header-right {
   display: flex;
   align-items: center;
@@ -214,7 +207,6 @@
 .app-header-icon:hover {
   background: #111827;
 }
-
 .app-header-user {
   display: flex;
   align-items: center;
@@ -307,12 +299,10 @@
   font-size: 11px;
   color: #9ca3af;
 }
-
 .cmd-item-short {
   font-size: 11px;
   color: #9ca3af;
 }
-
 .cmd-empty {
   padding: 10px 12px;
   font-size: 13px;
@@ -327,3 +317,36 @@
   font-size: 11px;
   color: #6b7280;
 }
+
+/* ───────────────────────────────────────────────
+   PAGE BODY + WIDGET VISIBILITY FIX
+   ─────────────────────────────────────────────── */
+.page-body {
+  padding: 16px;
+  display: block;
+  color: #e5e7eb;
+}
+
+.page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: #0f1115;
+}
+
+.page-body th,
+.page-body td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.page-body th {
+  text-align: left;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.page-body tr:hover {
+  background: #111827;
+}
+

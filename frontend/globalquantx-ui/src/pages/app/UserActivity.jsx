@@ -1,14 +1,15 @@
-import DockablePanel from "../../layout/DockablePanel.jsx";
-import Page from "../../layout/Page.jsx";
+import React from "react";
 
 export default function UserActivity() {
   return (
-    <DockablePanel title="UserActivity">
-      <Page>
-        <section>
-          {/* TODO: paste original content here */}
-        </section>
-      </Page>
-    </DockablePanel>
+    <div className="page page-app page-useractivity">
+      <div className="page-header">
+        <h1>User Activity</h1>
+        <p>Recent actions and audit trails.</p>
+      </div>
+      <div className="page-body">
+        <p>Inspect recent actions, approvals, and key events tied to your identity.</p>
+      </div>
+    </div>
   );
 }

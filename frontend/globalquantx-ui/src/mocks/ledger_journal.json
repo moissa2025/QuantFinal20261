@@ -1,0 +1,20 @@
+[
+  {
+    "id": "le-1",
+    "accountId": "ACC-1001",
+    "amount": 100000,
+    "currency": "USD",
+    "direction": "CREDIT",
+    "bookedAt": "2025-01-01T09:00:00Z",
+    "reference": "Trade T-1"
+  },
+  {
+    "id": "le-2",
+    "accountId": "ACC-2001",
+    "amount": 100000,
+    "currency": "USD",
+    "direction": "DEBIT",
+    "bookedAt": "2025-01-01T09:00:00Z",
+    "reference": "Trade T-1"
+  }
+]

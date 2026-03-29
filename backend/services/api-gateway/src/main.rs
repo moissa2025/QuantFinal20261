@@ -44,39 +44,33 @@ async fn main() {
     let state = Arc::new(
         AppState::new()
             .await
-            .expect("failed to initialize AppState"),
+            .expect("❌ API Gateway failed to initialize AppState"),
     );
 
     let app = app(state);
 
     let addr = "0.0.0.0:8080";
-
     println!("🚀 API Gateway running on http://{addr}");
 
-    // Axum 0.7 server startup
     let listener = TcpListener::bind(addr)
         .await
-        .expect("failed to bind TCP listener");
+        .expect("❌ Failed to bind TCP listener");
 
     serve(listener, app)
         .await
-        .expect("server error");
+        .expect("❌ Server error");
 }
 
 pub fn app(state: Arc<AppState>) -> Router {
     let openapi = openapi::ApiDoc::openapi();
 
     Router::new()
-        // Swagger UI (utoipa 5 / swagger-ui 7)
         .merge(
             SwaggerUi::new("/swagger-ui")
+                // FIXED: removed duplicate .url("/openapi.json", ...)
                 .url("/openapi.json", openapi.clone())
         )
-        .route("/openapi.json", get(|| async { Json(openapi) }))
 
-        // -------------------------------
-        // PUBLIC ROUTES
-        // -------------------------------
         .nest(
             "/v1/auth",
             Router::new()
@@ -84,16 +78,14 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .route("/logout", post(auth::logout_handler))
         )
 
-        // -------------------------------
-        // PROTECTED ROUTES
-	.nest(
-    		"/market-data",
-    		Router::new()
-        		.route("/snapshot", get(routes::market_proxy::proxy_snapshot))
-        		.route("/stream", get(routes::market_proxy::proxy_stream))
-        		.with_state(state.clone())
-	)	
-        // -------------------------------
+        .nest(
+            "/market-data",
+            Router::new()
+                .route("/snapshot", get(routes::market_proxy::proxy_snapshot))
+                .route("/stream", get(routes::market_proxy::proxy_stream))
+                .with_state(state.clone())
+        )
+
         .nest(
             "/v1/orders",
             orders::router()
@@ -138,14 +130,9 @@ pub fn app(state: Arc<AppState>) -> Router {
             balances::router()
                 .layer(from_fn_with_state(state.clone(), auth_middleware)),
         )
-
-        // Health check
         .route("/health", get(|| async { "OK" }))
-
-        // Global state
+        .route("/", get(|| async { "GlobalQuantX API Gateway" }))
         .with_state(state)
-
-        // Tracing layer (tower-http 0.5)
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(|req: &axum::http::Request<_>| {

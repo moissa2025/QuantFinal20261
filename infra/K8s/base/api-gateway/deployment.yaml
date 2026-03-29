@@ -13,11 +13,9 @@ spec:
       labels:
         app: api-gateway
     spec:
-      nodeSelector:
-        pool: backoffice
       containers:
         - name: api-gateway
-          image: gcr.io/globalquantx-prod/api-gateway:v0.0.2
+          image: gcr.io/globalquantx-prod/api-gateway:v0.0.4
           imagePullPolicy: Always
 
           env:
@@ -26,8 +24,15 @@ spec:
                 secretKeyRef:
                   name: apigw-db-url
                   key: DATABASE_URL
+
             - name: NATS_URL
-              value: nats://nats:4222
+              value: "nats://nats:4222"
+
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:8080"
+
+            - name: USER_SERVICE_URL
+              value: "http://user-service:8080"
 
           ports:
             - containerPort: 8080
@@ -40,5 +45,5 @@ spec:
       volumes:
         - name: cockroachdb-cloud-ca
           secret:
-            secretName: cockroachdb-cloud-ca
+            secretName: apigw-db-url
 

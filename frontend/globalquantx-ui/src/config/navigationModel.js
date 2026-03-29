@@ -1,5 +1,4 @@
 // src/config/navigationModel.js
-
 import { PERMISSIONS } from "./roles";
 
 export const NAV_SECTIONS = [

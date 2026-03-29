@@ -54,7 +54,8 @@ export default function Sidebar() {
                         to={item.path}
                         title={`${item.label} (${cmd})`}
                         className={
-                          "sidebar-item" + (active ? " sidebar-item-active" : "")
+                          "sidebar-item" +
+                          (active ? " sidebar-item-active" : "")
                         }
                       >
                         {item.label}
