@@ -14,43 +14,53 @@ spec:
         app: auth-service
     spec:
       containers:
-        - name: auth-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/auth/auth-service:v0.0.6
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: auth-db-url
-                  key: DATABASE_URL
-            - name: NATS_URL
-              value: nats://nats:4222
-          ports:
-            - containerPort: 9001
+      - name: auth-service
+        image: gcr.io/globalquantx-prod/auth-service:v0.0.9
+        imagePullPolicy: IfNotPresent
 
-          livenessProbe:
-            httpGet:
-              path: /live
-              port: 9001
-            initialDelaySeconds: 5
-            periodSeconds: 10
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: auth-db-url
+              key: DATABASE_URL
 
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 9001
-            initialDelaySeconds: 5
-            periodSeconds: 10
+        - name: NATS_URL
+          value: "nats://nats:4222"
 
-          volumeMounts:
-            - name: cockroachdb-ca
-              mountPath: /app/root.crt
-              subPath: root.crt
+        - name: REFRESH_TOKEN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: auth-refresh-key
+              key: REFRESH_TOKEN_KEY
+
+        ports:
+        - containerPort: 9001
+
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: 9001
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 9001
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        volumeMounts:
+        - name: cockroachdb-ca
+          mountPath: /app/root.crt
+          subPath: root.crt
 
       volumes:
-        - name: cockroachdb-ca
-          secret:
-            secretName: auth-db-url
-            items:
-              - key: ca.crt
-                path: root.crt
+      - name: cockroachdb-ca
+        secret:
+          secretName: auth-db-url
+          items:
+          - key: ca.crt
+            path: root.crt
 

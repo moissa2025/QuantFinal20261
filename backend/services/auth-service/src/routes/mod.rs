@@ -1,26 +1,28 @@
 use axum::{
+    Router,
     routing::get,
     extract::State,
-    Json, Router,
+    Json,
 };
 use serde_json::json;
 
 use crate::state::AppState;
 
 pub mod auth;
+pub use auth::router as auth_router;
 
 // ----------------------
 // /live
 // ----------------------
 async fn live() -> Json<serde_json::Value> {
-    Json(json!({"status": "live"}))
+    Json(json!({ "status": "live" }))
 }
 
 // ----------------------
 // /health
 // ----------------------
 async fn health() -> Json<serde_json::Value> {
-    Json(json!({"status": "ok"}))
+    Json(json!({ "status": "ok" }))
 }
 
 // ----------------------
@@ -43,17 +45,17 @@ async fn ready(State(state): State<AppState>) -> Json<serde_json::Value> {
         }));
     }
 
-    Json(json!({"status": "ready"}))
+    Json(json!({ "status": "ready" }))
 }
 
 // ----------------------
-// Router
+// Unified Router
 // ----------------------
 pub fn router() -> Router<AppState> {
-    Router::<AppState>::new()
+    Router::new()
         .route("/live", get(live))
         .route("/health", get(health))
         .route("/ready", get(ready))
-        .merge(auth::router())
+        .merge(auth_router())
 }
 

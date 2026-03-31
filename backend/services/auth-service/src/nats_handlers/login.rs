@@ -52,11 +52,15 @@ pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     // 1. Load user
     //
     let user = match sqlx::query!(
-        r#"SELECT id, password_hash, disabled
-           FROM auth.users
-           WHERE email = $1"#,
-        req.email
-    )
+    r#"
+    SELECT u.id, c.password_hash, u.disabled
+    FROM auth.users u
+    JOIN auth.credentials c ON c.user_id = u.id
+    WHERE u.email = $1
+    "#,
+    req.email
+)
+
     .fetch_optional(&pool)
     .await
     {

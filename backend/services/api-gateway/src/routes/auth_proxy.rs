@@ -16,36 +16,48 @@ pub async fn proxy_auth(
 ) -> impl IntoResponse {
     let client = Client::new();
 
-    let url = format!(
-        "http://auth-service:8080/{}",
-        path
-    );
-
+    // 1. Extract method + headers BEFORE consuming the body
     let method = req.method().clone();
+    let headers = req.headers().clone();
 
-    // Axum 0.7 requires a limit argument
+    // 2. Extract body (this consumes req)
     let body_bytes = to_bytes(req.into_body(), usize::MAX)
         .await
         .unwrap_or_default();
 
-    let resp = client
-        .request(method, &url)
+    // 3. Build target URL
+    let url = format!(
+        "http://auth-service:8080/v1/auth/{}",
+        path
+    );
+
+    // 4. Build outgoing request
+    let mut builder = client.request(method, &url);
+
+    // 5. Forward headers
+    for (name, value) in headers.iter() {
+        // Skip hop-by-hop headers
+        if name.as_str().eq_ignore_ascii_case("host") {
+            continue;
+        }
+        builder = builder.header(name, value);
+    }
+
+    // 6. Send request
+    let resp = builder
         .body(body_bytes)
         .send()
         .await;
 
+    // 7. Return response to client
     match resp {
         Ok(r) => {
             let status = r.status();
             let bytes = r.bytes().await.unwrap_or_default();
-
-            // Return a proper Axum response
             (status, bytes).into_response()
         }
         Err(e) => {
             tracing::error!("auth proxy error: {}", e);
-
-            // Also return a proper Axum response
             (
                 StatusCode::BAD_GATEWAY,
                 "auth-service unreachable"

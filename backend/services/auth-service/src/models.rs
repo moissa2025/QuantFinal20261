@@ -44,15 +44,16 @@ pub struct UserRole {
 }
 
 //
+//
 // SESSIONS
 //
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Session {
     pub id: Uuid,
     pub user_id: Uuid,
     pub session_token: String,
-    pub ip_address: Option<IpNetwork>,
-    pub user_agent: Option<String>,
-    pub device_hash: Option<String>,
+    pub ip: Option<String>,
+    pub device_ua_hash: Option<String>,
     pub expires_at: Option<DateTime<Utc>>,
     pub created_at: Option<DateTime<Utc>>,
     pub last_activity_at: Option<DateTime<Utc>>,
@@ -191,4 +192,3 @@ pub struct EventLog {
     pub payload: serde_json::Value,
     pub created_at: DateTime<Utc>,
 }
-

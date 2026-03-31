@@ -1,4 +1,3 @@
-use ipnetwork::IpNetwork;
 use sha2::{Digest, Sha256};
 use sqlx::Row;
 use uuid::Uuid;
@@ -60,50 +59,38 @@ pub async fn create_session(
     let now = Utc::now();
     let expires_at = now + chrono::Duration::seconds(SESSION_TTL_SECONDS);
 
-    let ip_network: Option<IpNetwork> = ip
-        .as_deref()
-        .and_then(|s| s.parse::<IpNetwork>().ok());
+    // Device fingerprint
+    let ua_norm = raw_user_agent.as_deref().map(normalise_device_ua);
+    let device_hash = ua_norm.as_deref().map(hash_device_ua);
 
-    let ua_norm = raw_user_agent
-        .as_deref()
-        .map(normalise_device_ua);
-
-    let device_hash = ua_norm
-        .as_deref()
-        .map(hash_device_ua);
-
-let rec = sqlx::query_as!(
-    Session,
-    r#"
-    INSERT INTO auth.sessions (
-        id, user_id, session_token,
-        ip_address, user_agent, device_hash,
-        expires_at, created_at, last_activity_at, revoked
+    let rec = sqlx::query_as!(
+        Session,
+        r#"
+        INSERT INTO auth.sessions (
+            id, user_id, session_token,
+            ip, device_ua_hash,
+            expires_at, created_at, last_activity_at, revoked
+        )
+        VALUES (
+            $1, $2, $3,
+            $4, $5,
+            $6, $7, $7, false
+        )
+        RETURNING
+            id, user_id, session_token,
+            ip, device_ua_hash,
+            expires_at, created_at, last_activity_at, revoked
+        "#,
+        Uuid::new_v4(),
+        user_id,
+        session_token,
+        ip,
+        device_hash,
+        expires_at,
+        now
     )
-    VALUES (
-        $1, $2, $3,
-        $4, $5, $6,
-        $7::timestamptz,
-        $8::timestamptz,
-        $8::timestamptz,
-        false
-    )
-    RETURNING
-        id, user_id, session_token,
-        ip_address, user_agent, device_hash,
-        expires_at, created_at, last_activity_at, revoked
-    "#,
-    Uuid::new_v4(),
-    user_id,
-    session_token,
-    ip_network,
-    raw_user_agent,
-    device_hash,
-    expires_at,
-    now
-)
-.fetch_one(pool)
-.await?;
+    .fetch_one(pool)
+    .await?;
 
     Ok(rec)
 }
@@ -122,7 +109,7 @@ pub async fn validate_session(
 
     let row = sqlx::query(
         r#"
-        SELECT s.user_id, s.ip_address, s.device_hash, s.expires_at, s.revoked, u.email
+        SELECT s.user_id, s.ip, s.device_ua_hash, s.expires_at, s.revoked, u.email
         FROM auth.sessions s
         JOIN users u ON u.id = s.user_id
         WHERE s.session_token = $1
@@ -137,8 +124,8 @@ pub async fn validate_session(
     };
 
     let user_id: Uuid = row.get("user_id");
-    let stored_ip: Option<String> = row.try_get("ip_address")?;
-    let stored_device_hash: Option<String> = row.try_get("device_hash")?;
+    let stored_ip: Option<String> = row.try_get("ip")?;
+    let stored_device_hash: Option<String> = row.try_get("device_ua_hash")?;
     let expires_at: DateTime<Utc> = row.get("expires_at");
     let revoked: bool = row.get("revoked");
     let email: String = row.get("email");
