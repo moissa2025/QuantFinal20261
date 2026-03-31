@@ -1,4 +1,5 @@
-const API_BASE = "https://api.globalquantx.com";
+// src/api/httpClient.js
+const API_BASE = ""; // Vite proxy handles routing
 
 let sessionToken = null;
 
@@ -13,7 +14,7 @@ export async function apiFetch(path, options = {}) {
   };
 
   if (sessionToken) {
-    headers["Authorization"] = `Session ${sessionToken}`;
+    headers["Authorization"] = `Bearer ${sessionToken}`;
   }
 
   const res = await fetch(`${API_BASE}${path}`, {
@@ -21,10 +22,6 @@ export async function apiFetch(path, options = {}) {
     headers,
     credentials: "include",
   });
-
-  if (res.status === 401 || res.status === 403) {
-    throw new Error("unauthorized");
-  }
 
   return res;
 }

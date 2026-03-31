@@ -1,43 +1,32 @@
+import React from "react";
 import { useLocation } from "react-router-dom";
-import { NAV_INDEX } from "./navigationIndex.js";
-import { useTheme } from "./ThemeContext";
-import { publish } from "./EventBus";
-
-const findByPath = (path) => NAV_INDEX.find((i) => i.path === path);
+import { useAuth } from "../context/AuthContext.jsx";   // ← add this
+import "../styles/layout.css";
 
 export default function Topbar() {
-  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
-  const current = findByPath(location.pathname);
+  const { logout } = useAuth();   // ← get logout from context
+
+  const pageTitle = location.pathname
+    .replace("/app/", "")
+    .replace("-", " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <header className="nav-topbar">
-      <div className="nav-topbar-left">
-        <span className="nav-topbar-title">
-          {current ? current.label : "Control Plane"}
-        </span>
-      </div>
+    <div className="gqx-topbar">
+      <div className="gqx-topbar-title">{pageTitle || "Dashboard"}</div>
 
-      <div className="nav-topbar-right">
-        <button
-          className="nav-topbar-btn"
-          onClick={() => publish("commandPalette:open")}
-        >
-          ⌘K
-        </button>
+      <div className="gqx-topbar-right">
+        <button className="gqx-topbar-btn">Search</button>
+        <button className="gqx-topbar-btn">Theme</button>
+        <button className="gqx-topbar-btn">Notifications</button>
 
-        <button
-          className="nav-topbar-btn"
-          onClick={() => publish("notifications:toggle")}
-        >
-          Notifications
-        </button>
-
-        <button className="nav-topbar-btn" onClick={toggleTheme}>
-          {theme === "dark" ? "Light" : "Dark"}
+        {/* 🔥 LOGOUT BUTTON */}
+        <button className="gqx-topbar-btn" onClick={logout}>
+          Logout
         </button>
       </div>
-    </header>
+    </div>
   );
 }
 

@@ -1,14 +1,40 @@
-// src/layout/Layout.jsx
 import React from "react";
-import AppShell from "./AppShell.jsx";
+import { Outlet } from "react-router-dom";
+import Footer from "./Footer.jsx";
 
-export default function Layout({ children }) {
+import Navigation from "./Navigation.jsx";
+import Topbar from "./Topbar.jsx";
+
+import WindowManager from "./WindowManager.jsx";
+import CommandPalette from "./CommandPalette.jsx";
+import NotificationCenter from "./NotificationCenter.jsx";
+import KeyboardShortcuts from "./KeyboardShortcuts.jsx";
+import { ThemeProvider } from "./ThemeContext.jsx";
+
+import "../styles/global.css";
+import "./os-shell.css";
+
+export default function Layout() {
   return (
-    <AppShell>
-      <div className="app-content">
-        {children}
+    <ThemeProvider>
+      <KeyboardShortcuts />
+      <CommandPalette />
+      <NotificationCenter />
+
+      <div className="gqx-shell">
+        <Navigation />
+
+        <div className="gqx-main">
+          <Topbar />
+
+          <WindowManager>
+            <Outlet />
+          </WindowManager>
+        </div>
       </div>
-    </AppShell>
+
+      <Footer />
+    </ThemeProvider>
   );
 }
 

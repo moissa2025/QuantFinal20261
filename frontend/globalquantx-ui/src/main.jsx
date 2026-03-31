@@ -2,10 +2,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import "./styles/auth.css";
+import App from "./App.jsx";
 
 // 🔥 Unified OS Shell Layout (Sidebar + Topbar + WindowManager + Search + Palette)
 import Layout from "./layout/Layout.jsx";
-
 // 🌙 Global OS Shell Styles (institutional look)
 import "./layout/os-shell.css";
 
@@ -145,11 +146,9 @@ setTheme("dark");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
       <BrowserRouter>
-        <Layout />
+        <App />
       </BrowserRouter>
-    </AuthProvider>
   </React.StrictMode>
 );
 

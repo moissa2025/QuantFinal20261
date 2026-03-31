@@ -1,48 +1,43 @@
-// src/context/AuthContext.jsx
+import { createContext, useContext, useEffect, useState } from "react";
 
-import React, { createContext, useContext, useState, useMemo } from "react";
-import { ROLES } from "../config/roles";
-
-const AuthContext = createContext(null);
+const AuthContext = createContext({
+  user: null,
+  login: () => {},
+  logout: () => {},
+});
 
 export function AuthProvider({ children }) {
-  // TODO: hydrate from real auth backend
-  const [user, setUser] = useState({
-    id: "demo-user",
-    name: "Demo User",
-    role: ROLES.ADMIN, // change to test: TRADER, CLIENT, SUPPORT, PUBLIC
-  });
+  const [user, setUser] = useState(null);
 
-  const value = useMemo(
-    () => ({
-      user,
-      setUser,
-    }),
-    [user]
+  // Load session from localStorage on startup
+  useEffect(() => {
+    const stored = localStorage.getItem("gqx_auth");
+    if (stored) {
+      setUser(JSON.parse(stored));
+    }
+  }, []);
+
+  // Login function
+  const login = (authData) => {
+    localStorage.setItem("gqx_auth", JSON.stringify(authData));
+    setUser(authData);
+  };
+
+  // Logout function
+  const logout = () => {
+    localStorage.removeItem("gqx_auth");
+    setUser(null);
+    window.location.href = "/public/login";
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  return useContext(AuthContext);
 }
 
-// Role-based landing mapping
-export function getLandingPathForRole(role) {
-  switch (role) {
-    case ROLES.ADMIN:
-      return "/adm/dash"; // Admin -> Dashboard
-    case ROLES.TRADER:
-      return "/app/mkt"; // Trader -> Market
-    case ROLES.CLIENT:
-      return "/app/pfl"; // Client -> Portfolio
-    case ROLES.SUPPORT:
-      return "/adm/usr"; // Support -> Users
-    case ROLES.PUBLIC:
-    default:
-      return "/pub/lnd"; // Public -> Home
-  }
-}

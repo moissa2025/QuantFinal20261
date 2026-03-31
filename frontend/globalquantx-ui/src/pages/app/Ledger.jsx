@@ -1,9 +1,9 @@
+// src/pages/app/Ledger.jsx
 import React, { useEffect, useState } from "react";
-import { LedgerEntry } from "../../services/dtos";
 import { mockFetch } from "../../services/mockFetch";
 
 export default function Ledger() {
-  const [entries, setEntries] = useState<LedgerEntry[]>([]);
+  const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -11,11 +11,12 @@ export default function Ledger() {
       setLoading(true);
       try {
         const data = await mockFetch("/ledger/journal");
-        setEntries(data);
+        setEntries(data || []);
       } finally {
         setLoading(false);
       }
     }
+
     load();
   }, []);
 
@@ -25,8 +26,10 @@ export default function Ledger() {
         <h1>Ledger</h1>
         <p>Journal entries and account movements.</p>
       </div>
+
       <div className="page-body">
         {loading && <div>Loading journal...</div>}
+
         {!loading && (
           <table>
             <thead>
@@ -39,6 +42,7 @@ export default function Ledger() {
                 <th>Reference</th>
               </tr>
             </thead>
+
             <tbody>
               {entries.map((e) => (
                 <tr key={e.id}>
@@ -57,3 +61,4 @@ export default function Ledger() {
     </div>
   );
 }
+

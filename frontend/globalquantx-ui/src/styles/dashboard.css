@@ -1,90 +1,187 @@
-.dashboard-container {
+/* ROOT */
+.dashboard-root {
+  position: relative;
+  min-height: 100vh;
+  padding: 40px;
+  color: #e5e7eb;
+  overflow-x: hidden;
+}
+
+/* CONTENT WRAPPER */
+.dashboard-content {
+  position: relative;
+  z-index: 5;
+}
+
+/* TOP BAR */
+.dashboard-topbar {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* ROWS */
-.dashboard-row {
-  display: flex;
-  gap: 20px;
-}
-
-/* CARDS */
-.dashboard-card {
-  flex: 1;
-  background: #111;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #222;
-}
-
-.dashboard-card h3 {
-  margin-bottom: 10px;
-  color: #aaa;
-}
-
-.metric {
-  font-size: 26px;
-  font-weight: bold;
-}
-
-.metric.positive {
-  color: #00c853;
-}
-
-.metric.negative {
-  color: #ff5252;
-}
-
-.metric.warning {
-  color: #ffb300;
-}
-
-/* CHART */
-.dashboard-chart {
-  flex: 2;
-  background: #111;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #222;
-}
-
-.chart-placeholder {
-  height: 250px;
-  background: #0d0d0d;
-  border: 1px dashed #333;
-  border-radius: 6px;
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  color: #555;
+  margin-bottom: 24px;
 }
 
-/* TABLE */
-.dashboard-table {
-  flex: 1;
-  background: #111;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #222;
+.dashboard-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #f3f4f6;
 }
 
-.dashboard-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.dashboard-table th {
-  text-align: left;
-  padding-bottom: 10px;
-  color: #888;
+.dashboard-user {
+  background: rgba(255,255,255,0.1);
+  padding: 8px 14px;
+  border-radius: 10px;
   font-size: 14px;
+  font-weight: 500;
 }
 
-.dashboard-table td {
+/* MARKET TICKER */
+.dashboard-ticker {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 12px 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.ticker-item {
+  display: flex;
+  gap: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.ticker-value {
+  color: #93c5fd;
+}
+
+.ticker-up {
+  color: #22c55e;
+}
+
+.ticker-down {
+  color: #ef4444;
+}
+
+/* GRID LAYOUT */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+/* GLASS CARDS */
+.dash-card {
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 22px;
+  border-radius: 16px;
+  animation: cardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dash-card h2 {
+  font-size: 16px;
+  margin-bottom: 14px;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+/* LISTS */
+.health-list li,
+.positions-list li,
+.risk-list li {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   padding: 8px 0;
-  border-bottom: 1px solid #222;
-  color: #ccc;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 13px;
+}
+
+.ok {
+  color: #22c55e;
+}
+
+.bad {
+  color: #ef4444;
+}
+
+/* BACKGROUND LAYERS (reuse from login) */
+.quant-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(59,130,246,0.25), transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(16,185,129,0.25), transparent 60%),
+              radial-gradient(circle at 50% 50%, rgba(168,85,247,0.18), transparent 70%);
+  background-size: 200% 200%;
+  animation: quantGradientMove 22s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes quantGradientMove {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.quant-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: quantGridDrift 18s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes quantGridDrift {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-40px); }
+}
+
+.quant-bg-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.quant-bg-particles::before,
+.quant-bg-particles::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 3px 3px;
+  animation: quantParticlesFloat 60s linear infinite;
+  opacity: 0.25;
+}
+
+.quant-bg-particles::after {
+  animation-duration: 90s;
+  opacity: 0.15;
+}
+
+@keyframes quantParticlesFloat {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(-200px, -200px); }
 }
 

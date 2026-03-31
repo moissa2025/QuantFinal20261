@@ -1,17 +1,15 @@
-import { useContext } from "react";
+// src/components/ProtectedRoute.jsx
+import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import AppShell from "./layout/AppShell";
 
 export default function ProtectedRoute({ children }) {
-  const { token, sessionExpired } = useContext(AuthContext);
+  const { auth, loading } = useAuth();
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  if (loading) return null;
 
-  if (sessionExpired) {
-    return <Navigate to="/login?expired=1" replace />;
+  if (!auth) {
+    return <Navigate to="/public/login" replace />;
   }
 
   return <AppShell>{children}</AppShell>;

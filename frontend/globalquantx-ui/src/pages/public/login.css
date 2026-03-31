@@ -1,0 +1,82 @@
+.gqx-login-container {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.gqx-login-card {
+  background: #111418;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #1c1f24;
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
+}
+
+.gqx-login-header h1 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.gqx-login-header p {
+  color: #a8acb1;
+  margin-bottom: 30px;
+}
+
+.gqx-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gqx-login-form label {
+  font-size: 14px;
+  color: #cfd3d8;
+}
+
+.gqx-login-form input {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #1c1f24;
+  background: #0f1216;
+  color: #fff;
+}
+
+.gqx-login-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #6b6f75;
+}
+
+.gqx-login-btn {
+  margin-top: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #00d4ff, #0077ff);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gqx-login-side {
+  color: #cfd3d8;
+  max-width: 420px;
+}
+
+.gqx-login-side h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.gqx-login-legal {
+  margin-top: 40px;
+  font-size: 12px;
+  color: #6b6f75;
+}
+
