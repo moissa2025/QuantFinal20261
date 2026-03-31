@@ -1,0 +1,32 @@
+.gqx-contact {
+  color: #e6e9ef;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.gqx-contact h1 {
+  margin-bottom: 16px;
+}
+
+.gqx-contact-lead {
+  color: #a8acb1;
+  margin-bottom: 32px;
+}
+
+.gqx-contact-section {
+  margin-bottom: 28px;
+}
+
+.gqx-contact-section h2 {
+  margin-bottom: 6px;
+}
+
+.gqx-contact-section p {
+  color: #a8acb1;
+}
+
+.gqx-contact a {
+  color: #00d4ff;
+}
+

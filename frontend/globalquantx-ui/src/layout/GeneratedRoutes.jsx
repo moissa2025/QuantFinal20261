@@ -1,3 +1,4 @@
+import Pricing from "../pages/marketing/Pricing.jsx";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -62,6 +63,8 @@ export default function GeneratedRoutes() {
 
   <Route path="/login" element={<PublicShell><Login /></PublicShell>} />
   <Route path="/landing" element={<PublicShell><Landing /></PublicShell>} />
+  <Route path="/pricing" element={<PublicShell><Pricing /></PublicShell>} />
+
   <Route path="/support" element={<PublicShell><Support /></PublicShell>} />
   <Route path="/terms" element={<PublicShell><Terms /></PublicShell>} />
   <Route path="/privacy" element={<PublicShell><Privacy /></PublicShell>} />

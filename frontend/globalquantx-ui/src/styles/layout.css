@@ -18,6 +18,23 @@
   animation: gqxGlow 12s ease-in-out infinite alternate;
   pointer-events: none;
 }
+/* PARTICLE LAYER */
+.gqx-public-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.08), transparent),
+    radial-gradient(2px 2px at 80% 70%, rgba(255,255,255,0.06), transparent),
+    radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.04), transparent);
+  animation: gqxParticles 18s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gqxParticles {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8%); }
+}
 
 @keyframes gqxGlow {
   0% { transform: translate(0,0) scale(1); opacity: 0.6; }
@@ -38,3 +55,124 @@
   justify-content: center;
   padding: 48px;
 }
+
+/* GRID OVERLAY */
+.gqx-public-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.gqx-public-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.gqx-public-logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #e6e9ef;
+}
+
+.gqx-public-tagline {
+  font-size: 14px;
+  color: #9aa0a8;
+  margin-top: 6px;
+}
+.gqx-public-shell {
+  perspective: 1200px;
+}
+
+.gqx-login-container {
+  transform: translateZ(0);
+  transition: transform 0.4s ease-out;
+}
+
+.gqx-public-shell:hover .gqx-login-container {
+  transform: translateZ(40px);
+}
+/* MARKET TICKER BAR */
+.gqx-ticker {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background: rgba(255,255,255,0.04);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 0;
+  position: relative;
+}
+
+.gqx-ticker-track {
+  display: inline-block;
+  animation: gqxTickerScroll 22s linear infinite;
+}
+
+@keyframes gqxTickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.gqx-ticker-item {
+  display: inline-block;
+  margin-right: 40px;
+  font-size: 14px;
+  color: #cfd3d8;
+}
+
+.gqx-ticker-up { color: #00d47e; }
+.gqx-ticker-down { color: #ff4d4d; }
+.gqx-asset-icons {
+  display: flex;
+  gap: 22px;
+  margin-top: 20px;
+  opacity: 0.9;
+}
+
+.gqx-asset-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #e6e9ef;
+  animation: gqxPulse 3.5s ease-in-out infinite;
+}
+
+.gqx-asset-icon:nth-child(2) { animation-delay: 0.4s; }
+.gqx-asset-icon:nth-child(3) { animation-delay: 0.8s; }
+.gqx-asset-icon:nth-child(4) { animation-delay: 1.2s; }
+
+@keyframes gqxPulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+.gqx-public-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.gqx-theme-toggle {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #e6e9ef;
+  font-size: 16px;
+}
+

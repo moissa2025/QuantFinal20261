@@ -1,0 +1,27 @@
+[
+  {
+    "id": "principal-architect",
+    "title": "Principal Architect, Trading Platform",
+    "location": "London",
+    "team": "Engineering",
+    "summary": "Own the architecture of the multi-asset execution and risk platform.",
+    "applyUrl": "mailto:careers@globalquantx.com?subject=Principal%20Architect%20Application"
+  },
+  {
+    "id": "quant-researcher",
+    "title": "Quantitative Researcher",
+    "location": "Remote",
+    "team": "Research",
+    "summary": "Design and evaluate execution, routing, and hedging strategies across asset classes.",
+    "applyUrl": "mailto:careers@globalquantx.com?subject=Quantitative%20Researcher%20Application"
+  },
+  {
+    "id": "institutional-sales",
+    "title": "Institutional Sales",
+    "location": "New York",
+    "team": "Go-To-Market",
+    "summary": "Work with funds, brokers, and desks to onboard them to GlobalQuantX.",
+    "applyUrl": "mailto:careers@globalquantx.com?subject=Institutional%20Sales%20Application"
+  }
+]
+

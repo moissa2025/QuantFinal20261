@@ -77,4 +77,32 @@
   color: #666;
   font-size: 14px;
 }
+/* WHY SECTION */
+.gqx-landing-why {
+  margin-top: 80px;
+}
+
+.gqx-landing-why h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.gqx-why-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.gqx-why-grid div {
+  max-width: 260px;
+}
+
+.gqx-why-grid h4 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.gqx-why-grid p {
+  color: #a8acb1;
+}
 

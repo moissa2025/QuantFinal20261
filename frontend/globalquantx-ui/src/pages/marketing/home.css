@@ -1,0 +1,79 @@
+.gqx-home {
+  color: #e6e9ef;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.gqx-home-hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.gqx-home-hero h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.gqx-home-hero p {
+  font-size: 20px;
+  color: #a8acb1;
+}
+
+.gqx-home-cta-row {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.gqx-btn-primary,
+.gqx-btn-secondary {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.gqx-btn-primary {
+  background: linear-gradient(135deg, #00d4ff, #0077ff);
+  color: #fff;
+}
+
+.gqx-btn-secondary {
+  border: 1px solid #3a3f48;
+  color: #e6e9ef;
+}
+
+.gqx-home-products {
+  margin-top: 60px;
+}
+
+.gqx-home-products h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.gqx-home-product-grid {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.gqx-home-product-grid h3 {
+  margin-bottom: 8px;
+}
+
+.gqx-home-product-grid p {
+  color: #a8acb1;
+}
+
+.gqx-home-contact {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.gqx-home-contact a {
+  color: #00d4ff;
+}
+

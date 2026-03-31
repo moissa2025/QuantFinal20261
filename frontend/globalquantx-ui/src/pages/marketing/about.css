@@ -1,0 +1,32 @@
+.gqx-about {
+  color: #e6e9ef;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.gqx-about h1 {
+  margin-bottom: 16px;
+}
+
+.gqx-about-lead {
+  color: #a8acb1;
+  margin-bottom: 40px;
+}
+
+.gqx-about-section {
+  margin-bottom: 32px;
+}
+
+.gqx-about-section h2 {
+  margin-bottom: 8px;
+}
+
+.gqx-about-section p {
+  color: #a8acb1;
+}
+
+.gqx-about a {
+  color: #00d4ff;
+}
+
