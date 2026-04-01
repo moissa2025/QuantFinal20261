@@ -298,4 +298,17 @@ body.login-page .gqx-theme-toggle {
   0% { background: rgba(255,80,80,0.25); }
   100% { background: transparent; }
 }
+.gqx-login-risk {
+  margin-top: 24px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8a8f96;
+  opacity: 0.85;
+  text-align: center;
+  max-width: 360px;
+}
+
+.gqx-login-shell.light .gqx-login-risk {
+  color: #555;
+}
 

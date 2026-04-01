@@ -14,6 +14,7 @@ export const NAV_SECTIONS = [
       { id: "adm-usr", label: "Users", path: "/adm/usr" },
     ],
   },
+
   {
     id: "trading",
     label: "Trading Desk",
@@ -23,8 +24,18 @@ export const NAV_SECTIONS = [
       { id: "app-pos", label: "Positions", path: "/app/pos" },
       { id: "app-ord", label: "Order Entry", path: "/app/ord" },
       { id: "app-pfl", label: "Portfolio", path: "/app/pfl" },
+
+      // ⭐ NEW WALLET ROUTE (correct placement)
+      {
+        id: "app-wal",
+        label: "Wallet",
+        path: "/wallet",
+        icon: "wallet",
+        keywords: "wallet money balance funds account deposit transfer"
+      },
     ],
   },
+
   {
     id: "analytics",
     label: "Analytics Lab",
@@ -35,6 +46,7 @@ export const NAV_SECTIONS = [
       { id: "adm-rep", label: "Execution Replay", path: "/adm/exe/rep" },
     ],
   },
+
   {
     id: "public",
     label: "Public Pages",
@@ -49,10 +61,3 @@ export const NAV_SECTIONS = [
   },
 ];
 
-export const NAV_ITEMS_FLAT = NAV_SECTIONS.flatMap((section) =>
-  section.items.map((item) => ({
-    ...item,
-    sectionId: section.id,
-    sectionLabel: section.label,
-  }))
-);

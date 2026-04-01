@@ -4,10 +4,11 @@ import { setTheme } from "../../theme.js";
 
 export default function Login() {
   const [themeState, setThemeState] = useState("dark");
-useEffect(() => {
-  document.body.classList.add("login-page");
-  return () => document.body.classList.remove("login-page");
-}, []);
+
+  useEffect(() => {
+    document.body.classList.add("login-page");
+    return () => document.body.classList.remove("login-page");
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") || "dark";
@@ -61,6 +62,12 @@ useEffect(() => {
         <div className="gqx-login-footer">
           New to GlobalQuantX? <a href="#">Request Institutional Access</a>
         </div>
+
+        {/* Institutional Risk Disclosure */}
+        <div className="gqx-login-risk">
+          <strong>Risk Disclosure:</strong> Trading in digital assets, FX, equities, and derivatives involves significant risk and may not be suitable for all investors. Prices can be highly volatile and may move sharply in short periods of time. Digital asset investments are not protected by the Financial Ombudsman Service and are not covered by the Financial Services Compensation Scheme. Leveraged products carry a high risk of rapid loss. Ensure you fully understand the risks and tax implications before trading.
+        </div>
+
       </div>
 
     </div>

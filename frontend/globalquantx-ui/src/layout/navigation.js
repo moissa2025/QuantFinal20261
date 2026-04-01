@@ -10,6 +10,10 @@ export const NAV_INDEX = [
   { label: "Trading Terminal", path: "/trading", category: "Core" },
   { label: "Positions & PnL", path: "/positions", category: "Core" },
   { label: "Ledger", path: "/ledger", category: "Core" },
+
+  // ⭐ NEW WALLET ROUTE (CORRECT POSITION)
+  { label: "Wallet", path: "/wallet", category: "Core" },
+  { label: "Wallet", path: "/wallet", category: "Core", icon: "wallet" },
   { label: "Risk", path: "/risk", category: "Core" },
   { label: "Strategies", path: "/strategies", category: "Core" },
   { label: "Market Data", path: "/market-data", category: "Core" },

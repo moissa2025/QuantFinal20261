@@ -1,4 +1,4 @@
-use async_nats::Client;
+use async_nats::{Client, Subscriber};
 use serde::{de::DeserializeOwned, Serialize};
 use thiserror::Error;
 
@@ -28,6 +28,11 @@ impl NatsClient {
         Ok(Self { inner })
     }
 
+    //
+    // ─────────────────────────────────────────────────────────────
+    //   RPC REQUEST (already correct)
+    // ─────────────────────────────────────────────────────────────
+    //
     pub async fn rpc<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
     where
         Req: Serialize,
@@ -46,6 +51,18 @@ impl NatsClient {
             .map_err(|e| NatsError::Deserialization(e.to_string()))?;
 
         Ok(res)
+    }
+
+    //
+    // ─────────────────────────────────────────────────────────────
+    //   SUBSCRIBE (needed for WebSockets)
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn subscribe(&self, subject: &str) -> Result<Subscriber, NatsError> {
+        self.inner
+            .subscribe(subject.to_string())
+            .await
+            .map_err(|e| NatsError::Request(e.to_string()))
     }
 }
 

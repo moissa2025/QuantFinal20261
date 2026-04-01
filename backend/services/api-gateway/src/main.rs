@@ -16,7 +16,6 @@ use axum::{
     routing::{get, post},
     Router,
     middleware::from_fn_with_state,
-    Json,
 };
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
@@ -32,6 +31,7 @@ use crate::middleware::auth::auth_middleware;
 use crate::state::AppState;
 use crate::routes::{
     balances, ledger, market, orders, positions, risk, trading, users, auth,
+    wallet, crypto,
 };
 
 #[tokio::main]
@@ -70,7 +70,7 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .url("/openapi.json", openapi.clone())
         )
 
-        // 🔥 AUTH PROXY — MUST COME BEFORE /v1/auth
+        // 🔥 AUTH PROXY
         .nest(
             "/auth",
             Router::new()
@@ -84,6 +84,19 @@ pub fn app(state: Arc<AppState>) -> Router {
             Router::new()
                 .route("/login", post(auth::login_handler))
                 .route("/logout", post(auth::logout_handler))
+        )
+
+        // ⭐ WALLET ROUTES
+        .nest(
+            "/v1/wallet",
+            wallet::router()
+                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+
+        // ⭐ CRYPTO ROUTES
+        .nest(
+            "/api",
+            crypto::router()
         )
 
         .nest(

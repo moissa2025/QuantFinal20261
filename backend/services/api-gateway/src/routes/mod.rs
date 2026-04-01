@@ -1,3 +1,5 @@
+pub mod crypto;
+pub mod wallet;
 pub mod auth_proxy;
 pub mod health;
 pub mod users;

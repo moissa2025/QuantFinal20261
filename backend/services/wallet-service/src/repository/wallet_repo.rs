@@ -1,4 +1,5 @@
-use sqlx::{query_as, query};
+use sqlx::query_as;
+
 use uuid::Uuid;
 use serde_json::Value;
 
