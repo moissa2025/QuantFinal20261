@@ -1,71 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./login.css";
+import { setTheme } from "../../theme.js";
 
 export default function Login() {
+  const [themeState, setThemeState] = useState("dark");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") || "dark";
+    setTheme(saved);
+    setThemeState(saved);
+  }, []);
+
+  function toggleTheme() {
+    const next = themeState === "dark" ? "light" : "dark";
+    setTheme(next);
+    setThemeState(next);
+  }
+
   return (
-    <div className="gqx-login-wrapper">
+    <div className={`gqx-login-shell ${themeState}`}>
 
-      {/* Animated Asset Icons */}
-      <div className="gqx-asset-icons">
-        <div className="gqx-asset-icon">₿</div>
-        <div className="gqx-asset-icon">Ξ</div>
-        <div className="gqx-asset-icon">₣</div>
-        <div className="gqx-asset-icon">📈</div>
-      </div>
+      {/* Futuristic animated background */}
+      <div className="gqx-login-bg-layer"></div>
+      <div className="gqx-login-grid"></div>
+      <div className="gqx-login-particles"></div>
 
-      {/* Main Login Layout */}
-      <div className="gqx-login-container">
+      {/* Theme toggle */}
+      <button className="gqx-login-theme-toggle" onClick={toggleTheme}>
+        {themeState === "dark" ? "☀️" : "🌙"}
+      </button>
 
-        {/* Login Card */}
-        <div className="gqx-login-card">
-          <div className="gqx-login-header">
-            <h1>Sign in to GlobalQuantX</h1>
-            <p>Secure access to the institutional trading and risk platform.</p>
+      {/* Centered login card */}
+      <div className="gqx-login-card">
+        <h1>Sign in to GlobalQuantX</h1>
+        <p className="gqx-login-subtitle">
+          Secure access to the institutional trading and risk platform.
+        </p>
+
+        <form className="gqx-login-form">
+          <label>Email</label>
+          <input type="email" placeholder="you@institution.com" />
+
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" />
+
+          <div className="gqx-login-meta">
+            <a href="#">Forgot password?</a>
+            <span>MFA enforced</span>
           </div>
 
-          <form className="gqx-login-form">
-            <label>Email</label>
-            <input type="email" placeholder="you@institution.com" />
+          <button type="submit" className="gqx-login-btn">
+            Sign In
+          </button>
+        </form>
 
-            <label>Password</label>
-            <input type="password" placeholder="••••••••" />
-
-            <div className="gqx-login-meta">
-              <a href="#">Forgot password?</a>
-              <span>MFA enforced</span>
-            </div>
-
-            <button type="submit" className="gqx-login-btn">
-              Sign In
-            </button>
-          </form>
-
-          <div className="gqx-login-footer">
-            <p>
-              New to GlobalQuantX?{" "}
-              <a href="#">Request Institutional Access</a>
-            </p>
-          </div>
+        <div className="gqx-login-footer">
+          New to GlobalQuantX? <a href="#">Request Institutional Access</a>
         </div>
-
-        {/* Right‑Side Info Panel */}
-        <div className="gqx-login-side">
-          <h2>GLOBALQUANTX MULTI-ASSET DESK</h2>
-          <p>
-            Real-time view across crypto, FX, equities, and ETFs – wired for
-            algorithmic execution.
-          </p>
-          <p>Core routing engine: &lt; 5 ms internal latency</p>
-          <p>Guest session — Create an account to onboard</p>
-
-          <footer className="gqx-login-legal">
-            © 2026 Bassteck — Trade Beyond Boundaries  
-            <br />
-            Bass Industries LTD — Company Registration: 17018032
-          </footer>
-        </div>
-
       </div>
+
     </div>
   );
 }
