@@ -1,6 +1,10 @@
 /* -------------------------------------------------------
    GLOBAL PUBLIC SHELL BACKGROUND (3 LAYERS)
    ------------------------------------------------------- */
+/* Hide header theme toggle on login page */
+body.login-page .gqx-theme-toggle {
+  display: none !important;
+}
 
 /* BASE BACKGROUND */
 .gqx-public-shell {

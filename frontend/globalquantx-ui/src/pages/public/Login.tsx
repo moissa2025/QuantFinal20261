@@ -4,6 +4,10 @@ import { setTheme } from "../../theme.js";
 
 export default function Login() {
   const [themeState, setThemeState] = useState("dark");
+useEffect(() => {
+  document.body.classList.add("login-page");
+  return () => document.body.classList.remove("login-page");
+}, []);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") || "dark";
