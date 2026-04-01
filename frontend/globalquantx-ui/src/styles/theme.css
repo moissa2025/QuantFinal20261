@@ -1,0 +1,10 @@
+:root[data-theme="dark"] {
+  --bg: #0b0e12;
+  --text: #e6e9ef;
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --text: #1a1a1a;
+}
+

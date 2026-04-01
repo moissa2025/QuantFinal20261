@@ -1,11 +1,19 @@
-/* FUTURISTIC PUBLIC BACKGROUND */
+/* -------------------------------------------------------
+   GLOBAL PUBLIC SHELL BACKGROUND (3 LAYERS)
+   ------------------------------------------------------- */
+
+/* BASE BACKGROUND */
 .gqx-public-shell {
   background: radial-gradient(circle at 20% 20%, #1a1f27 0%, #0b0e12 60%, #050608 100%);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  perspective: 1200px;
 }
 
-/* Subtle animated glow */
+/* LAYER 1 — GLOW */
 .gqx-public-shell::before {
   content: "";
   position: absolute;
@@ -17,10 +25,25 @@
   filter: blur(80px);
   animation: gqxGlow 12s ease-in-out infinite alternate;
   pointer-events: none;
+  z-index: 0;
 }
-/* PARTICLE LAYER */
+
+/* LAYER 2 — GRID */
 .gqx-public-shell::after {
   content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* LAYER 3 — PARTICLES */
+.gqx-public-particles {
   position: absolute;
   inset: 0;
   background-image:
@@ -29,7 +52,212 @@
     radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.04), transparent);
   animation: gqxParticles 18s linear infinite;
   pointer-events: none;
+  z-index: 2;
 }
+
+/* -------------------------------------------------------
+   HEADER
+   ------------------------------------------------------- */
+
+.gqx-public-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.25);
+  padding: 16px 32px;
+  transition: background 0.3s ease;
+}
+
+.gqx-public-header-wrapper.scrolled {
+  background: rgba(0,0,0,0.85);
+}
+
+.gqx-public-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gqx-public-logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #e6e9ef;
+}
+
+/* REMOVE TAGLINE FROM HEADER */
+.gqx-public-tagline {
+  display: none;
+}
+
+/* NAVIGATION */
+.gqx-public-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.gqx-public-nav a {
+  color: #e6e9ef;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.gqx-public-nav a:hover {
+  opacity: 1;
+}
+
+.gqx-nav-login {
+  font-weight: 600;
+  color: #00d4ff;
+}
+
+/* THEME TOGGLE */
+.gqx-theme-toggle {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #e6e9ef;
+  font-size: 16px;
+  transition: background 0.2s ease;
+}
+
+.gqx-theme-toggle:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* -------------------------------------------------------
+   TICKER BAR + TICKER
+   ------------------------------------------------------- */
+
+/* Wrapper below header */
+.gqx-public-ticker-bar {
+  position: relative;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: rgba(255,255,255,0.04);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 11px;
+  opacity: 0.9;
+  overflow: hidden;
+}
+
+/* Fade masks left/right */
+.gqx-public-ticker-bar::before,
+.gqx-public-ticker-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gqx-public-ticker-bar::before {
+  left: 0;
+  background: linear-gradient(to right, #0b0e12, transparent);
+}
+
+.gqx-public-ticker-bar::after {
+  right: 0;
+  background: linear-gradient(to left, #0b0e12, transparent);
+}
+
+/* Ticker container */
+.gqx-ticker {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Scrolling track */
+.gqx-ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: gqxTickerScroll 22s linear infinite;
+}
+
+/* Individual items */
+.gqx-ticker-item {
+  display: inline-block;
+  margin-right: 22px;
+  font-size: 11px;
+  color: #cfd3d8;
+}
+
+/* Up / down colors */
+.gqx-ticker-up {
+  color: #00d47e;
+}
+
+.gqx-ticker-down {
+  color: #ff4d4d;
+}
+
+/* Flash animations on change */
+.gqx-ticker-flash-up {
+  animation: gqxFlashGreen 0.6s ease;
+}
+
+.gqx-ticker-flash-down {
+  animation: gqxFlashRed 0.6s ease;
+}
+
+/* -------------------------------------------------------
+   MOBILE MENU
+   ------------------------------------------------------- */
+
+.gqx-mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .gqx-public-nav {
+    display: none;
+  }
+  .gqx-mobile-menu-btn {
+    display: block;
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: #e6e9ef;
+  }
+  .gqx-mobile-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Smaller ticker on mobile */
+  .gqx-public-ticker-bar {
+    font-size: 10px;
+    padding: 3px 0;
+  }
+  .gqx-ticker-item {
+    margin-right: 14px;
+    font-size: 10px;
+  }
+  .gqx-public-ticker-bar::before,
+  .gqx-public-ticker-bar::after {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------
+   ANIMATIONS
+   ------------------------------------------------------- */
 
 @keyframes gqxParticles {
   0% { transform: translateY(0); }
@@ -41,138 +269,29 @@
   100% { transform: translate(10%,10%) scale(1.2); opacity: 0.9; }
 }
 
-.gqx-public-shell {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: #0b0e12;
-}
-
 .gqx-public-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
+  animation: fadeIn 0.4s ease;
 }
 
-/* GRID OVERLAY */
-.gqx-public-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-.gqx-public-header {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 40px;
-  opacity: 0.9;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.gqx-public-logo {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #e6e9ef;
-}
-
-.gqx-public-tagline {
-  font-size: 14px;
-  color: #9aa0a8;
-  margin-top: 6px;
-}
-.gqx-public-shell {
-  perspective: 1200px;
-}
-
-.gqx-login-container {
-  transform: translateZ(0);
-  transition: transform 0.4s ease-out;
-}
-
-.gqx-public-shell:hover .gqx-login-container {
-  transform: translateZ(40px);
-}
-/* MARKET TICKER BAR */
-.gqx-ticker {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  background: rgba(255,255,255,0.04);
-  border-top: 1px solid rgba(255,255,255,0.08);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding: 10px 0;
-  position: relative;
-}
-
-.gqx-ticker-track {
-  display: inline-block;
-  animation: gqxTickerScroll 22s linear infinite;
-}
-
+/* Ticker scroll */
 @keyframes gqxTickerScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-.gqx-ticker-item {
-  display: inline-block;
-  margin-right: 40px;
-  font-size: 14px;
-  color: #cfd3d8;
+/* Flash up/down */
+@keyframes gqxFlashGreen {
+  0% { background: rgba(0,255,120,0.25); }
+  100% { background: transparent; }
 }
 
-.gqx-ticker-up { color: #00d47e; }
-.gqx-ticker-down { color: #ff4d4d; }
-.gqx-asset-icons {
-  display: flex;
-  gap: 22px;
-  margin-top: 20px;
-  opacity: 0.9;
-}
-
-.gqx-asset-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #e6e9ef;
-  animation: gqxPulse 3.5s ease-in-out infinite;
-}
-
-.gqx-asset-icon:nth-child(2) { animation-delay: 0.4s; }
-.gqx-asset-icon:nth-child(3) { animation-delay: 0.8s; }
-.gqx-asset-icon:nth-child(4) { animation-delay: 1.2s; }
-
-@keyframes gqxPulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.7; }
-}
-.gqx-public-header-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.gqx-theme-toggle {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #e6e9ef;
-  font-size: 16px;
+@keyframes gqxFlashRed {
+  0% { background: rgba(255,80,80,0.25); }
+  100% { background: transparent; }
 }
 
