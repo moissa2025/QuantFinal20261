@@ -1,3 +1,11 @@
+use once_cell::sync::Lazy;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
+
+static OPENAPI: Lazy<utoipa::openapi::OpenApi> =
+    Lazy::new(|| openapi::ApiDoc::openapi());
+
+// --- MODULE DECLARATIONS ---
 mod db;
 mod state;
 mod routes;
@@ -9,6 +17,7 @@ mod auth_client_nats;
 mod identity;
 mod middleware;
 mod openapi;
+// ---------------------------
 
 use std::sync::Arc;
 
@@ -16,15 +25,11 @@ use axum::{
     routing::{get, post},
     Router,
     middleware::from_fn_with_state,
+    response::IntoResponse,
+    Json,
 };
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
-
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
-
-use tokio::net::TcpListener;
-use axum::serve;
 
 use crate::middleware::rate_limit_user::per_user_rate_limit;
 use crate::middleware::auth::auth_middleware;
@@ -52,22 +57,23 @@ async fn main() {
     let addr = "0.0.0.0:8080";
     println!("🚀 API Gateway running on http://{addr}");
 
-    let listener = TcpListener::bind(addr)
-        .await
-        .expect("❌ Failed to bind TCP listener");
-
-    serve(listener, app)
+    // ⭐ Axum 0.6 server startup
+    axum::Server::bind(&addr.parse().unwrap())
+        .serve(app.into_make_service())
         .await
         .expect("❌ Server error");
 }
 
-pub fn app(state: Arc<AppState>) -> Router {
-    let openapi = openapi::ApiDoc::openapi();
+async fn openapi_json() -> impl IntoResponse {
+    Json(openapi::ApiDoc::openapi())
+}
 
+pub fn app(state: Arc<AppState>) -> Router {
     Router::new()
+        // ⭐ Swagger UI
         .merge(
             SwaggerUi::new("/swagger-ui")
-                .url("/openapi.json", openapi.clone())
+                .url("/openapi.json", OPENAPI.clone())
         )
 
         // 🔥 AUTH PROXY
@@ -90,15 +96,13 @@ pub fn app(state: Arc<AppState>) -> Router {
         .nest(
             "/v1/wallet",
             wallet::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
 
         // ⭐ CRYPTO ROUTES
-        .nest(
-            "/api",
-            crypto::router()
-        )
+        .nest("/api", crypto::router())
 
+        // ⭐ MARKET DATA PROXY
         .nest(
             "/market-data",
             Router::new()
@@ -107,52 +111,71 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .with_state(state.clone())
         )
 
+        // ⭐ ORDER ROUTES
         .nest(
             "/v1/orders",
             orders::router()
                 .layer(from_fn_with_state(state.clone(), auth_middleware))
-                .layer(from_fn_with_state(state.user_limiter.clone(), per_user_rate_limit)),
+                .layer(from_fn_with_state(state.user_limiter.clone(), per_user_rate_limit))
         )
+
+        // ⭐ USER ROUTES
         .nest(
             "/v1/users",
             users::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ POSITIONS
         .nest(
             "/v1/positions",
             positions::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ MARKET
         .nest(
             "/v1/market",
             market::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ TRADING
         .nest(
             "/v1/trading",
             trading::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ RISK
         .nest(
             "/v1/risk",
             risk::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ LEDGER
         .nest(
             "/v1/ledger",
             ledger::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
+
+        // ⭐ BALANCES
         .nest(
             "/v1/balances",
             balances::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware)),
+                .layer(from_fn_with_state(state.clone(), auth_middleware))
         )
 
+        // HEALTH + ROOT
         .route("/health", get(|| async { "OK" }))
         .route("/", get(|| async { "GlobalQuantX API Gateway" }))
+
+        // GLOBAL STATE
         .with_state(state)
 
+        // ⭐ TRACING LAYER
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(|req: &axum::http::Request<_>| {
@@ -175,7 +198,7 @@ pub fn app(state: Arc<AppState>) -> Router {
                         latency_ms = %latency.as_millis(),
                         "request completed"
                     );
-                }),
+                })
         )
 }
 

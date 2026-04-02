@@ -13,8 +13,6 @@ async fn main() -> anyhow::Result<()> {
     println!("🚨 aml-monitoring-service starting…");
 
     // CockroachDB Cloud ALWAYS uses DATABASE_URL.
-    // Kubernetes will inject DATABASE_URL via Secret.
-    // The sslrootcert path is already inside the URL.
     let db_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set for CockroachDB Cloud");
 
@@ -34,11 +32,9 @@ async fn main() -> anyhow::Result<()> {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     println!("🚀 aml-monitoring-service running on {}", addr);
 
-    let listener = tokio::net::TcpListener::bind(addr)
-        .await
-        .expect("Failed to bind");
-
-    axum::serve(listener, app).await.unwrap();
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
     Ok(())
 }

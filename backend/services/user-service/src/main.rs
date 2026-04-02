@@ -9,12 +9,11 @@ use db::init_db;
 use std::net::SocketAddr;
 
 use axum::{Router, routing::get};
-use tokio::net::TcpListener;
 
 mod http;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenvy::dotenv().ok();
 
     let pool = init_db().await.expect("Failed to init DB");
@@ -35,11 +34,13 @@ async fn main() {
         .route("/health", get(|| async { "OK" }))
         .nest("/", http::routes(pool.clone()));
 
-    let listener = TcpListener::bind("0.0.0.0:8080").await.unwrap();
-    println!("HTTP server running on 0.0.0.0:8080");
+    let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
+    println!("HTTP server running on {}", addr);
 
-    axum::serve(listener, app.into_make_service())
-        .await
-        .unwrap();
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
+
+    Ok(())
 }
 

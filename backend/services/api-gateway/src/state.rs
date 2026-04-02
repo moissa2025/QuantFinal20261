@@ -9,16 +9,24 @@ use crate::middleware::rate_limit_user::UserRateLimiter;
 use crate::db::DbPool;
 
 #[derive(Clone)]
+pub struct BinanceConfig {
+    pub api_key: String,
+    pub secret_key: String,
+}
+
+#[derive(Clone)]
 pub struct AppState {
+    pub db: DbPool,
+    pub nats: NatsClient,
+
     pub user_limiter: UserRateLimiter,
 
     pub auth_client: AuthClient,
     pub user_client: UserClient,
 
-    pub nats: NatsClient,
     pub auth_nats: AuthNatsClient,
 
-    pub db: DbPool,
+    pub binance: BinanceConfig,
 }
 
 impl AppState {
@@ -52,17 +60,26 @@ impl AppState {
         let user_limiter = UserRateLimiter::new();
 
         //
-        // DATABASE (CockroachDB)
+        // DATABASE
         //
         let db = DbPool::connect_from_env().await?;
 
+        //
+        // BINANCE CONFIG (placeholder)
+        //
+        let binance = BinanceConfig {
+            api_key: env::var("BINANCE_API_KEY").unwrap_or_default(),
+            secret_key: env::var("BINANCE_SECRET_KEY").unwrap_or_default(),
+        };
+
         Ok(Self {
+            db,
+            nats,
             user_limiter,
             auth_client,
             user_client,
-            nats,
             auth_nats,
-            db,
+            binance,
         })
     }
 }

@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/bash
+            - -c
+            - |
+              cockroach sql --insecure --host=cockroachdb-0.cockroachdb <<EOF
+              CREATE DATABASE IF NOT EXISTS globalquantx;
+              EOF
+

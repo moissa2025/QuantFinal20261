@@ -1,30 +1,45 @@
 use std::sync::Arc;
 
 use axum::{
-    body::Body,
     extract::State,
-    http::{Request, StatusCode},
+    http::{HeaderMap, Request, StatusCode},
     middleware::Next,
     response::Response,
 };
-use axum_extra::TypedHeader;
-use axum_extra::headers::Cookie;
+use cookie::Cookie;
 
 use crate::{identity::Identity, state::AppState};
 
-pub async fn auth_middleware(
+pub async fn auth_middleware<B>(
     State(state): State<Arc<AppState>>,
-    TypedHeader(cookies): TypedHeader<Cookie>,
-    mut req: Request<Body>,
-    next: Next,
-) -> Result<Response, StatusCode> {
-    let token = cookies
-        .get("session_token")
+    headers: HeaderMap,
+    mut req: Request<B>,
+    next: Next<B>,
+) -> Result<Response, StatusCode>
+where
+    B: Send + 'static,
+{
+    let cookie_header = headers
+        .get("cookie")
+        .and_then(|v| v.to_str().ok())
         .ok_or(StatusCode::UNAUTHORIZED)?;
+
+    let cookies = Cookie::split_parse(cookie_header);
+    let mut session_token = None;
+
+    for c in cookies {
+        let c = c.map_err(|_| StatusCode::UNAUTHORIZED)?;
+        if c.name() == "session_token" {
+            session_token = Some(c.value().to_string());
+            break;
+        }
+    }
+
+    let token = session_token.ok_or(StatusCode::UNAUTHORIZED)?;
 
     let res = state
         .auth_nats
-        .validate_session(token.to_string())
+        .validate_session(token)
         .await
         .map_err(|_| StatusCode::UNAUTHORIZED)?;
 

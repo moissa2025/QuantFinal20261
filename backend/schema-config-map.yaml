@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: globalquantx-schema
+  namespace: database
+data:
+  schema.sql: |
+    CREATE DATABASE IF NOT EXISTS globalquantx;
+    USE globalquantx;
+
+    CREATE SCHEMA IF NOT EXISTS auth;
+    CREATE SCHEMA IF NOT EXISTS user;
+    CREATE SCHEMA IF NOT EXISTS wallet;
+    CREATE SCHEMA IF NOT EXISTS ledger;
+    CREATE SCHEMA IF NOT EXISTS trading;
+    CREATE SCHEMA IF NOT EXISTS risk;
+    CREATE SCHEMA IF NOT EXISTS market;
+    CREATE SCHEMA IF NOT EXISTS kyc;
+    CREATE SCHEMA IF NOT EXISTS aml;
+    CREATE SCHEMA IF NOT EXISTS onboarding;
+    CREATE SCHEMA IF NOT EXISTS reconciliation;

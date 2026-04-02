@@ -1,11 +1,11 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{State},
+    extract::State,
     extract::ws::{WebSocketUpgrade, WebSocket, Message as AxumMessage, CloseFrame, CloseCode},
     response::IntoResponse,
 };
-use futures_util::{StreamExt, SinkExt};
+use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::connect_async;
 use tungstenite::Message as TungsteniteMessage;
 
@@ -16,11 +16,15 @@ pub async fn proxy_snapshot(State(_state): State<Arc<AppState>>) -> impl IntoRes
 
     match reqwest::get(url).await {
         Ok(res) => {
-            let status = res.status();
+            let status =
+                axum::http::StatusCode::from_u16(res.status().as_u16()).unwrap_or(axum::http::StatusCode::BAD_GATEWAY);
             let body = res.text().await.unwrap_or_default();
             (status, body)
         }
-        Err(_) => (axum::http::StatusCode::BAD_GATEWAY, "gateway error".to_string()),
+        Err(_) => (
+            axum::http::StatusCode::BAD_GATEWAY,
+            "gateway error".to_string(),
+        ),
     }
 }
 
@@ -32,10 +36,9 @@ pub async fn proxy_stream(
 }
 
 async fn handle_ws_proxy(client_ws: WebSocket) {
-    let (mut internal_ws, _) =
-        connect_async("ws://market-data-service:8081/market-stream")
-            .await
-            .expect("failed to connect to internal market stream");
+    let (internal_ws, _) = connect_async("ws://market-data-service:8081/market-stream")
+        .await
+        .expect("failed to connect to internal market stream");
 
     let (mut internal_tx, mut internal_rx) = internal_ws.split();
     let (mut client_tx, mut client_rx) = client_ws.split();

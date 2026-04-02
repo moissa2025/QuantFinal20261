@@ -1,6 +1,21 @@
+// src/components/portfolio/AllocationBreakdown.jsx
 import { Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend
+} from "chart.js";
 
-export default function AllocationBreakdown({ wallet, positionsValue, cash, unrealizedPnL }) {
+// ⭐ REQUIRED — fixes Vite import error
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+export default function AllocationBreakdown({
+  wallet,
+  positionsValue,
+  cash,
+  unrealizedPnL
+}) {
   const crypto = wallet?.crypto_balance_usd || 0;
   const fiat = wallet?.balance || 0;
   const total = positionsValue + cash + unrealizedPnL + crypto + fiat;
@@ -11,11 +26,11 @@ export default function AllocationBreakdown({ wallet, positionsValue, cash, unre
       {
         data: [crypto, fiat, positionsValue, cash, unrealizedPnL],
         backgroundColor: [
-          "#f59e0b", // crypto
-          "#10b981", // fiat
-          "#3b82f6", // positions
-          "#6366f1", // cash
-          "#ef4444", // pnl
+          "#f59e0b",
+          "#10b981",
+          "#3b82f6",
+          "#6366f1",
+          "#ef4444",
         ],
         borderWidth: 0,
       },

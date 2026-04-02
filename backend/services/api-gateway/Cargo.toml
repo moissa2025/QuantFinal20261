@@ -4,47 +4,53 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tokio = { version = "1", features = ["full"] }
+# Workspace shared deps
+axum.workspace = true
+tower-http.workspace = true
+http.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+async-nats.workspace = true
+sqlx.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
 
-# Axum 0.7 with WebSocket support
-axum = { version = "0.7", features = ["macros", "json", "ws"] }
-axum-extra = { version = "0.9", features = ["cookie", "typed-header"] }
+# OpenAPI / Swagger
+utoipa.workspace = true
+utoipa-swagger-ui.workspace = true
 
-# HTTP + WebSocket proxy dependencies
-reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+# Internal workspace crate
+common = { path = "../../libs/common" }
+
+# Utoipa codegen
+utoipa-gen = "5.4.0"
+
+# Extra gateway-specific deps
+futures = "0.3"
 futures-util = "0.3"
+cookie = "0.18"
+
+# HTTP + WebSocket proxy
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 tokio-tungstenite = "0.21"
 tungstenite = "0.21"
 
 # tower stack
 tower = "0.4"
-tower-http = { version = "0.5", features = ["trace", "cors"] }
-
-# serialization
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-
-# tracing
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
-
-# NATS
-async-nats = "0.34"
 
 # utils
-uuid = { version = "1", features = ["v4", "serde"] }
 thiserror = "1"
 anyhow = "1"
 dashmap = "5"
 tokio-util = "0.7"
 headers = "0.4"
+http-body-util = "0.1"
+once_cell.workspace = true
+hyper = "0.14"
 
-# Database
-sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "tls-rustls"] }
-common = { path = "../../libs/common" }
-
-# OpenAPI
-utoipa = "4.2.3"
-utoipa-swagger-ui = { version = "7.1.0", features = ["axum"] }
-futures = "0.3"
+[package.metadata.sqlx]
+offline = true
 

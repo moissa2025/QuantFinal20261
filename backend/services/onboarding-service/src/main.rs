@@ -10,7 +10,7 @@ mod db;
 use db::init_db;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let pool = init_db()
@@ -24,12 +24,10 @@ async fn main() {
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
 
-    let listener = tokio::net::TcpListener::bind(addr)
-        .await
-        .expect("Failed to bind");
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
-    axum::serve(listener, app)
-        .await
-        .unwrap();
+    Ok(())
 }
 

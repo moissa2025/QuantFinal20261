@@ -1,5 +1,4 @@
 use axum::{Router, routing::get};
-use sqlx::{Pool, Postgres};
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
 use tracing_subscriber;
@@ -9,7 +8,7 @@ mod models;
 mod nats_handlers;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> anyhow::Result<()> {
     // Initialize structured logging
     tracing_subscriber::fmt::init();
 
@@ -57,18 +56,15 @@ async fn main() {
         .with_state(db);
 
     //
-    // ⭐ Bind to port 8080
+    // ⭐ Bind to port 8080 (Axum 0.6)
     //
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
-
     println!("🚀 KYC service running on {}", addr);
 
-    let listener = tokio::net::TcpListener::bind(addr)
-        .await
-        .expect("❌ Failed to bind to port");
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
-    axum::serve(listener, app)
-        .await
-        .unwrap();
+    Ok(())
 }
 

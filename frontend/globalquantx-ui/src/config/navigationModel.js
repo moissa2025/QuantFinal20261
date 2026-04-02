@@ -25,13 +25,12 @@ export const NAV_SECTIONS = [
       { id: "app-ord", label: "Order Entry", path: "/app/ord" },
       { id: "app-pfl", label: "Portfolio", path: "/app/pfl" },
 
-      // ⭐ NEW WALLET ROUTE (correct placement)
       {
         id: "app-wal",
         label: "Wallet",
         path: "/wallet",
         icon: "wallet",
-        keywords: "wallet money balance funds account deposit transfer"
+        keywords: "wallet money balance funds account deposit transfer",
       },
     ],
   },
@@ -60,4 +59,13 @@ export const NAV_SECTIONS = [
     ],
   },
 ];
+
+// ⭐ REQUIRED EXPORT — fixes Vite error
+export const NAV_ITEMS_FLAT = NAV_SECTIONS.flatMap(section =>
+  section.items.map(item => ({
+    ...item,
+    section: section.label,
+    permission: section.permission,
+  }))
+);
 

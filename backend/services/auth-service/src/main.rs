@@ -15,7 +15,6 @@ use axum::{
     extract::connect_info::IntoMakeServiceWithConnectInfo,
     Router,
 };
-use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::EnvFilter;
 
@@ -34,13 +33,12 @@ async fn main() -> anyhow::Result<()> {
     //
     // 1. Connect to NATS
     //
-    // 1. Connect to NATS
     let nats_url = std::env::var("NATS_URL")
-    	.unwrap_or_else(|_| "nats://nats.trading-platform.svc.cluster.local:4222".to_string());
+        .unwrap_or_else(|_| "nats://nats.trading-platform.svc.cluster.local:4222".to_string());
 
     let nats = async_nats::connect(&nats_url)
-    	.await
-    	.expect("failed to connect to NATS");
+        .await
+        .expect("failed to connect to NATS");
 
     //
     // 2. Connect to Postgres
@@ -68,13 +66,9 @@ async fn main() -> anyhow::Result<()> {
     let app = router.with_state(state.clone());
 
     //
-    // 6. Bind TCP listener
+    // 6. Bind address (Axum 0.6 uses Server::bind)
     //
     let addr: SocketAddr = "0.0.0.0:9001".parse().unwrap();
-    let listener = TcpListener::bind(addr)
-        .await
-        .expect("failed to bind TCP listener");
-
     tracing::info!("auth-service running on {}", addr);
 
     //
@@ -83,9 +77,9 @@ async fn main() -> anyhow::Result<()> {
     let make_service: IntoMakeServiceWithConnectInfo<_, SocketAddr> =
         app.into_make_service_with_connect_info::<SocketAddr>();
 
-    axum::serve(listener, make_service)
-        .await
-        .expect("server error");
+    axum::Server::bind(&addr)
+        .serve(make_service)
+        .await?;
 
     Ok(())
 }

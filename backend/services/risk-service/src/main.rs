@@ -2,7 +2,6 @@ use std::net::SocketAddr;
 use axum::{Router, routing::post};
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::EnvFilter;
-use tokio::net::TcpListener;
 
 mod routes;
 mod db;
@@ -16,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    // Initialize database (dual mode: DATABASE_URL or Cloud SQL Proxy)
+    // Initialize database
     let pool = init_db()
         .await
         .expect("❌ Failed to initialize database");
@@ -32,12 +31,13 @@ async fn main() -> anyhow::Result<()> {
                 .allow_headers(Any),
         );
 
-    // Bind and serve
+    // Bind and serve (Axum 0.6)
     let addr = SocketAddr::from(([0, 0, 0, 0], 8083));
     tracing::info!("🚀 risk-service listening on {}", addr);
 
-    let listener = TcpListener::bind(addr).await?;
-    axum::serve(listener, app).await?;
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
     Ok(())
 }

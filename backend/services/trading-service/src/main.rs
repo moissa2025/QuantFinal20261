@@ -17,12 +17,12 @@ async fn main() -> anyhow::Result<()> {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    // Initialize database (dual mode: DATABASE_URL or Cloud SQL Proxy)
+    // Initialize database
     let pool = init_db()
         .await
         .expect("❌ Failed to initialize database");
 
-    // Shared state (now includes DB pool)
+    // Shared state
     let state = AppState::new(pool.clone());
 
     // Build router
@@ -36,13 +36,13 @@ async fn main() -> anyhow::Result<()> {
                 .allow_headers(Any),
         );
 
-    // Bind address
-    let addr = "0.0.0.0:8080";
+    // Bind address (Axum 0.6)
+    let addr = "0.0.0.0:8080".parse().unwrap();
     tracing::info!("🚀 trading-service listening on {}", addr);
 
-    // Axum 0.7 server
-    let listener = tokio::net::TcpListener::bind(addr).await?;
-    axum::serve(listener, app).await?;
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
     Ok(())
 }

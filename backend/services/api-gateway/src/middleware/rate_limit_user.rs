@@ -1,7 +1,6 @@
 use std::time::{Duration, Instant};
 
 use axum::{
-    body::Body,
     http::{Request, StatusCode},
     middleware::Next,
     response::{IntoResponse, Response},
@@ -33,11 +32,10 @@ impl UserRateLimiter {
     }
 
     pub fn check(&self, user_id: &str) -> bool {
-        let mut bucket = self.buckets.entry(user_id.to_string())
-            .or_insert(Bucket {
-                tokens: self.capacity,
-                last_refill: Instant::now(),
-            });
+        let mut bucket = self.buckets.entry(user_id.to_string()).or_insert(Bucket {
+            tokens: self.capacity,
+            last_refill: Instant::now(),
+        });
 
         let now = Instant::now();
         if now.duration_since(bucket.last_refill) >= self.refill_interval {
@@ -54,10 +52,13 @@ impl UserRateLimiter {
     }
 }
 
-pub async fn per_user_rate_limit(
-    req: Request<Body>,
-    next: Next,
-) -> Response {
+pub async fn per_user_rate_limit<B>(
+    req: Request<B>,
+    next: Next<B>,
+) -> Response
+where
+    B: Send + 'static,
+{
     let user_id = req
         .extensions()
         .get::<crate::identity::Identity>()

@@ -1,12 +1,13 @@
 use std::sync::Arc;
+use std::str::FromStr;
 
 use axum::{
-    extract::{State, Json},
-    http::{StatusCode, header},
+    extract::{Json, State},
+    http::{header, HeaderMap, StatusCode},
     response::{IntoResponse, Response},
 };
-use axum_extra::TypedHeader;
-use axum_extra::headers::Cookie;
+use cookie::Cookie;
+
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
@@ -68,11 +69,18 @@ pub async fn login_handler(
 )]
 pub async fn logout_handler(
     State(state): State<Arc<AppState>>,
-    TypedHeader(cookies): TypedHeader<Cookie>,
+    headers: HeaderMap,
 ) -> impl IntoResponse {
-    if let Some(token) = cookies.get("session_token") {
-        let _ = state.auth_nats.logout(token.to_string()).await;
+    if let Some(raw) = headers.get("cookie").and_then(|v| v.to_str().ok()) {
+    for c in cookie::Cookie::split_parse(raw) {
+        if let Ok(c) = c {
+            if c.name() == "session_token" {
+                let _ = state.auth_nats.logout(c.value().to_string()).await;
+            }
+        }
     }
+}
+	
 
     let clear_cookie =
         "session_token=deleted; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0";

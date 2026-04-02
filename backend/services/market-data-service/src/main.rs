@@ -13,7 +13,6 @@ mod engine;
 
 use crate::state::AppState;
 use crate::engine::aggregator::run_aggregator;
-use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
@@ -34,7 +33,7 @@ async fn main() {
     let app = Router::new()
         .route("/market-data/snapshot", get(routes::rest::market_snapshot))
         .route("/market-stream", get(routes::ws::market_stream))
-        .with_state(state.clone())   // MUST match handler: State<Arc<AppState>>
+        .with_state(state.clone())
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)
@@ -45,7 +44,9 @@ async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8081));
     tracing::info!("market-data-service listening on {}", addr);
 
-    let listener = TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }
 

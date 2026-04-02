@@ -6,9 +6,7 @@ edition = "2021"
 [dependencies]
 futures-util = "0.3"
 chrono = { version = "0.4", features = ["serde"] }
-axum = "0.7"
 tokio = { version = "1", features = ["full"] }
-tower-http = { version = "0.5", features = ["cors"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 serde = { version = "1", features = ["derive"] }
@@ -42,4 +40,8 @@ thiserror = "1"
 aes-gcm = "0.10"
 rand_core = "0.6"
 base64 = "0.21"
-
+axum.workspace = true
+tower-http.workspace = true
+http.workspace = true
+[package.metadata.sqlx]
+offline = true

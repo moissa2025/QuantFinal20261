@@ -9,7 +9,7 @@ use crate::db::init_db;
 use crate::state::AppState;
 use axum::{Router, routing::{get, post}};
 use std::sync::Arc;
-use tokio::net::TcpListener;
+use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -38,12 +38,14 @@ async fn main() -> anyhow::Result<()> {
         .with_state(state);
 
     // -------------------------------
-    // ⭐ HTTP SERVER (CRITICAL FIX)
+    // ⭐ HTTP SERVER (Axum 0.6)
     // -------------------------------
-    let listener = TcpListener::bind("0.0.0.0:8080").await?;
-    println!("wallet-service HTTP server running on 0.0.0.0:8080");
+    let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
+    println!("wallet-service HTTP server running on {}", addr);
 
-    axum::serve(listener, app).await?;
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
     Ok(())
 }
