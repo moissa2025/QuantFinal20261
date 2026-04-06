@@ -48,3 +48,4 @@ sqlx-data.json
 .env
 .env.*
 
+backend/local-data/*.log
