@@ -65,7 +65,7 @@ impl AppState {
         let db = DbPool::connect_from_env().await?;
 
         //
-        // BINANCE CONFIG (placeholder)
+        // BINANCE CONFIG
         //
         let binance = BinanceConfig {
             api_key: env::var("BINANCE_API_KEY").unwrap_or_default(),
@@ -83,4 +83,3 @@ impl AppState {
         })
     }
 }
-

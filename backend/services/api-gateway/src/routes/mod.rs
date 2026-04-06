@@ -1,3 +1,4 @@
+pub mod intelligence;
 pub mod crypto;
 pub mod wallet;
 pub mod auth_proxy;

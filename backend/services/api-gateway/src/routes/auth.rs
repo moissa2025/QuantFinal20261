@@ -1,16 +1,14 @@
 use std::sync::Arc;
-use std::str::FromStr;
 
 use axum::{
     extract::{Json, State},
     http::{header, HeaderMap, StatusCode},
     response::{IntoResponse, Response},
+    routing::post,
+    Router,
 };
-use cookie::Cookie;
-
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-
 use utoipa::ToSchema;
 
 use crate::state::AppState;
@@ -72,15 +70,14 @@ pub async fn logout_handler(
     headers: HeaderMap,
 ) -> impl IntoResponse {
     if let Some(raw) = headers.get("cookie").and_then(|v| v.to_str().ok()) {
-    for c in cookie::Cookie::split_parse(raw) {
-        if let Ok(c) = c {
-            if c.name() == "session_token" {
-                let _ = state.auth_nats.logout(c.value().to_string()).await;
+        for c in cookie::Cookie::split_parse(raw) {
+            if let Ok(c) = c {
+                if c.name() == "session_token" {
+                    let _ = state.auth_nats.logout(c.value().to_string()).await;
+                }
             }
         }
     }
-}
-	
 
     let clear_cookie =
         "session_token=deleted; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0";
@@ -89,5 +86,12 @@ pub async fn logout_handler(
         [(header::SET_COOKIE, clear_cookie)],
         Json(json!({ "status": "ok" })),
     )
+}
+
+/// Router for auth endpoints
+pub fn router() -> Router<Arc<AppState>> {
+    Router::new()
+        .route("/v1/auth/login", post(login_handler))
+        .route("/v1/auth/logout", post(logout_handler))
 }
 

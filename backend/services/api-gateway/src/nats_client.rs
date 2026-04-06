@@ -30,7 +30,20 @@ impl NatsClient {
 
     //
     // ─────────────────────────────────────────────────────────────
-    //   RPC REQUEST (already correct)
+    //   ADD THIS: request() wrapper for API Gateway compatibility
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
+    where
+        Req: Serialize,
+        Res: DeserializeOwned,
+    {
+        self.rpc(subject, req).await
+    }
+
+    //
+    // ─────────────────────────────────────────────────────────────
+    //   RPC REQUEST (your original implementation)
     // ─────────────────────────────────────────────────────────────
     //
     pub async fn rpc<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
@@ -55,7 +68,7 @@ impl NatsClient {
 
     //
     // ─────────────────────────────────────────────────────────────
-    //   SUBSCRIBE (needed for WebSockets)
+    //   SUBSCRIBE (unchanged)
     // ─────────────────────────────────────────────────────────────
     //
     pub async fn subscribe(&self, subject: &str) -> Result<Subscriber, NatsError> {

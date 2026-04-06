@@ -34,6 +34,8 @@ use tracing_subscriber::EnvFilter;
 use crate::middleware::rate_limit_user::per_user_rate_limit;
 use crate::middleware::auth::auth_middleware;
 use crate::state::AppState;
+
+use crate::routes::intelligence;
 use crate::routes::{
     balances, ledger, market, orders, positions, risk, trading, users, auth,
     wallet, crypto,
@@ -52,12 +54,11 @@ async fn main() {
             .expect("❌ API Gateway failed to initialize AppState"),
     );
 
-    let app = app(state);
+    let app = app(state.clone());
 
     let addr = "0.0.0.0:8080";
     println!("🚀 API Gateway running on http://{addr}");
 
-    // ⭐ Axum 0.6 server startup
     axum::Server::bind(&addr.parse().unwrap())
         .serve(app.into_make_service())
         .await
@@ -87,9 +88,7 @@ pub fn app(state: Arc<AppState>) -> Router {
         // 🔥 DIRECT AUTH ENDPOINTS
         .nest(
             "/v1/auth",
-            Router::new()
-                .route("/login", post(auth::login_handler))
-                .route("/logout", post(auth::logout_handler))
+            auth::router().with_state(state.clone())
         )
 
         // ⭐ WALLET ROUTES
@@ -166,6 +165,13 @@ pub fn app(state: Arc<AppState>) -> Router {
             "/v1/balances",
             balances::router()
                 .layer(from_fn_with_state(state.clone(), auth_middleware))
+        )
+
+        // ⭐ INTELLIGENCE PORTAL ROUTES
+        .nest(
+            "/api/intelligence",
+            intelligence::router()
+                .with_state(state.clone())
         )
 
         // HEALTH + ROOT

@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: cockroachdb-init
+  namespace: trading-platform
 spec:
   template:
     spec:
@@ -10,10 +11,15 @@ spec:
         - name: init
           image: cockroachdb/cockroach:v24.1.0
           command:
-            - /bin/bash
+            - /bin/sh
             - -c
             - |
-              cockroach sql --insecure --host=cockroachdb-0.cockroachdb <<EOF
-              CREATE DATABASE IF NOT EXISTS globalquantx;
-              EOF
+              echo "Waiting for CockroachDB to be ready..."
+              until cockroach sql --insecure --host=cockroachdb-0.cockroachdb -e "SELECT 1;" >/dev/null 2>&1; do
+                echo "CockroachDB not ready yet. Retrying..."
+                sleep 2
+              done
+              echo "CockroachDB is ready. Creating database..."
+              cockroach sql --insecure --host=cockroachdb-0.cockroachdb -e "CREATE DATABASE IF NOT EXISTS globalquantx;"
+              echo "Database created."
 
