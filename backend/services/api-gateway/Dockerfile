@@ -16,24 +16,24 @@ RUN apt-get update && apt-get install -y \
 
 ENV SQLX_OFFLINE=true
 
-# Copy workspace files
-COPY Cargo.toml Cargo.lock ./
+# Copy full workspace (Cargo workspace requires full structure)
+COPY backend ./backend
+COPY Cargo.toml .
+COPY Cargo.lock .
 COPY .sqlx ./.sqlx
-COPY libs ./libs
-COPY services ./services
 
+# Copy CockroachDB CA cert
 COPY root.crt /app/root.crt
 
 # Build only this service
+WORKDIR /app/backend/services/api-gateway
 RUN cargo build --release -p api-gateway
-
 
 # ============================
 # Stage 2 — Runtime
 # ============================
 FROM debian:stable-slim AS runtime
 
-# Install CA certificates + DNS resolver libraries
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl-dev \
@@ -49,9 +49,7 @@ COPY --from=builder /app/target/release/api-gateway /app/api-gateway
 # Copy CockroachDB Cloud CA cert
 COPY --from=builder /app/root.crt /app/root.crt
 
-# Expose port
 EXPOSE 8080
 
-# Run the binary
 CMD ["/app/api-gateway"]
 

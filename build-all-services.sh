@@ -18,18 +18,23 @@ SERVICES=(
   "trading-service"
   "user-service"
   "wallet-service"
+  "aml-monitoring-service"
 )
 
-# Create and use a buildx builder once
-docker buildx create --name gqx-builder --use --bootstrap || docker buildx use gqx-builder
+# Create and use a buildx builder (idempotent)
+docker buildx create --name gqx-builder --use --bootstrap 2>/dev/null || \
+docker buildx use gqx-builder
+
+echo ">>> Using builder: gqx-builder"
+echo ">>> Building multi-arch images: linux/arm64 + linux/amd64"
 
 for svc in "${SERVICES[@]}"; do
   IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/${svc}:${TAG}"
   echo ">>> Building ${svc} -> ${IMAGE}"
 
   docker buildx build \
-    --platform linux/amd64 \
-    -f "services/${svc}/Dockerfile" \
+    --platform linux/arm64,linux/amd64 \
+    -f "backend/services/${svc}/Dockerfile" \
     -t "${IMAGE}" \
     --push \
     .
@@ -37,5 +42,5 @@ for svc in "${SERVICES[@]}"; do
   echo ">>> Done: ${svc}"
 done
 
-echo "All services built and pushed for linux/amd64."
+echo "All services built and pushed for linux/arm64 + linux/amd64."
 

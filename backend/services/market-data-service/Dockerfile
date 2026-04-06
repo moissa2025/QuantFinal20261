@@ -8,10 +8,12 @@ RUN apt-get update && apt-get install -y     build-essential     pkg-config     
 ENV SQLX_OFFLINE=true
 
 # Copy workspace files
-COPY Cargo.toml Cargo.lock ./
-COPY .sqlx ./.sqlx
-COPY libs ./libs
-COPY services ./services
+
+
+
+
+
+
 COPY root.crt /app/root.crt
 
 # Build only this service
@@ -31,3 +33,9 @@ ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
 CMD ["/app/market-data-service"]
+COPY backend ./backend
+
+COPY backend ./backend
+COPY Cargo.toml .
+COPY Cargo.lock .
+COPY .sqlx ./.sqlx

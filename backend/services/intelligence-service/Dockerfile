@@ -26,8 +26,8 @@ COPY .sqlx ./.sqlx
 COPY root.crt /app/root.crt
 
 # Build only this service
-WORKDIR /app/backend/services/auth-service
-RUN cargo build --release -p auth-service
+WORKDIR /app/backend/services/intelligence-service
+RUN cargo build --release -p intelligence-service
 
 # ============================
 # Stage 2 — Runtime
@@ -44,7 +44,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /app/target/release/auth-service /app/auth-service
+COPY --from=builder /app/backend/services/intelligence-service/target/release/intelligence-service /app/intelligence-service
 
 # Copy CockroachDB Cloud CA cert
 COPY --from=builder /app/root.crt /app/root.crt
@@ -52,5 +52,5 @@ COPY --from=builder /app/root.crt /app/root.crt
 ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
-CMD ["/app/auth-service"]
+CMD ["/app/intelligence-service"]
 
