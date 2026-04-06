@@ -1,12 +1,14 @@
 # ============================
-# Stage 1: Builder (Stable Bullseye + Nightly via rustup)
+# Stage 1: Builder (Nightly + MUSL)
 # ============================
 FROM rust:1.80-slim-bullseye AS builder
 
 WORKDIR /app
 
-# Install build dependencies
+# Install MUSL toolchain + build deps
 RUN apt-get update && apt-get install -y \
+    musl-tools \
+    musl-dev \
     build-essential \
     pkg-config \
     libssl-dev \
@@ -16,34 +18,32 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install nightly toolchain manually
+# Install nightly (needed for edition2024 crates)
 RUN rustup toolchain install nightly && rustup default nightly
+
+# Add MUSL targets
+RUN rustup target add aarch64-unknown-linux-musl x86_64-unknown-linux-musl
 
 ENV SQLX_OFFLINE=true
 
-# Copy workspace
 COPY . .
 
-# Build using nightly
-RUN cargo +nightly build --release -p market-data-service
+# Build static binary
+RUN cargo +nightly build --release --target aarch64-unknown-linux-musl -p market-data-service
 
 
 # ============================
-# Stage 2: Runtime (Bullseye)
+# Stage 2: Runtime (scratch)
 # ============================
-FROM debian:bullseye-slim
-
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/market-data-service /app/market-data-service
+COPY --from=builder /app/target/aarch64-unknown-linux-musl/release/market-data-service /app/market-data-service
 COPY root.crt /app/root.crt
 
 ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
-CMD ["/app/market-data-service"]
+ENTRYPOINT ["/app/market-data-service"]
 
