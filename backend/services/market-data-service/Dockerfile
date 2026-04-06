@@ -1,28 +1,41 @@
-# Stage 1: builder
-FROM rust:latest AS builder
+# ============================
+# Stage 1: Builder (Stable Bullseye + Nightly via rustup)
+# ============================
+FROM rust:1.80-slim-bullseye AS builder
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y     build-essential     pkg-config     libssl-dev     clang     cmake     libpq-dev     && rm -rf /var/lib/apt/lists/*
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    clang \
+    cmake \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install nightly toolchain manually
+RUN rustup toolchain install nightly && rustup default nightly
 
 ENV SQLX_OFFLINE=true
 
-# Copy workspace files
+# Copy workspace
+COPY . .
+
+# Build using nightly
+RUN cargo +nightly build --release -p market-data-service
 
 
+# ============================
+# Stage 2: Runtime (Bullseye)
+# ============================
+FROM debian:bullseye-slim
 
-
-
-
-COPY root.crt /app/root.crt
-
-# Build only this service
-RUN cargo build --release -p market-data-service
-
-# Stage 2: runtime
-FROM debian:bookworm-slim
-
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -33,9 +46,4 @@ ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
 CMD ["/app/market-data-service"]
-COPY backend ./backend
 
-COPY backend ./backend
-COPY Cargo.toml .
-COPY Cargo.lock .
-COPY .sqlx ./.sqlx

@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: wallet-service
   namespace: trading-platform
+  labels:
+    app: wallet-service
 spec:
   replicas: 2
   selector:
@@ -15,32 +17,41 @@ spec:
     spec:
       containers:
         - name: wallet-service
-          image: gcr.io/globalquantx-prod/wallet-service:v0.0.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/wallet-service:v0.0.1
           imagePullPolicy: Always
 
           env:
             - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: wallet-db-url
-                  key: DATABASE_URL
+              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
 
             - name: NATS_URL
               value: "nats://nats:4222"
 
+            - name: RUST_LOG
+              value: info
+
           ports:
             - containerPort: 8080
 
-          volumeMounts:
-            - name: cockroachdb-ca
-              mountPath: /app/root.crt
-              subPath: root.crt
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
 
-      volumes:
-        - name: cockroachdb-ca
-          secret:
-            secretName: wallet-db-url
-            items:
-              - key: ca.crt
-                path: root.crt
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
 

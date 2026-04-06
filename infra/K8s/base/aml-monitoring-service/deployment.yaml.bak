@@ -22,7 +22,7 @@ spec:
 
           env:
             - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
+              value: "postgresql://root@cockroachdb-public:26257/globalquantx?sslmode=disable"
 
             - name: NATS_URL
               value: "nats://nats:4222"

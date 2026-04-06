@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: onboarding-service
   namespace: trading-platform
+  labels:
+    app: onboarding-service
 spec:
   type: ClusterIP
   selector:
     app: onboarding-service
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
 

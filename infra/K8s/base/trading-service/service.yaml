@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: trading-service
   namespace: trading-platform
+  labels:
+    app: trading-service
 spec:
   type: ClusterIP
   selector:
     app: trading-service
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
 

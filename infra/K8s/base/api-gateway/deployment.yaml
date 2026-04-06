@@ -3,8 +3,10 @@ kind: Deployment
 metadata:
   name: api-gateway
   namespace: trading-platform
+  labels:
+    app: api-gateway
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api-gateway
@@ -15,35 +17,33 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: gcr.io/globalquantx-prod/api-gateway:v0.1.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:v0.0.1
           imagePullPolicy: Always
 
           env:
             - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: apigw-db-url
-                  key: DATABASE_URL
+              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
 
             - name: NATS_URL
               value: "nats://nats:4222"
 
-            - name: AUTH_SERVICE_URL
-              value: "http://auth-service:8080"
-
-            - name: USER_SERVICE_URL
-              value: "http://user-service:8080"
+            - name: RUST_LOG
+              value: info
 
           ports:
             - containerPort: 8080
 
-          volumeMounts:
-            - name: cockroachdb-cloud-ca
-              mountPath: /app/root.crt
-              subPath: root.crt
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
 
-      volumes:
-        - name: cockroachdb-cloud-ca
-          secret:
-            secretName: apigw-db-url
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
 

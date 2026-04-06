@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: risk-service
   namespace: trading-platform
+  labels:
+    app: risk-service
 spec:
   replicas: 2
   selector:
@@ -17,26 +19,41 @@ spec:
         pool: trading-compute
       containers:
         - name: risk-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/risk/risk-service:v0.0.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/risk-service:v0.0.1
+          imagePullPolicy: Always
+
           env:
             - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: risk-db-url
-                  key: DATABASE_URL
+              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
+
             - name: NATS_URL
-              value: nats://nats:4222
+              value: "nats://nats:4222"
+
+            - name: RUST_LOG
+              value: info
+
           ports:
             - containerPort: 8080
 
-          volumeMounts:
-            - name: cockroachdb-ca
-              mountPath: /app/root.crt
-              subPath: root.crt
-      volumes:
-        - name: cockroachdb-ca
-          secret:
-            secretName: apigw-db-url
-            items:
-              - key: ca.crt
-                path: root.crt
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+

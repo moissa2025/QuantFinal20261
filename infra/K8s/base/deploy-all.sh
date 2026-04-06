@@ -9,17 +9,26 @@ echo "-----------------------------------------------------------"
 apply_service() {
   SERVICE=$1
   echo "📦 Applying $SERVICE ..."
-  kubectl apply -n $NAMESPACE -f $SERVICE/
+
+  # Apply only standard Kubernetes manifests
+  for file in $SERVICE/*.yaml; do
+    # Skip GKE-only CRDs
+    if [[ "$file" == *"backendconfig"* ]] || [[ "$file" == *"managed-certificate"* ]]; then
+      echo "⏭️  Skipping GKE-only file: $file"
+      continue
+    fi
+
+    kubectl apply -n $NAMESPACE -f "$file"
+  done
+
   echo "✅ $SERVICE applied"
   echo ""
 }
 
-# Ensure trading-platform namespace exists
 echo "📁 Ensuring namespace exists..."
 kubectl apply -f namespace/namespace.yaml
 echo ""
 
-# Apply NATS (it has its own namespace)
 echo "📦 Applying NATS (namespace-aware)..."
 kubectl apply -f nats/
 echo "✅ NATS applied"
@@ -38,6 +47,7 @@ apply_service "trading-service"
 apply_service "market-data-service"
 apply_service "risk-service"
 apply_service "aml-monitoring-service"
+apply_service "intelligence-service"
 
 echo "-----------------------------------------------------------"
 echo "🎉 All services applied successfully!"

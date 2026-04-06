@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: wallet-service
   namespace: trading-platform
+  labels:
+    app: wallet-service
 spec:
   type: ClusterIP
   selector:
     app: wallet-service
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
 

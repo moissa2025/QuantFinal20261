@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: reconciliation-service
   namespace: trading-platform
+  labels:
+    app: reconciliation-service
 spec:
   type: ClusterIP
   selector:
     app: reconciliation-service
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
 

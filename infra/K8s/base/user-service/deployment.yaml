@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: user-service
   namespace: trading-platform
+  labels:
+    app: user-service
 spec:
   replicas: 2
   selector:
@@ -15,32 +17,41 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/user/user-service:v0.0.1
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/user-service:v0.0.1
           imagePullPolicy: Always
 
           env:
-            # CockroachDB connection string (already includes sslmode + sslrootcert=/app/root.crt)
             - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: user-db-url
-                  key: DATABASE_URL
+              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
 
-            # NATS cluster DNS
             - name: NATS_URL
               value: "nats://nats:4222"
+
+            - name: RUST_LOG
+              value: info
 
           ports:
             - containerPort: 8080
 
-          volumeMounts:
-            # CockroachDB Cloud CA cert mounted at /app/root.crt
-            - name: cockroachdb-cloud-ca
-              mountPath: /app/root.crt
-              subPath: root.crt
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
 
-      volumes:
-        - name: cockroachdb-cloud-ca
-          secret:
-            secretName: cockroachdb-cloud-ca
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
 

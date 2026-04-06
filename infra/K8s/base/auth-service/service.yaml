@@ -8,6 +8,7 @@ spec:
   selector:
     app: auth-service
   ports:
-    - port: 8080
+    - name: http
+      port: 9001
       targetPort: 9001
 

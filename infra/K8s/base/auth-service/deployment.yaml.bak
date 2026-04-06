@@ -1,49 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aml-monitoring-service
+  name: auth-service
   namespace: trading-platform
   labels:
-    app: aml-monitoring-service
+    app: auth-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: aml-monitoring-service
+      app: auth-service
   template:
     metadata:
       labels:
-        app: aml-monitoring-service
+        app: auth-service
     spec:
       containers:
-        - name: aml-monitoring-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/aml-monitoring-service:v0.0.1
+        - name: auth-service
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/auth-service:v0.0.9
           imagePullPolicy: Always
 
           env:
             - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
+              value: "postgresql://root@cockroachdb-public:26257/globalquantx?sslmode=disable"
 
             - name: NATS_URL
               value: "nats://nats:4222"
+
+            - name: REFRESH_TOKEN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-refresh-key
+                  key: REFRESH_TOKEN_KEY
 
             - name: RUST_LOG
               value: info
 
           ports:
-            - containerPort: 8080
+            - containerPort: 9001
 
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8080
+              port: 9001
             initialDelaySeconds: 3
             periodSeconds: 5
 
           livenessProbe:
             httpGet:
               path: /live
-              port: 8080
+              port: 9001
             initialDelaySeconds: 5
             periodSeconds: 10
 

@@ -1,31 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aml-monitoring-service
+  name: intelligence-service
   namespace: trading-platform
   labels:
-    app: aml-monitoring-service
+    app: intelligence-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: aml-monitoring-service
+      app: intelligence-service
   template:
     metadata:
       labels:
-        app: aml-monitoring-service
+        app: intelligence-service
     spec:
       containers:
-        - name: aml-monitoring-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/aml-monitoring-service:v0.0.1
+        - name: intelligence-service
+          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/intelligence-service:v0.0.1
           imagePullPolicy: Always
 
           env:
             - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
+              value: "postgresql://root@cockroachdb-public:26257/globalquantx?sslmode=disable"
 
             - name: NATS_URL
               value: "nats://nats:4222"
+
+            - name: INTELLIGENCE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: intelligence-service-secret
+                  key: api_key
 
             - name: RUST_LOG
               value: info
