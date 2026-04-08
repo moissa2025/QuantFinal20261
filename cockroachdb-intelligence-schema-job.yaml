@@ -1,0 +1,93 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-intelligence-schema
+  namespace: trading-platform
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: intelligence-schema
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/sh
+            - -c
+            - |
+              HOST="cockroachdb-0.cockroachdb.trading-platform.svc.cluster.local"
+
+              echo "Waiting for CockroachDB..."
+              until /cockroach/cockroach sql --insecure --host=$HOST -e "SELECT 1;" >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Creating intelligence schema tables..."
+
+              /cockroach/cockroach sql --insecure --host=$HOST --database=globalquantx -e "
+                CREATE TABLE IF NOT EXISTS intelligence.assets (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  symbol TEXT UNIQUE NOT NULL,
+                  name TEXT NOT NULL,
+                  asset_class TEXT NOT NULL,
+                  exchange TEXT,
+                  currency TEXT NOT NULL,
+                  sector TEXT,
+                  country TEXT,
+                  status TEXT NOT NULL DEFAULT 'active'
+                );
+
+                CREATE TABLE IF NOT EXISTS intelligence.quotes (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  asset_id UUID REFERENCES intelligence.assets(id),
+                  ts TIMESTAMP NOT NULL,
+                  price DOUBLE PRECISION NOT NULL,
+                  change_abs DOUBLE PRECISION,
+                  change_pct DOUBLE PRECISION,
+                  volume DOUBLE PRECISION
+                );
+
+                CREATE TABLE IF NOT EXISTS intelligence.news_items (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  source TEXT,
+                  source_id TEXT,
+                  title TEXT,
+                  body TEXT,
+                  url TEXT,
+                  published_at TIMESTAMP,
+                  summary_ai TEXT,
+                  sentiment TEXT,
+                  tags_assets TEXT[],
+                  tags_themes TEXT[]
+                );
+
+                CREATE TABLE IF NOT EXISTS intelligence.articles (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  slug TEXT UNIQUE NOT NULL,
+                  title TEXT NOT NULL,
+                  summary TEXT,
+                  body_html TEXT NOT NULL,
+                  author TEXT,
+                  published_at TIMESTAMP,
+                  assets TEXT[],
+                  themes TEXT[]
+                );
+
+                CREATE TABLE IF NOT EXISTS intelligence.themes (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  slug TEXT UNIQUE NOT NULL,
+                  name TEXT NOT NULL,
+                  description TEXT
+                );
+
+                CREATE TABLE IF NOT EXISTS intelligence.quant_scores (
+                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                  asset_id UUID REFERENCES intelligence.assets(id),
+                  as_of TIMESTAMP NOT NULL,
+                  score DOUBLE PRECISION,
+                  label TEXT,
+                  explanation TEXT
+                );
+              "
+
+              echo "Intelligence schema tables created."
+

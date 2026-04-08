@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-intelligence-schema-update
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: schema-update
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Applying intelligence schema updates..."
+
+              cockroach sql \
+                --insecure \
+                --host=cockroachdb.trading-platform.svc.cluster.local \
+                --database=globalquantx \
+                -e "
+                  ALTER TABLE intelligence.themes
+                  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+
+                  CREATE TABLE IF NOT EXISTS intelligence.theme_assets (
+                      theme_slug STRING NOT NULL REFERENCES intelligence.themes(slug),
+                      asset_symbol STRING NOT NULL REFERENCES intelligence.assets(symbol),
+                      PRIMARY KEY (theme_slug, asset_symbol)
+                  );
+                "
+
+              echo "Schema update complete."
+

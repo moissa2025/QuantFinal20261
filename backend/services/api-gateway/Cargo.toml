@@ -14,7 +14,6 @@ serde_json.workspace = true
 uuid.workspace = true
 chrono.workspace = true
 async-nats.workspace = true
-sqlx.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 
@@ -50,7 +49,14 @@ headers = "0.4"
 http-body-util = "0.1"
 once_cell.workspace = true
 hyper = "0.14"
+[dependencies.sqlx]
+version = "0.7"
+features = [
+    "runtime-tokio",
+    "postgres",
+    "uuid",
+    "chrono",
 
+]
 [package.metadata.sqlx]
-offline = true
-
+offline = false

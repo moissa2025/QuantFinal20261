@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: cockroachdb
   namespace: trading-platform
-  labels:
-    app: cockroachdb
+labels:
+  app: cockroachdb
 spec:
   ports:
     - port: 26257

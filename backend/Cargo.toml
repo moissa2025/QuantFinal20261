@@ -2,20 +2,20 @@
 resolver = "2"
 
 members = [
-    "backend/services/auth-service",
-    "backend/services/ledger-service",
-    "backend/services/trading-service",
-    "backend/services/user-service",
-    "backend/services/risk-service",
-    "backend/services/market-data-service",
-    "backend/services/api-gateway",
-    "backend/services/wallet-service",
-    "backend/services/reconciliation-service",
-    "backend/services/aml-monitoring-service",
-    "backend/services/onboarding-service",
-    "backend/services/kyc-service",
-    "backend/services/intelligence-service",
-    "backend/libs/common"
+    "services/auth-service",
+    "services/ledger-service",
+    "services/trading-service",
+    "services/user-service",
+    "services/risk-service",
+    "services/market-data-service",
+    "services/api-gateway",
+    "services/wallet-service",
+    "services/reconciliation-service",
+    "services/aml-monitoring-service",
+    "services/onboarding-service",
+    "services/kyc-service",
+    "services/intelligence-service",
+    "libs/common"
 ]
 
 [workspace.dependencies]
@@ -41,8 +41,6 @@ chrono = { version = "0.4", features = ["serde"] }
 # NATS
 async-nats = "0.34"
 
-# SQLX
-sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "uuid", "chrono"] }
 
 # Logging
 tracing = "0.1"

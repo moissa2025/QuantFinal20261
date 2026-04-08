@@ -115,25 +115,29 @@ pub async fn get_latest_quote(pool: &PgPool, symbol: &str) -> sqlx::Result<Optio
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_assets_by_theme(pool: &PgPool, slug: &str) -> sqlx::Result<Vec<MarketAsset>> {
-    let rows = sqlx::query!(
-        r#"
-        SELECT 
-            a.symbol,
-            q.price,
-            q.change_pct,
-            qs.score AS quant_score
-        FROM intelligence.themes t
-        JOIN intelligence.theme_assets ta ON ta.theme_id = t.id   -- FIXED SCHEMA
-        JOIN intelligence.assets a ON a.id = ta.asset_id
-        JOIN intelligence.quotes q ON q.asset_id = a.id
-        LEFT JOIN intelligence.quant_scores qs ON qs.asset_id = a.id
-        WHERE t.slug = $1
-        ORDER BY q.change_pct DESC
-        "#,
-        slug
-    )
-    .fetch_all(pool)
-    .await?;
+let rows = sqlx::query!(
+    r#"
+    SELECT 
+        a.symbol,
+        q.price,
+        q.change_pct,
+        qs.score AS quant_score
+    FROM intelligence.themes t
+    JOIN intelligence.theme_assets ta 
+        ON ta.theme_slug = t.slug
+    JOIN intelligence.assets a 
+        ON a.symbol = ta.asset_symbol
+    JOIN intelligence.quotes q 
+        ON q.asset_id = a.id
+    LEFT JOIN intelligence.quant_scores qs 
+        ON qs.asset_id = a.id
+    WHERE t.slug = $1
+    ORDER BY q.change_pct DESC
+    "#,
+    slug
+)
+.fetch_all(pool)
+.await?;
 
     Ok(rows
         .into_iter()

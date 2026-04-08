@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
-use sqlx::types::ipnetwork::IpNetwork;
 
 //
 // USERS

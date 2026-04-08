@@ -18,16 +18,6 @@ jsonwebtoken = "9"
 common = { path = "../../libs/common" }
 subtle = "2.5"
 ipnetwork = "0.20"
-# new
-sqlx = { version = "0.7", features = [
-    "runtime-tokio-rustls",
-    "postgres",
-    "uuid",
-    "time",
-    "macros",
-    "chrono",
-    "ipnetwork"
-] }
 time = { version = "0.3", features = ["macros", "formatting"] }
 argon2 = "0.5"
 rand = "0.8"
@@ -36,12 +26,24 @@ sha2 = "0.10"
 hex = "0.4"
 dotenvy = "0.15"
 thiserror = "1"
-
 aes-gcm = "0.10"
 rand_core = "0.6"
 base64 = "0.21"
+
 axum.workspace = true
 tower-http.workspace = true
 http.workspace = true
+
 [package.metadata.sqlx]
-offline = true
+offline = false
+
+[dependencies.sqlx]
+version = "0.7"
+features = [
+    "runtime-tokio",
+    "postgres",
+    "uuid",
+    "chrono",
+    "macros"
+]
+

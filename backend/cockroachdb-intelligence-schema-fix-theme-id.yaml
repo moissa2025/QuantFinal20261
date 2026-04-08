@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-intelligence-schema-fix-theme-id
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: schema-fix
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "🔧 Applying intelligence.theme_assets schema fix..."
+
+              cockroach sql \
+                --insecure \
+                --host=cockroachdb.trading-platform.svc.cluster.local \
+                --database=globalquantx \
+                -e "
+                  -- 1. Add theme_id column if missing
+                  ALTER TABLE intelligence.theme_assets
+                  ADD COLUMN IF NOT EXISTS theme_id STRING;
+
+                  -- 2. Populate theme_id from theme_slug
+                  UPDATE intelligence.theme_assets
+                  SET theme_id = theme_slug
+                  WHERE theme_id IS NULL;
+
+                  -- 3. Enforce NOT NULL constraint
+                  ALTER TABLE intelligence.theme_assets
+                  ALTER COLUMN theme_id SET NOT NULL;
+                "
+
+              echo "✅ Schema fix complete."
+
