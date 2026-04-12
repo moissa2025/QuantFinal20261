@@ -1,0 +1,65 @@
+namespace: trading-platform
+
+global:
+  databaseUrl: "postgresql://root@cockroachdb.trading-platform.svc.cluster.local:26257/globalquantx?sslmode=disable"
+  natsUrl: "nats://nats.trading-platform.svc.cluster.local:4222"
+
+nats:
+  image: nats:2.10
+  replicas: 1
+
+services:
+  - name: aml-monitoring-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/aml-monitoring-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: api-gateway
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/api-gateway:v0.0.1
+    port: 8080
+    replicas: 1
+    servicePort: 80
+  - name: auth-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/auth-service:v0.0.9
+    port: 9001
+    replicas: 2
+  - name: intelligence-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/intelligence-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: kyc-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/kyc-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: ledger-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/ledger-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: market-data-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/market-data-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: onboarding-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/onboarding-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: reconciliation-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/reconciliation-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: risk-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/risk-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: trading-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/trading-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: user-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/user-service:v0.0.1
+    port: 8080
+    replicas: 2
+  - name: wallet-service
+    image: europe-west2-docker.pkg.dev/globalquantx-prod/api/wallet-service:v0.0.1
+    port: 8080
+    replicas: 2
+

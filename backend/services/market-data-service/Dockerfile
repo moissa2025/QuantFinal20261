@@ -1,49 +1,52 @@
 # ============================
-# Stage 1: Builder (Nightly + MUSL)
+# Stage 1 — Builder
 # ============================
-FROM rust:1.80-slim-bullseye AS builder
+FROM rust:latest AS builder
 
 WORKDIR /app
 
-# Install MUSL toolchain + build deps
 RUN apt-get update && apt-get install -y \
-    musl-tools \
-    musl-dev \
     build-essential \
     pkg-config \
     libssl-dev \
     clang \
     cmake \
     libpq-dev \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install nightly (needed for edition2024 crates)
-RUN rustup toolchain install nightly && rustup default nightly
+ENV SQLX_OFFLINE=false
 
-# Add MUSL targets
-RUN rustup target add aarch64-unknown-linux-musl x86_64-unknown-linux-musl
+# Copy full workspace (Cargo workspace requires full structure)
+# Copy full workspace (Cargo workspace requires full structure)
+COPY Cargo.toml Cargo.lock ./
+COPY services ./services
+COPY libs ./libs
+COPY .sqlx ./.sqlx
 
-ENV SQLX_OFFLINE=true
+# Copy CockroachDB CA cert
 
-COPY . .
-
-# Build static binary
-RUN cargo +nightly build --release --target aarch64-unknown-linux-musl -p market-data-service
-
+# Build only this service
+WORKDIR /app/services/market-data-service
+RUN cargo build --release -p market-data-service
 
 # ============================
-# Stage 2: Runtime (scratch)
+# Stage 2 — Runtime
 # ============================
-FROM scratch
+FROM debian:bookworm-slim AS runtime
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libssl-dev \
+    libpq5 \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY --from=builder /app/target/aarch64-unknown-linux-musl/release/market-data-service /app/market-data-service
-COPY root.crt /app/root.crt
+# Copy binary from builder
+COPY --from=builder /app/target/release/market-data-service /app/market-data-service
 
-ENV SSL_CERT_FILE=/app/root.crt
+
 ENV RUST_LOG=info
 
-ENTRYPOINT ["/app/market-data-service"]
-
+CMD ["/app/market-data-service"]

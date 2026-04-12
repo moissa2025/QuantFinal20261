@@ -3,54 +3,63 @@ set -e
 
 NAMESPACE="trading-platform"
 
-echo "🚀 Deploying GlobalQuantX Platform"
-echo "-----------------------------------------------------------"
+SERVICES=(
+  auth-service
+  aml-monitoring-service
+  api-gateway
+  intelligence-service
+  kyc-service
+  ledger-service
+  market-data-service
+  onboarding-service
+  reconciliation-service
+  risk-service
+  trading-service
+  user-service
+  wallet-service
+)
 
-apply_service() {
-  SERVICE=$1
-  echo "📦 Applying $SERVICE ..."
+echo "🚀 Deploying all services into namespace: $NAMESPACE"
+echo ""
 
-  # Apply only standard Kubernetes manifests
-  for file in $SERVICE/*.yaml; do
-    # Skip GKE-only CRDs
-    if [[ "$file" == *"backendconfig"* ]] || [[ "$file" == *"managed-certificate"* ]]; then
-      echo "⏭️  Skipping GKE-only file: $file"
-      continue
+for svc in "${SERVICES[@]}"; do
+  echo "----------------------------------------"
+  echo "📦 Deploying $svc"
+
+  DEPLOY="$svc/deployment.yaml"
+  SERVICE="$svc/service.yaml"
+
+  if [ -f "$DEPLOY" ]; then
+    echo "  🔍 Ensuring envFrom exists in $DEPLOY"
+
+    # Insert envFrom if missing (idempotent)
+    if ! grep -q "envFrom:" "$DEPLOY"; then
+      echo "  ➕ Adding envFrom to $DEPLOY"
+      yq -i '.spec.template.spec.containers[0].envFrom += [{"configMapRef": {"name": "platform-config"}}]' "$DEPLOY"
+    else
+      echo "  ✔ envFrom already present"
     fi
 
-    kubectl apply -n $NAMESPACE -f "$file"
-  done
+    echo "  ➤ Applying deployment.yaml"
+    kubectl apply -n $NAMESPACE -f "$DEPLOY"
+  else
+    echo "  ⚠️  No deployment.yaml found for $svc"
+  fi
 
-  echo "✅ $SERVICE applied"
-  echo ""
-}
+  if [ -f "$SERVICE" ]; then
+    echo "  ➤ Applying service.yaml"
+    kubectl apply -n $NAMESPACE -f "$SERVICE"
+  else
+    echo "  ⚠️  No service.yaml found for $svc"
+  fi
 
-echo "📁 Ensuring namespace exists..."
-kubectl apply -f namespace/namespace.yaml
+  echo "  🔄 Restarting deployment"
+  kubectl rollout restart deployment/$svc -n $NAMESPACE || true
+
+done
+
 echo ""
-
-echo "📦 Applying NATS (namespace-aware)..."
-kubectl apply -f nats/
-echo "✅ NATS applied"
+echo "🎉 All service deployments applied and restarted"
 echo ""
-
-# Apply each microservice folder into trading-platform
-apply_service "api-gateway"
-apply_service "auth-service"
-apply_service "user-service"
-apply_service "wallet-service"
-apply_service "onboarding-service"
-apply_service "kyc-service"
-apply_service "ledger-service"
-apply_service "reconciliation-service"
-apply_service "trading-service"
-apply_service "market-data-service"
-apply_service "risk-service"
-apply_service "aml-monitoring-service"
-apply_service "intelligence-service"
-
-echo "-----------------------------------------------------------"
-echo "🎉 All services applied successfully!"
-echo "You may now run: kubectl rollout restart deploy -n $NAMESPACE"
-echo "-----------------------------------------------------------"
+kubectl get pods -n $NAMESPACE
 

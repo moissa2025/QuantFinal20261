@@ -1,0 +1,289 @@
+------------------------------------------------------------
+-- 1. CREATE DATABASE (run as admin, not gqx_user)
+------------------------------------------------------------
+-- CREATE DATABASE IF NOT EXISTS gqx_identity;
+-- GRANT ALL ON DATABASE gqx_identity TO gqx_user;
+
+------------------------------------------------------------
+-- 2. SWITCH TO IDENTITY DATABASE
+------------------------------------------------------------
+SET DATABASE = gqx_identity;
+
+------------------------------------------------------------
+-- 3. CREATE SCHEMAS
+------------------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS auth;
+CREATE SCHEMA IF NOT EXISTS users;
+CREATE SCHEMA IF NOT EXISTS onboarding;
+CREATE SCHEMA IF NOT EXISTS api;
+
+------------------------------------------------------------
+-- 4. AUTH SCHEMA
+------------------------------------------------------------
+
+-- USERS
+CREATE TABLE IF NOT EXISTS auth.users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    disabled BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+-- ROLES
+CREATE TABLE IF NOT EXISTS auth.roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE
+);
+
+-- USER ROLES
+CREATE TABLE IF NOT EXISTS auth.user_roles (
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    role_id UUID NOT NULL REFERENCES auth.roles(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
+);
+
+-- CREDENTIALS
+CREATE TABLE IF NOT EXISTS auth.credentials (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    password_hash TEXT NOT NULL,
+    password_algo TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- SESSIONS
+CREATE TABLE IF NOT EXISTS auth.sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    session_token TEXT NOT NULL UNIQUE,
+    ip_address INET,
+    user_agent TEXT,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    device_hash TEXT,
+    last_activity_at TIMESTAMPTZ
+);
+
+-- REFRESH TOKENS
+CREATE TABLE IF NOT EXISTS auth.refresh_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id),
+    token_hash TEXT NOT NULL,
+    ciphertext BYTES NOT NULL,
+    nonce BYTES NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    replaced_by UUID REFERENCES auth.refresh_tokens(id)
+);
+
+-- PASSWORD RESET TOKENS
+CREATE TABLE IF NOT EXISTS auth.password_reset_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- EMAIL VERIFICATION TOKENS
+CREATE TABLE IF NOT EXISTS auth.email_verification_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- LOGIN ATTEMPTS
+CREATE TABLE IF NOT EXISTS auth.login_attempts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID,
+    email TEXT,
+    success BOOLEAN NOT NULL,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- AUDIT LOG
+CREATE TABLE IF NOT EXISTS auth.audit_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id),
+    event_type TEXT NOT NULL,
+    event_data JSONB NOT NULL,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- EVENT LOG
+CREATE TABLE IF NOT EXISTS auth.event_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_type TEXT NOT NULL,
+    payload JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- USER PROFILE
+CREATE TABLE IF NOT EXISTS auth.user_profile (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    first_name TEXT,
+    last_name TEXT,
+    phone_number TEXT,
+    country TEXT,
+    timezone TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- USER PREFERENCES
+CREATE TABLE IF NOT EXISTS auth.user_preferences (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    marketing_opt_in BOOLEAN NOT NULL DEFAULT FALSE,
+    dark_mode BOOLEAN NOT NULL DEFAULT FALSE,
+    language TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- SERVICE ACCOUNTS
+CREATE TABLE IF NOT EXISTS auth.service_accounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- API KEYS
+CREATE TABLE IF NOT EXISTS auth.api_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    service_account_id UUID NOT NULL REFERENCES auth.service_accounts(id) ON DELETE CASCADE,
+    key_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    revoked BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+------------------------------------------------------------
+-- 5. USERS SCHEMA
+------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS users.users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    username TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS users.user_profiles (
+    user_id UUID PRIMARY KEY REFERENCES users.users(id) ON DELETE CASCADE,
+    first_name TEXT,
+    last_name TEXT,
+    avatar_url TEXT,
+    bio TEXT,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS users.user_preferences (
+    user_id UUID PRIMARY KEY REFERENCES users.users(id) ON DELETE CASCADE,
+    theme TEXT DEFAULT 'light',
+    language TEXT DEFAULT 'en',
+    timezone TEXT DEFAULT 'UTC',
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS users.roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE,
+    description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS users.user_roles (
+    user_id UUID REFERENCES users.users(id) ON DELETE CASCADE,
+    role_id UUID REFERENCES users.roles(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
+);
+
+CREATE TABLE IF NOT EXISTS users.audit_logs (
+    id BIGINT PRIMARY KEY DEFAULT unique_rowid(),
+    user_id UUID REFERENCES users.users(id) ON DELETE SET NULL,
+    action TEXT NOT NULL,
+    metadata JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+------------------------------------------------------------
+-- 6. ONBOARDING SCHEMA
+------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS onboarding.onboarding_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    current_step TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_onboarding_sessions_user_id
+    ON onboarding.onboarding_sessions(user_id);
+
+CREATE TABLE IF NOT EXISTS onboarding.onboarding_steps (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES onboarding.onboarding_sessions(id) ON DELETE CASCADE,
+    step_name TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    started_at TIMESTAMPTZ DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    error_message TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_onboarding_steps_session_id
+    ON onboarding.onboarding_steps(session_id);
+
+CREATE TABLE IF NOT EXISTS onboarding.onboarding_audit_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES onboarding.onboarding_sessions(id) ON DELETE CASCADE,
+    event TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_onboarding_audit_log_session_id
+    ON onboarding.onboarding_audit_log(session_id);
+
+------------------------------------------------------------
+-- 7. API SCHEMA
+------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS api.request_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT,
+    method TEXT NOT NULL,
+    path TEXT NOT NULL,
+    status INT NOT NULL,
+    latency_ms INT NOT NULL,
+    ip_address TEXT,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS api.rate_limit (
+    user_id TEXT PRIMARY KEY,
+    window_start TIMESTAMPTZ NOT NULL,
+    request_count INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS api.api_keys (
+    key_id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    hashed_key TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    last_used TIMESTAMPTZ
+);
+

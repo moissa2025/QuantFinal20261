@@ -16,15 +16,14 @@ async fn main() -> anyhow::Result<()> {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    // Build AppState (DB + NATS)
+    println!("📌 intelligence-service: initializing state…");
+
     let state = Arc::new(AppState::new().await?);
 
-    // Register NATS handlers
     nats_handlers::register_nats_handlers(state.clone()).await?;
 
     println!("🚀 intelligence-service running");
 
-    // Keep alive
     loop {
         tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
     }

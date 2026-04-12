@@ -1,9 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: api-gateway-cert
-  namespace: trading-platform
-spec:
-  domains:
-    - api.globalquantx.com
-

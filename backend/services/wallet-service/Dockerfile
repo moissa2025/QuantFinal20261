@@ -14,16 +14,18 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SQLX_OFFLINE=true
+ENV SQLX_OFFLINE=false
 
 # Copy full workspace (Cargo workspace requires full structure)
-COPY backend ./backend
-COPY Cargo.toml .
-COPY Cargo.lock .
+# Copy full workspace (Cargo workspace requires full structure)
+COPY Cargo.toml Cargo.lock ./
+COPY services ./services
+COPY libs ./libs
 COPY .sqlx ./.sqlx
 
+# Set the working directory to the service
+
 # Copy CockroachDB CA cert
-COPY root.crt /app/root.crt
 
 # Build only this service
 WORKDIR /app/backend/services/wallet-service
@@ -46,10 +48,7 @@ WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/target/release/wallet-service /app/wallet-service
 
-# Copy CockroachDB Cloud CA cert
-COPY --from=builder /app/root.crt /app/root.crt
 
-ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
 CMD ["/app/wallet-service"]

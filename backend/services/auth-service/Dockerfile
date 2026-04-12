@@ -14,19 +14,20 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SQLX_OFFLINE=true
+ENV SQLX_OFFLINE=false
 
 # Copy full workspace (Cargo workspace requires full structure)
-COPY backend ./backend
-COPY Cargo.toml .
-COPY Cargo.lock .
+# Copy full workspace (Cargo workspace requires full structure)
+# Copy full workspace (Cargo workspace requires full structure)
+COPY Cargo.toml Cargo.lock ./
+COPY services ./services
+COPY libs ./libs
 COPY .sqlx ./.sqlx
 
 # Copy CockroachDB CA cert
-COPY root.crt /app/root.crt
 
 # Build only this service
-WORKDIR /app/backend/services/auth-service
+WORKDIR /app/services/auth-service
 RUN cargo build --release -p auth-service
 
 # ============================
@@ -46,10 +47,7 @@ WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/target/release/auth-service /app/auth-service
 
-# Copy CockroachDB Cloud CA cert
-COPY --from=builder /app/root.crt /app/root.crt
 
-ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
 CMD ["/app/auth-service"]

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ledger-service
-  namespace: trading-platform
+  namespace: trade-platform
   labels:
     app: ledger-service
 spec:
@@ -15,45 +15,49 @@ spec:
       labels:
         app: ledger-service
     spec:
-      nodeSelector:
-        pool: backoffice
       containers:
         - name: ledger-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/ledger-service:v0.0.1
-          imagePullPolicy: Always
+          image: ledger-service:v.0.0.1
+          imagePullPolicy: IfNotPresent
+
+          envFrom:
+            - configMapRef:
+                name: platform-config-trade
 
           env:
-            - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
-
             - name: NATS_URL
               value: "nats://nats:4222"
-
             - name: RUST_LOG
-              value: info
+              value: "info"
 
           ports:
             - containerPort: 8080
 
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /health
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 5
 
           livenessProbe:
             httpGet:
-              path: /live
+              path: /health
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ledger-service
+  namespace: trade-platform
+spec:
+  type: ClusterIP
+  selector:
+    app: ledger-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
 

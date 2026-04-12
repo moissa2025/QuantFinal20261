@@ -14,16 +14,15 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SQLX_OFFLINE=true
+ENV SQLX_OFFLINE=false
 
 # Copy full workspace (Cargo workspace requires full structure)
-COPY backend ./backend
+COPY services ./services
 COPY Cargo.toml .
-COPY Cargo.lock .
+COPY libs ./libs
 COPY .sqlx ./.sqlx
 
 # Copy CockroachDB CA cert
-COPY root.crt /app/root.crt
 
 # Build only this service
 WORKDIR /app/backend/services/aml-monitoring-service
@@ -46,10 +45,7 @@ WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/target/release/aml-monitoring-service /app/aml-monitoring-service
 
-# Copy CockroachDB Cloud CA cert
-COPY --from=builder /app/root.crt /app/root.crt
 
-ENV SSL_CERT_FILE=/app/root.crt
 ENV RUST_LOG=info
 
 CMD ["/app/aml-monitoring-service"]

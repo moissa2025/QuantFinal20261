@@ -15,39 +15,10 @@ spec:
       labels:
         app: onboarding-service
     spec:
-      nodeSelector:
-        pool: core-services
       containers:
         - name: onboarding-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/onboarding-service:v0.0.1
-          imagePullPolicy: Always
-
-          env:
-            - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
-
-            - name: NATS_URL
-              value: "nats://nats:4222"
-
-            - name: RUST_LOG
-              value: info
-
-          ports:
-            - containerPort: 8080
-
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 5
-
-          livenessProbe:
-            httpGet:
-              path: /live
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
+          image: onboarding-service:v.0.0.1
+          imagePullPolicy: IfNotPresent
 
           resources:
             requests:
@@ -56,4 +27,54 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
+
+          # Load all shared platform variables
+          envFrom:
+            - configMapRef:
+                name: platform-config-identity
+
+          # Explicitly inject DATABASE_URL so SQLx can connect
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: platform-config-identity
+                  key: DATABASE_URL
+
+            - name: NATS_URL
+              value: "nats://nats:4222"
+
+            - name: RUST_LOG
+              value: "info"
+
+          ports:
+            - containerPort: 8080
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: onboarding-service
+  namespace: trading-platform
+spec:
+  type: ClusterIP
+  selector:
+    app: onboarding-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
 

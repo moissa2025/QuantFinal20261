@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cockroachdb-trade
+  namespace: trade-platform
+  labels:
+    app: cockroachdb-trade
+spec:
+  clusterIP: None
+  ports:
+    - port: 26257
+      name: grpc
+    - port: 8080
+      name: http
+  selector:
+    app: cockroachdb-trade
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cockroachdb-trade-public
+  namespace: trade-platform
+  labels:
+    app: cockroachdb-trade
+spec:
+  type: ClusterIP
+  ports:
+    - port: 26257
+      name: grpc
+    - port: 8080
+      name: http
+  selector:
+    app: cockroachdb-trade
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cockroachdb-trade
+  namespace: trade-platform
+  labels:
+    app: cockroachdb-trade
+spec:
+  serviceName: cockroachdb-trade
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cockroachdb-trade
+  template:
+    metadata:
+      labels:
+        app: cockroachdb-trade
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.1.11
+          args:
+            - start
+            - --insecure
+            - --advertise-host=$(HOSTNAME).cockroachdb-trade.trade-platform.svc.cluster.local
+            - --join=cockroachdb-trade-0.cockroachdb-trade.trade-platform.svc.cluster.local,cockroachdb-trade-1.cockroachdb-trade.trade-platform.svc.cluster.local,cockroachdb-trade-2.cockroachdb-trade.trade-platform.svc.cluster.local
+          ports:
+            - containerPort: 26257
+              name: grpc
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: data
+              mountPath: /cockroach/cockroach-data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+

@@ -17,18 +17,18 @@ spec:
     spec:
       containers:
         - name: aml-monitoring-service
-          image: europe-west2-docker.pkg.dev/globalquantx-prod/api/aml-monitoring-service:v0.0.1
-          imagePullPolicy: Always
+          image: aml-monitoring-service:latest
+          imagePullPolicy: IfNotPresent
+
+          envFrom:
+            - configMapRef:
+                name: platform-config
 
           env:
-            - name: DATABASE_URL
-              value: "postgresql://root@cockroachdb:26257/globalquantx?sslmode=disable"
-
             - name: NATS_URL
               value: "nats://nats:4222"
-
             - name: RUST_LOG
-              value: info
+              value: "info"
 
           ports:
             - containerPort: 8080
@@ -46,4 +46,18 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aml-monitoring-service
+  namespace: trading-platform
+spec:
+  type: ClusterIP
+  selector:
+    app: aml-monitoring-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
 
