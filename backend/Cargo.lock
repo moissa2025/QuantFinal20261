@@ -1661,17 +1661,18 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-nats 0.34.0",
- "axum 0.6.20",
+ "axum 0.7.9",
  "chrono",
  "common",
  "dotenvy",
  "futures-util",
- "http 0.2.12",
  "serde",
  "serde_json",
  "sqlx",
  "tokio",
- "tower-http 0.4.4",
+ "tower-http 0.5.2",
+ "tracing",
+ "tracing-subscriber",
  "uuid",
 ]
 

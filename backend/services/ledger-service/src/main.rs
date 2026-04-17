@@ -3,21 +3,26 @@ mod models;
 mod repository;
 mod nats_handlers;
 
-use crate::db::DbPool;
-use async_nats::{Client, connect};
-use db::init_db;
+use axum::{Router, routing::get, serve};
+use tower_http::cors::{Any, CorsLayer};
+use tracing_subscriber::EnvFilter;
 
-pub async fn start_nats_listeners(_nats: Client, _pool: DbPool) {
-    // TODO: wire up subscriptions to:
-    // - ensure_account::handle_ensure_account
-    // - get_balance::handle_get_balance
-    // - get_history::handle_get_history
-    // - record_journal::handle_record_journal
+use crate::db::{DbPool, init_db};
+use async_nats::connect;
+use tokio::net::TcpListener;
+
+// --- HEALTH HANDLER ---
+async fn health() -> &'static str {
+    "OK"
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
+
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::from_default_env())
+        .init();
 
     println!("ledger-service starting…");
 
@@ -32,10 +37,32 @@ async fn main() -> anyhow::Result<()> {
 
     let nats = connect(&nats_url).await?;
 
-    // Start NATS listeners
-    nats_handlers::start_nats_listeners(nats, pool).await;
+    // Start NATS listeners (non-blocking)
+    tokio::spawn({
+        let pool = pool.clone();
+        let nats = nats.clone();
+        async move {
+            nats_handlers::start_nats_listeners(nats, pool).await;
+        }
+    });
 
-    println!("ledger-service running with DB + NATS connectivity");
+    // Build Axum router
+    let app = Router::new()
+        .route("/health", get(health))
+        .with_state(pool.clone())
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods(Any)
+                .allow_headers(Any),
+        );
+
+    // Axum 0.7 server (Hyper under the hood)
+    let addr = "0.0.0.0:8080";
+    let listener = TcpListener::bind(addr).await?;
+    tracing::info!("🚀 ledger-service listening on {}", addr);
+
+    serve(listener, app).await?;
 
     Ok(())
 }

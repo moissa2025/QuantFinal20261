@@ -11,7 +11,7 @@ fi
 TAG=$1
 
 SERVICES=(
-  auth-service
+  ledger-service
 )
 
 echo "📥 Loading images into KIND cluster 'globalquantx'..."

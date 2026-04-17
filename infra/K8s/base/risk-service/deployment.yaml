@@ -17,8 +17,16 @@ spec:
     spec:
       containers:
         - name: risk-service
-          image: risk-service:v.0.0.1
+          image: risk-service:v0.0.3
           imagePullPolicy: IfNotPresent
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 
           envFrom:
             - configMapRef:

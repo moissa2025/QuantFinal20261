@@ -11,7 +11,7 @@ fi
 TAG=$1
 
 SERVICES=(
-  auth-service
+  ledger-service
 )
 
 echo "🐳 Building all service images locally..."

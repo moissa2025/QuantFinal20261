@@ -17,10 +17,8 @@ RUN apt-get update && apt-get install -y \
 ENV SQLX_OFFLINE=false
 
 # Copy full workspace (Cargo workspace requires full structure)
-# Copy full workspace (Cargo workspace requires full structure)
 COPY Cargo.toml Cargo.lock ./
 COPY services ./services
-# Copy CockroachDB CA cert
 COPY libs ./libs
 COPY .sqlx ./.sqlx
 
@@ -37,6 +35,8 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl-dev \
     libpq5 \
+    libnss-resolve \
+    libnss-myhostname \
     && update-ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -44,9 +44,6 @@ WORKDIR /app
 
 # Copy binary from builder
 COPY --from=builder /app/target/release/ledger-service /app/ledger-service
-
-
-ENV RUST_LOG=info
 
 CMD ["/app/ledger-service"]
 

@@ -10,6 +10,11 @@ mod db;
 use crate::state::AppState;
 use crate::db::init_db;
 
+// --- HEALTH HANDLER ---
+async fn health() -> &'static str {
+    "OK"
+}
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // Logging
@@ -27,8 +32,16 @@ async fn main() -> anyhow::Result<()> {
 
     // Build router
     let app = Router::new()
+        // Health endpoint (required for Kubernetes probes)
+        .route("/health", get(health))
+
+        // WebSocket endpoint
         .route("/ws/terminal", get(routes::ws::terminal_stream))
+
+        // Shared state
         .with_state(state)
+
+        // CORS
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)
@@ -36,7 +49,7 @@ async fn main() -> anyhow::Result<()> {
                 .allow_headers(Any),
         );
 
-    // Bind address (Axum 0.6)
+    // Bind address
     let addr = "0.0.0.0:8080".parse().unwrap();
     tracing::info!("🚀 trading-service listening on {}", addr);
 

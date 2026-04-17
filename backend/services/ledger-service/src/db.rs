@@ -14,22 +14,28 @@ pub async fn init_db() -> Result<DbPool, sqlx::Error> {
             .await;
     }
 
-    // 2. COCKROACHDB MODE (Kubernetes / Cloud)
+    // 2. COCKROACHDB MODE
     println!("📌 ledger-service: Using CockroachDB environment variables");
 
     let user = env::var("DB_USER").expect("DB_USER missing");
-    let pass = env::var("DB_PASSWORD").expect("DB_PASSWORD missing");
+    let pass = env::var("DB_PASSWORD").unwrap_or_default();
     let host = env::var("DB_HOST").unwrap_or_else(|_| "127.0.0.1".into());
     let port = env::var("DB_PORT").unwrap_or_else(|_| "26257".into());
     let name = env::var("DB_NAME").expect("DB_NAME missing");
+    let sslmode = env::var("DB_SSLMODE").unwrap_or_else(|_| "disable".into());
 
-    // Cockroach Cloud requires TLS unless overridden
-    let sslmode = env::var("DB_SSLMODE").unwrap_or_else(|_| "require".into());
-
-    let url = format!(
-        "postgres://{}:{}@{}:{}/{}?sslmode={}",
-        user, pass, host, port, name, sslmode
-    );
+    // Build URL correctly depending on password
+    let url = if pass.is_empty() {
+        format!(
+            "postgres://{}@{}:{}/{}?sslmode={}",
+            user, host, port, name, sslmode
+        )
+    } else {
+        format!(
+            "postgres://{}:{}@{}:{}/{}?sslmode={}",
+            user, pass, host, port, name, sslmode
+        )
+    };
 
     PgPoolOptions::new()
         .max_connections(10)
