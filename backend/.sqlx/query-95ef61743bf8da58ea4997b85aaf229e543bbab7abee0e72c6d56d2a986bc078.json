@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \n            qs.score,\n            qs.label,\n            qs.explanation\n        FROM intelligence.quant_scores qs\n        JOIN intelligence.assets a ON a.id = qs.asset_id\n        WHERE a.symbol = $1\n        ORDER BY qs.as_of DESC\n        LIMIT 1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "score",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 1,
+        "name": "label",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "explanation",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "95ef61743bf8da58ea4997b85aaf229e543bbab7abee0e72c6d56d2a986bc078"
+}

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: intelligence-service
-  namespace: trading-platform
+  namespace: compliance-platform
   labels:
     app: intelligence-service
 spec:
@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
         - name: intelligence-service
-          image: intelligence-service:latest
+          image: intelligence-service:v0.0.1
           imagePullPolicy: IfNotPresent
 
           envFrom:
             - configMapRef:
-                name: platform-config
+                name: platform-config-compliance
 
           env:
             - name: NATS_URL
@@ -35,23 +35,31 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /health
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 5
 
           livenessProbe:
             httpGet:
-              path: /live
+              path: /health
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: intelligence-service
-  namespace: trading-platform
+  namespace: compliance-platform
 spec:
   type: ClusterIP
   selector:

@@ -1,0 +1,179 @@
+-----------------------------------------
+-- SCHEMAS
+-----------------------------------------
+CREATE SCHEMA IF NOT EXISTS kyc;
+CREATE SCHEMA IF NOT EXISTS aml;
+CREATE SCHEMA IF NOT EXISTS intelligence;
+CREATE SCHEMA IF NOT EXISTS reconciliation;
+
+-----------------------------------------
+-- KYC DOMAIN
+-----------------------------------------
+
+-- KYC Records
+CREATE TABLE IF NOT EXISTS kyc.kyc_records (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    provider TEXT,
+    provider_reference TEXT,
+    risk_score INT DEFAULT 0,
+    rejection_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- KYC Documents
+CREATE TABLE IF NOT EXISTS kyc.kyc_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    kyc_id UUID NOT NULL REFERENCES kyc.kyc_records(id) ON DELETE CASCADE,
+    doc_type TEXT NOT NULL,
+    file_url TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'uploaded',
+    rejection_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- KYC Audit Log
+CREATE TABLE IF NOT EXISTS kyc.kyc_audit_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    kyc_id UUID NOT NULL REFERENCES kyc.kyc_records(id) ON DELETE CASCADE,
+    event TEXT NOT NULL,
+    metadata JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-----------------------------------------
+-- AML DOMAIN
+-----------------------------------------
+
+CREATE TABLE IF NOT EXISTS aml.aml_alerts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    alert_type TEXT NOT NULL,
+    risk_score INT NOT NULL,
+    description TEXT,
+    status TEXT NOT NULL DEFAULT 'open',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS aml.aml_sar_reports (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    alert_id UUID NOT NULL REFERENCES aml.aml_alerts(id),
+    narrative TEXT NOT NULL,
+    submitted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-----------------------------------------
+-- INTELLIGENCE DOMAIN
+-----------------------------------------
+
+-- Assets
+CREATE TABLE IF NOT EXISTS intelligence.assets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  symbol TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  asset_class TEXT NOT NULL,
+  exchange TEXT,
+  currency TEXT NOT NULL,
+  sector TEXT,
+  country TEXT,
+  status TEXT NOT NULL DEFAULT 'active'
+);
+
+-- Quotes
+CREATE TABLE IF NOT EXISTS intelligence.quotes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  asset_id UUID REFERENCES intelligence.assets(id),
+  ts TIMESTAMP NOT NULL,
+  price DOUBLE PRECISION NOT NULL,
+  change_abs DOUBLE PRECISION,
+  change_pct DOUBLE PRECISION,
+  volume DOUBLE PRECISION
+);
+
+-- News Items
+CREATE TABLE IF NOT EXISTS intelligence.news_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source TEXT,
+  source_id TEXT,
+  title TEXT,
+  body TEXT,
+  url TEXT,
+  published_at TIMESTAMP,
+  summary_ai TEXT,
+  sentiment TEXT,
+  tags_assets TEXT[],
+  tags_themes TEXT[]
+);
+
+-- Articles
+CREATE TABLE IF NOT EXISTS intelligence.articles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT,
+  body_html TEXT NOT NULL,
+  author TEXT,
+  published_at TIMESTAMP,
+  assets TEXT[],
+  themes TEXT[]
+);
+
+-- Themes
+CREATE TABLE IF NOT EXISTS intelligence.themes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT
+);
+
+-- Quant Scores
+CREATE TABLE IF NOT EXISTS intelligence.quant_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  asset_id UUID REFERENCES intelligence.assets(id),
+  as_of TIMESTAMP NOT NULL,
+  score DOUBLE PRECISION,
+  label TEXT,
+  explanation TEXT
+);
+
+-----------------------------------------
+-- RECONCILIATION DOMAIN
+-----------------------------------------
+
+CREATE TABLE IF NOT EXISTS reconciliation.reconciliation_runs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    run_type TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    error_message TEXT
+);
+
+CREATE TABLE IF NOT EXISTS reconciliation.reconciliation_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    run_id UUID NOT NULL REFERENCES reconciliation.reconciliation_runs(id) ON DELETE CASCADE,
+    source TEXT NOT NULL,
+    reference TEXT NOT NULL,
+    expected_amount NUMERIC,
+    actual_amount NUMERIC,
+    status TEXT NOT NULL DEFAULT 'mismatch',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_recon_items_run_id
+    ON reconciliation.reconciliation_items(run_id);
+
+CREATE TABLE IF NOT EXISTS reconciliation.reconciliation_audit_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    run_id UUID NOT NULL REFERENCES reconciliation.reconciliation_runs(id) ON DELETE CASCADE,
+    event TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_recon_audit_run_id
+    ON reconciliation.reconciliation_audit_log(run_id);
+

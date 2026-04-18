@@ -1,0 +1,59 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT id, title, summary_ai, sentiment, tags_assets, tags_themes, published_at\n        FROM intelligence.news_items\n        WHERE $1::TEXT = ANY(tags_assets)\n        ORDER BY published_at DESC\n        LIMIT $2::INT8\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "summary_ai",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "sentiment",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "tags_assets",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 5,
+        "name": "tags_themes",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 6,
+        "name": "published_at",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "6127a72e0a738d3ca9a5cdcd90d119ba2f2e8d45bc8e1ee2b207db1f21bd2813"
+}

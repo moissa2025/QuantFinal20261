@@ -16,6 +16,10 @@ mod engine;
 use crate::state::AppState;
 use crate::engine::aggregator::run_aggregator;
 
+async fn health() -> &'static str {
+    "OK"
+}
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -30,6 +34,7 @@ async fn main() {
     });
 
     let app = Router::new()
+        .route("/health", get(health))
         .route("/market-data/snapshot", get(routes::rest::market_snapshot))
         .route("/market-stream", get(routes::ws::market_stream))
         .with_state(state.clone())
@@ -40,7 +45,7 @@ async fn main() {
                 .allow_headers(Any),
         );
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8081));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     tracing::info!("market-data-service listening on {}", addr);
 
     let listener = TcpListener::bind(addr).await.unwrap();

@@ -4,47 +4,34 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# Workspace crate
 common = { path = "../../libs/common" }
 
-# Tokio + async
 tokio = { version = "1.36", features = ["full"] }
 futures-util = "0.3"
 
-# Axum + WebSockets
 axum = { version = "0.7", features = ["ws", "macros"] }
 hyper = { version = "1", features = ["full"] }
 tower = "0.4"
 tower-http = { version = "0.5", features = ["cors", "trace"] }
 
-# WebSocket clients
 tokio-tungstenite = "0.21"
 tungstenite = "0.21"
 
-# HTTP client
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 
-# Time
 chrono = { version = "0.4", features = ["serde"] }
 
-# NATS
 async-nats = "0.33"
 
-# Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
-# Logging
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
 
-# Crypto / hashing
 sha2 = "0.10"
-
-# FIX: avoid edition2024 crates
 base64ct = "=1.6.0"
 
-# Utilities
 uuid = { version = "1.7", features = ["v4", "serde"] }
 anyhow = "1.0"
 thiserror = "1.0"

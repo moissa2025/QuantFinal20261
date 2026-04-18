@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cockroachdb-compliance
+  namespace: compliance-platform
+  labels:
+    app: cockroachdb-compliance
+spec:
+  ports:
+    - port: 26257
+      name: grpc
+    - port: 8080
+      name: http
+  clusterIP: None
+  selector:
+    app: cockroachdb-compliance
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cockroachdb-compliance
+  namespace: compliance-platform
+spec:
+  serviceName: cockroachdb-compliance
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cockroachdb-compliance
+  template:
+    metadata:
+      labels:
+        app: cockroachdb-compliance
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.1.11
+          args:
+            - start-single-node
+            - --insecure
+            - --store=attrs=ssd,path=/cockroach/cockroach-data
+            - --http-port=8080
+          ports:
+            - containerPort: 26257
+              name: grpc
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: datadir
+              mountPath: /cockroach/cockroach-data
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+

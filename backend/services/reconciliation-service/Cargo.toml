@@ -28,6 +28,5 @@ features = [
     "uuid",
     "chrono",
     "macros",
-    
 ]
 

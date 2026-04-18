@@ -1,6 +1,12 @@
 mod db;
 
+use axum::{Router, routing::get};
+use std::net::SocketAddr;
 use db::init_db;
+
+async fn health() -> &'static str {
+    "OK"
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -10,7 +16,16 @@ async fn main() -> anyhow::Result<()> {
         .await
         .expect("Failed to initialize database");
 
-    println!("reconciliation-service running with DB connectivity");
+    let app = Router::new()
+        .route("/health", get(health))
+        .with_state(pool);
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
+    println!("reconciliation-service running on {}", addr);
+
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
 
     Ok(())
 }

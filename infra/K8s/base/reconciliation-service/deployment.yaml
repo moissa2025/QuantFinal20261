@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reconcilliation-service
-  namespace: trading-platform
+  name: reconciliation-service
+  namespace: compliance-platform
   labels:
-    app: reconcilliation-service
+    app: reconciliation-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: reconcilliation-service
+      app: reconciliation-service
   template:
     metadata:
       labels:
-        app: reconcilliation-service
+        app: reconciliation-service
     spec:
       containers:
-        - name: reconcilliation-service
-          image: reconcilliation-service:latest
+        - name: reconciliation-service
+          image: reconciliation-service:v0.0.1
           imagePullPolicy: IfNotPresent
 
           envFrom:
             - configMapRef:
-                name: platform-config
+                name: platform-config-compliance
 
           env:
             - name: NATS_URL
@@ -35,27 +35,35 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /health
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 5
 
           livenessProbe:
             httpGet:
-              path: /live
+              path: /health
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: reconcilliation-service
-  namespace: trading-platform
+  name: reconciliation-service
+  namespace: compliance-platform
 spec:
   type: ClusterIP
   selector:
-    app: reconcilliation-service
+    app: reconciliation-service
   ports:
     - name: http
       port: 8080
