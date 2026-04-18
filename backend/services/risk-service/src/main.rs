@@ -1,5 +1,5 @@
 use std::net::SocketAddr;
-use axum::{Router, routing::post};
+use axum::{Router, routing::{get, post}};
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::EnvFilter;
 
@@ -20,9 +20,10 @@ async fn main() -> anyhow::Result<()> {
         .await
         .expect("❌ Failed to initialize database");
 
-    // Build router with DB state
+    // Router with DB state
     let app = Router::new()
         .route("/risk/check", post(routes::check_risk))
+        .route("/health", get(|| async { "OK" }))
         .with_state(pool)
         .layer(
             CorsLayer::new()
@@ -32,7 +33,7 @@ async fn main() -> anyhow::Result<()> {
         );
 
     // Bind and serve (Axum 0.6)
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8083));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     tracing::info!("🚀 risk-service listening on {}", addr);
 
     axum::Server::bind(&addr)
