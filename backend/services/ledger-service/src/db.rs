@@ -6,13 +6,17 @@ pub type DbPool = Pool<Postgres>;
 
 pub async fn init_db() -> Result<DbPool, sqlx::Error> {
     // 1. LOCAL DEVELOPMENT OVERRIDE
-    if let Ok(url) = env::var("DATABASE_URL") {
+   if let Ok(url) = env::var("DATABASE_URL") {
+    if !url.trim().is_empty() {
         println!("📌 ledger-service: Using DATABASE_URL for local development");
         return PgPoolOptions::new()
             .max_connections(10)
             .connect(&url)
             .await;
     }
+}
+ 
+   
 
     // 2. COCKROACHDB MODE
     println!("📌 ledger-service: Using CockroachDB environment variables");

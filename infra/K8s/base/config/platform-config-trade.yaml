@@ -6,7 +6,7 @@ metadata:
 data:
   DB_USER: "gqx_trade"
   DB_PASSWORD: ""
-  DB_HOST: "cockroachdb-trade"
+  DB_HOST: "cockroachdb-trade-public.trade-platform.svc.cluster.local"
   DB_PORT: "26257"
   DB_SSLMODE: "disable"
   DB_NAME: "globalquantx_db_trade"
