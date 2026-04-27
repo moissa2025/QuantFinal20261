@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: ledger-service
   namespace: trading-platform
-  labels:
-    app: ledger-service
 spec:
   type: ClusterIP
   selector:

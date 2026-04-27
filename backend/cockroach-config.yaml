@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cockroach-config
+  namespace: trading-platform
+data:
+  DATABASE_HOST: cockroachdb-public.trading-platform.svc.cluster.local
+  DATABASE_PORT: "26258"
+  DATABASE_NAME: gqx_db
+

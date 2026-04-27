@@ -1,171 +1,109 @@
 use async_nats::{Client, Message};
-use chrono::Utc;
 use serde_json;
+use tracing::error;
+use sqlx::Row;
+use uuid::Uuid;
 
-use common::auth_messages::{AuthRefreshRequest, AuthRefreshResponse};
+use common::auth_messages::{
+    AuthRefreshRequest,
+    AuthRefreshResponse,
+};
 
 use crate::db::DbPool;
-use crate::session::create_session;
 use crate::crypto::refresh_token::{
     hash_refresh_token,
     decrypt_refresh_token,
     generate_refresh_token,
     encrypt_refresh_token,
 };
+use crate::session::create_session;
 
-//
-// Local helpers (refresh.rs needs its own respond_raw/respond_json)
-//
-async fn respond_raw(nats: &Client, msg: &Message, bytes: &[u8]) {
-    if let Some(reply) = msg.reply.clone() {
-        let _ = nats.publish(reply, bytes.to_vec().into()).await;
-    }
-}
-
-async fn respond_json<T: serde::Serialize>(nats: &Client, msg: &Message, value: &T) {
-    if let Some(reply) = msg.reply.clone() {
-        let payload = serde_json::to_vec(value).unwrap();
-        let _ = nats.publish(reply, payload.into()).await;
-    }
-}
-
-//
-// REFRESH HANDLER
-//
 pub async fn handle_refresh(pool: DbPool, nats: Client, msg: Message) {
-    //
-    // 1. Parse request
-    //
     let req: AuthRefreshRequest = match serde_json::from_slice(&msg.payload) {
         Ok(r) => r,
-        Err(_) => {
-            respond_raw(&nats, &msg, b"invalid request").await;
+        Err(e) => {
+            error!("refresh: invalid payload: {}", e);
             return;
         }
     };
 
-    //
-    // 2. Hash incoming refresh token
-    //
     let incoming_hash = hash_refresh_token(&req.refresh_token);
 
-    //
-    // 3. Lookup refresh token record
-    //
-    let rec = match sqlx::query!(
+    let row = match sqlx::query(
         r#"
         SELECT id, user_id, expires_at, revoked, ciphertext, nonce
         FROM auth.refresh_tokens
         WHERE token_hash = $1
-        "#,
-        incoming_hash
+        "#
     )
+    .bind(&incoming_hash)
     .fetch_optional(&pool)
     .await
     {
         Ok(Some(r)) => r,
-        _ => {
-            respond_raw(&nats, &msg, b"unauthorized").await;
-            return;
-        }
+        _ => return,
     };
 
-    //
-    // 4. Check expiry + revocation
-    //
-    if rec.revoked || rec.expires_at < Utc::now() {
-        respond_raw(&nats, &msg, b"unauthorized").await;
+    let token_id: Uuid = row.get("id");
+    let user_id: Uuid = row.get("user_id");
+    let expires_at: chrono::DateTime<chrono::Utc> = row.get("expires_at");
+    let revoked: bool = row.get("revoked");
+    let ciphertext: Vec<u8> = row.get("ciphertext");
+    let nonce: Vec<u8> = row.get("nonce");
+
+    if revoked || expires_at < chrono::Utc::now() {
         return;
     }
 
-    //
-    // 5. Decrypt stored ciphertext and verify plaintext matches
-    //
-    let decrypted = match decrypt_refresh_token(&rec.ciphertext, &rec.nonce) {
-        Ok(p) => p,
-        Err(_) => {
-            respond_raw(&nats, &msg, b"unauthorized").await;
-            return;
-        }
-    };
-
+    let decrypted = decrypt_refresh_token(&ciphertext, &nonce).unwrap();
     if decrypted != req.refresh_token {
-        respond_raw(&nats, &msg, b"unauthorized").await;
         return;
     }
 
-    //
-    // 6. Revoke old refresh token
-    //
-    let _ = sqlx::query!(
-        r#"UPDATE auth.refresh_tokens SET revoked = true WHERE id = $1"#,
-        rec.id
+    // Revoke old token
+    let _ = sqlx::query(
+        r#"UPDATE auth.refresh_tokens SET revoked = true WHERE id = $1"#
     )
+    .bind(token_id)
     .execute(&pool)
     .await;
 
-    //
-    // 7. Generate + encrypt new refresh token
-    //
+    // Create new refresh token
     let new_plain = generate_refresh_token();
     let new_hash = hash_refresh_token(&new_plain);
+    let (new_ciphertext, new_nonce) = encrypt_refresh_token(&new_plain).unwrap();
+    let new_expires_at = chrono::Utc::now() + chrono::Duration::days(30);
 
-    let (new_ciphertext, new_nonce) = match encrypt_refresh_token(&new_plain) {
-        Ok(v) => v,
-        Err(_) => {
-            respond_raw(&nats, &msg, b"error").await;
-            return;
-        }
-    };
-
-    let expires_at = Utc::now() + chrono::Duration::days(30);
-    let new_id = uuid::Uuid::new_v4();
-
-    let _ = sqlx::query!(
+    sqlx::query(
         r#"
-        INSERT INTO auth.refresh_tokens (
-            id, user_id, token_hash, ciphertext, nonce, expires_at, revoked, replaced_by
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, false, NULL)
-        "#,
-        new_id,
-        rec.user_id,
-        new_hash,
-        new_ciphertext,
-        new_nonce,
-        expires_at
+        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        VALUES ($1, $2, $3, $4, $5, $6, false)
+        "#
     )
+    .bind(Uuid::new_v4())
+    .bind(user_id)
+    .bind(&new_hash)
+    .bind(&new_ciphertext)
+    .bind(&new_nonce)
+    .bind(new_expires_at)
     .execute(&pool)
-    .await;
-
-    //
-    // 8. Create new session
-    //
-    let session = match create_session(
-        &pool,
-        rec.user_id,
-        req.ip_address.clone(),
-        req.user_agent.clone(),
-    )
     .await
-    {
-        Ok(s) => s,
-        Err(_) => {
-            respond_raw(&nats, &msg, b"error").await;
-            return;
-        }
-    };
+    .ok();
 
-    //
-    // 9. Respond with new session + refresh token
-    //
-    let res = AuthRefreshResponse {
-        user_id: rec.user_id.to_string(),
+    // Create new session
+    let session = create_session(&pool, user_id, req.ip_address.clone(), None)
+        .await
+        .unwrap();
+
+    let resp = AuthRefreshResponse {
+        user_id: user_id.to_string(),
         session_token: session.session_token,
         refresh_token: new_plain,
         ttl_seconds: 3600,
     };
 
-    respond_json(&nats, &msg, &res).await;
+    if let Some(reply) = msg.reply {
+        let _ = nats.publish(reply, serde_json::to_vec(&resp).unwrap().into()).await;
+    }
 }
 

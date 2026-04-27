@@ -30,8 +30,8 @@ async fn health() -> Json<serde_json::Value> {
 // ----------------------
 async fn ready(State(state): State<AppState>) -> Json<serde_json::Value> {
     // 1. Check DB
-    if let Err(e) = sqlx::query("SELECT 1").execute(&state.db).await {
-        return Json(json!({
+        if let Err(e) = sqlx::query("SELECT 1 as one").execute(&state.db).await {
+         return Json(json!({
             "status": "error",
             "db": e.to_string()
         }));

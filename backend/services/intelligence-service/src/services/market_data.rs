@@ -1,6 +1,6 @@
-use sqlx::PgPool;
+use sqlx::{PgPool, Row};
 use crate::dto::{AssetDto, MarketAsset, MarketSnapshot, QuoteDto};
-use crate::nats_client::NatsClient; // FIXED: correct import
+use crate::nats_client::NatsClient;
 
 //
 // ─────────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ pub async fn get_quote_via_nats(nats: &NatsClient, symbol: &str) -> anyhow::Resu
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_market_snapshot(pool: &PgPool) -> sqlx::Result<MarketSnapshot> {
-    let rows = sqlx::query!(
+    let rows = sqlx::query(
         r#"
         SELECT 
             a.symbol,
@@ -42,18 +42,24 @@ pub async fn get_market_snapshot(pool: &PgPool) -> sqlx::Result<MarketSnapshot> 
     .fetch_all(pool)
     .await?;
 
-    Ok(MarketSnapshot {
-        top_movers: rows
-            .into_iter()
-            .map(|r| MarketAsset {
-                symbol: r.symbol,
-                price: r.price,
-                change_pct: Some(r.change_pct.unwrap_or(0.0)), // FIXED
-                quant_score: Some(r.quant_score.unwrap_or(0.0)),
+    let top_movers = rows
+        .into_iter()
+        .map(|row| {
+            let symbol: String = row.get("symbol");
+            let price: f64 = row.get("price");
+            let change_pct: Option<f64> = row.get("change_pct");
+            let quant_score: Option<f64> = row.get("quant_score");
 
-  		})
-            .collect(),
-    })
+            MarketAsset {
+                symbol,
+                price,
+                change_pct: Some(change_pct.unwrap_or(0.0)),
+                quant_score: Some(quant_score.unwrap_or(0.0)),
+            }
+        })
+        .collect();
+
+    Ok(MarketSnapshot { top_movers })
 }
 
 //
@@ -62,23 +68,31 @@ pub async fn get_market_snapshot(pool: &PgPool) -> sqlx::Result<MarketSnapshot> 
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_asset(pool: &PgPool, symbol: &str) -> sqlx::Result<Option<AssetDto>> {
-    let row = sqlx::query!(
+    let row = sqlx::query(
         r#"
         SELECT symbol, name, asset_class, exchange, currency
         FROM intelligence.assets
         WHERE symbol = $1
-        "#,
-        symbol
+        "#
     )
+    .bind(symbol)
     .fetch_optional(pool)
     .await?;
 
-    Ok(row.map(|r| AssetDto {
-        symbol: r.symbol,
-        name: r.name,
-        asset_class: r.asset_class,
-        exchange: r.exchange,
-        currency: r.currency,
+    Ok(row.map(|row| {
+        let symbol: String = row.get("symbol");
+        let name: String = row.get("name");
+        let asset_class: String = row.get("asset_class");
+        let exchange: Option<String> = row.get("exchange");
+        let currency: String = row.get("currency");
+
+        AssetDto {
+            symbol,
+            name,
+            asset_class,
+            exchange,
+            currency,
+        }
     }))
 }
 
@@ -88,7 +102,7 @@ pub async fn get_asset(pool: &PgPool, symbol: &str) -> sqlx::Result<Option<Asset
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_latest_quote(pool: &PgPool, symbol: &str) -> sqlx::Result<Option<QuoteDto>> {
-    let row = sqlx::query!(
+    let row = sqlx::query(
         r#"
         SELECT q.price, q.change_abs, q.change_pct
         FROM intelligence.quotes q
@@ -96,16 +110,22 @@ pub async fn get_latest_quote(pool: &PgPool, symbol: &str) -> sqlx::Result<Optio
         WHERE a.symbol = $1
         ORDER BY q.ts DESC
         LIMIT 1
-        "#,
-        symbol
+        "#
     )
+    .bind(symbol)
     .fetch_optional(pool)
     .await?;
 
-    Ok(row.map(|r| QuoteDto {
-        price: r.price,
-        change_abs: r.change_abs.unwrap_or(0.0), // FIXED
-        change_pct: r.change_pct.unwrap_or(0.0), // FIXED
+    Ok(row.map(|row| {
+        let price: f64 = row.get("price");
+        let change_abs: Option<f64> = row.get("change_abs");
+        let change_pct: Option<f64> = row.get("change_pct");
+
+        QuoteDto {
+            price,
+            change_abs: change_abs.unwrap_or(0.0),
+            change_pct: change_pct.unwrap_or(0.0),
+        }
     }))
 }
 
@@ -115,38 +135,47 @@ pub async fn get_latest_quote(pool: &PgPool, symbol: &str) -> sqlx::Result<Optio
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_assets_by_theme(pool: &PgPool, slug: &str) -> sqlx::Result<Vec<MarketAsset>> {
-let rows = sqlx::query!(
-    r#"
-    SELECT 
-        a.symbol,
-        q.price,
-        q.change_pct,
-        qs.score AS quant_score
-    FROM intelligence.themes t
-    JOIN intelligence.theme_assets ta 
-        ON ta.theme_slug = t.slug
-    JOIN intelligence.assets a 
-        ON a.symbol = ta.asset_symbol
-    JOIN intelligence.quotes q 
-        ON q.asset_id = a.id
-    LEFT JOIN intelligence.quant_scores qs 
-        ON qs.asset_id = a.id
-    WHERE t.slug = $1
-    ORDER BY q.change_pct DESC
-    "#,
-    slug
-)
-.fetch_all(pool)
-.await?;
+    let rows = sqlx::query(
+        r#"
+        SELECT 
+            a.symbol,
+            q.price,
+            q.change_pct,
+            qs.score AS quant_score
+        FROM intelligence.themes t
+        JOIN intelligence.theme_assets ta 
+            ON ta.theme_slug = t.slug
+        JOIN intelligence.assets a 
+            ON a.symbol = ta.asset_symbol
+        JOIN intelligence.quotes q 
+            ON q.asset_id = a.id
+        LEFT JOIN intelligence.quant_scores qs 
+            ON qs.asset_id = a.id
+        WHERE t.slug = $1
+        ORDER BY q.change_pct DESC
+        "#
+    )
+    .bind(slug)
+    .fetch_all(pool)
+    .await?;
 
-    Ok(rows
+    let assets = rows
         .into_iter()
-        .map(|r| MarketAsset {
-            symbol: r.symbol,
-            price: r.price,
-            change_pct: Some(r.change_pct.unwrap_or(0.0)), // FIXED
-            quant_score: Some(r.quant_score.unwrap_or(0.0)), // FIXED
+        .map(|row| {
+            let symbol: String = row.get("symbol");
+            let price: f64 = row.get("price");
+            let change_pct: Option<f64> = row.get("change_pct");
+            let quant_score: Option<f64> = row.get("quant_score");
+
+            MarketAsset {
+                symbol,
+                price,
+                change_pct: Some(change_pct.unwrap_or(0.0)),
+                quant_score: Some(quant_score.unwrap_or(0.0)),
+            }
         })
-        .collect())
+        .collect();
+
+    Ok(assets)
 }
 

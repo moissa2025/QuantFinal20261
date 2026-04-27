@@ -1,6 +1,6 @@
-use sqlx::PgPool;
+use sqlx::{PgPool, Row};
 use crate::dto::QuantDto;
-use crate::nats_client::NatsClient; // FIXED IMPORT
+use crate::nats_client::NatsClient;
 
 //
 // ─────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ pub async fn get_quant_via_nats(nats: &NatsClient, symbol: &str) -> anyhow::Resu
 // ─────────────────────────────────────────────────────────────
 //
 pub async fn get_latest_score(pool: &PgPool, symbol: &str) -> sqlx::Result<Option<QuantDto>> {
-    let row = sqlx::query!(
+    let row = sqlx::query(
         r#"
         SELECT 
             qs.score,
@@ -30,16 +30,22 @@ pub async fn get_latest_score(pool: &PgPool, symbol: &str) -> sqlx::Result<Optio
         WHERE a.symbol = $1
         ORDER BY qs.as_of DESC
         LIMIT 1
-        "#,
-        symbol
+        "#
     )
+    .bind(symbol)
     .fetch_optional(pool)
     .await?;
 
-    Ok(row.map(|r| QuantDto {
-        score: r.score.unwrap_or(0.0),               // FIXED
-        label: r.label.unwrap_or_default(),          // FIXED
-        explanation: r.explanation.unwrap_or_default(), // FIXED
+    Ok(row.map(|row| {
+        let score: Option<f64> = row.get("score");
+        let label: Option<String> = row.get("label");
+        let explanation: Option<String> = row.get("explanation");
+
+        QuantDto {
+            score: score.unwrap_or(0.0),
+            label: label.unwrap_or_default(),
+            explanation: explanation.unwrap_or_default(),
+        }
     }))
 }
 

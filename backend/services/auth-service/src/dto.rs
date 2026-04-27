@@ -1,5 +1,46 @@
 use serde::{Deserialize, Serialize};
 
+pub struct AuthValidateSessionResponse {
+    pub user_id: String,
+    pub session_id: String,
+    pub valid: bool,
+}
+
+#[derive(Deserialize)]
+pub struct ActivateRequest {
+    pub token: String,
+}
+
+#[derive(Serialize)]
+pub struct ActivateResponse {
+    pub ok: bool,
+}
+
+#[derive(Deserialize)]
+pub struct VerifyMfaRequest {
+    pub method: String, // "email" or "totp"
+    pub code: String,
+    pub user_id: String,
+}
+
+#[derive(Serialize)]
+pub struct VerifyMfaResponse {
+    pub access_token: String,
+    pub refresh_token: String,
+    pub expires_in: i64,
+}
+
+#[derive(Deserialize)]
+pub struct SetupTotpRequest {
+    pub user_id: String,
+}
+
+#[derive(Serialize)]
+pub struct SetupTotpResponse {
+    pub qr_code: Vec<u8>, // was String
+    pub secret: String,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct LoginRequest {
     pub email: String,

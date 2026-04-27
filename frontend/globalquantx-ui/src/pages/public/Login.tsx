@@ -1,9 +1,15 @@
+// pages/public/Login.tsx
 import React, { useEffect, useState } from "react";
 import "./login.css";
 import { setTheme } from "../../theme.js";
+import { login } from "../../api/authClient";
 
 export default function Login() {
   const [themeState, setThemeState] = useState("dark");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     document.body.classList.add("login-page");
@@ -22,54 +28,83 @@ export default function Login() {
     setThemeState(next);
   }
 
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await login(email, password);
+
+      if (res.mfa_required) {
+        sessionStorage.setItem("gqx_pending_email", email);
+        window.location.href = "/public/mfa";
+        return;
+      }
+
+      if (res.session_token) {
+        window.location.href = "/app/dashboard";
+        return;
+      }
+
+      setError("Unexpected response from server.");
+    } catch (err: any) {
+      setError(err.message || "Sign in failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className={`gqx-login-shell ${themeState}`}>
-
-      {/* Futuristic animated background */}
       <div className="gqx-login-bg-layer"></div>
       <div className="gqx-login-grid"></div>
       <div className="gqx-login-particles"></div>
 
-      {/* Theme toggle */}
       <button className="gqx-login-theme-toggle" onClick={toggleTheme}>
         {themeState === "dark" ? "☀️" : "🌙"}
       </button>
 
-      {/* Centered login card */}
       <div className="gqx-login-card">
         <h1>Sign in to GlobalQuantX</h1>
         <p className="gqx-login-subtitle">
           Secure access to the institutional trading and risk platform.
         </p>
 
-        <form className="gqx-login-form">
+        <form className="gqx-login-form" onSubmit={submit}>
           <label>Email</label>
-          <input type="email" placeholder="you@institution.com" />
+          <input
+            type="email"
+            placeholder="you@institution.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
           <label>Password</label>
-          <input type="password" placeholder="••••••••" />
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
           <div className="gqx-login-meta">
-            <a href="#">Forgot password?</a>
+            <a href="/public/reset-request">Forgot password?</a>
             <span>MFA enforced</span>
           </div>
 
-          <button type="submit" className="gqx-login-btn">
-            Sign In
+          {error && <div className="gqx-login-error">{error}</div>}
+
+          <button type="submit" className="gqx-login-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         <div className="gqx-login-footer">
-          New to GlobalQuantX? <a href="#">Request Institutional Access</a>
+          New to GlobalQuantX?{" "}
+          <a href="/register/Signup">Request Institutional Access</a>
         </div>
-
-        {/* Institutional Risk Disclosure */}
-        <div className="gqx-login-risk">
-          <strong>Risk Disclosure:</strong> Trading in digital assets, FX, equities, and derivatives involves significant risk and may not be suitable for all investors. Prices can be highly volatile and may move sharply in short periods of time. Digital asset investments are not protected by the Financial Ombudsman Service and are not covered by the Financial Services Compensation Scheme. Leveraged products carry a high risk of rapid loss. Ensure you fully understand the risks and tax implications before trading.
-        </div>
-
       </div>
-
     </div>
   );
 }

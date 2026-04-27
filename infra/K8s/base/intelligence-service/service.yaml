@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: intelligence-service
   namespace: trading-platform
-  labels:
-    app: intelligence-service
 spec:
   type: ClusterIP
   selector:

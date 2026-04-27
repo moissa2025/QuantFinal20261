@@ -1,36 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: risk-service
-  namespace: trade-platform
+  name: wallet-service
+  namespace: trading-platform
   labels:
-    app: risk-service
+    app: wallet-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: risk-service
+      app: wallet-service
   template:
     metadata:
       labels:
-        app: risk-service
+        app: wallet-service
     spec:
       containers:
-        - name: risk-service
-          image: risk-service:v0.1.1
+        - name: wallet-service
+          image: wallet-service:v0.0.1
           imagePullPolicy: IfNotPresent
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
-              cpu: "500m"
-              memory: "1Gi"
 
           envFrom:
             - configMapRef:
-                name: platform-config-trade
+                name: platform-config
 
           env:
             - name: NATS_URL
@@ -40,32 +32,4 @@ spec:
 
           ports:
             - containerPort: 8080
-
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 5
-
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: risk-service
-  namespace: trade-platform
-spec:
-  type: ClusterIP
-  selector:
-    app: risk-service
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
 

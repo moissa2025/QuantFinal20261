@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ledger-service
-  namespace: trade-platform
+  namespace: trading-platform
   labels:
     app: ledger-service
 spec:
@@ -17,20 +17,12 @@ spec:
     spec:
       containers:
         - name: ledger-service
-          image: ledger-service:v0.1.0
+          image: ledger-service:v0.0.1
           imagePullPolicy: IfNotPresent
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "512Mi"
-            limits:
-              cpu: "500m"
-              memory: "1Gi"
 
           envFrom:
             - configMapRef:
-                name: platform-config-trade
+                name: platform-config
 
           env:
             - name: NATS_URL
@@ -40,18 +32,4 @@ spec:
 
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ledger-service
-  namespace: trade-platform
-spec:
-  type: ClusterIP
-  selector:
-    app: ledger-service
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
 

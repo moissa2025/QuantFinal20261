@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: trading-platform
+  labels:
+    app: auth-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: auth-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+
+          env:
+            # CockroachDB ConfigMap
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: cockroach-config
+                  key: DATABASE_HOST
+
+            - name: DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: cockroach-config
+                  key: DATABASE_PORT
+
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: cockroach-config
+                  key: DATABASE_NAME
+
+            # CockroachDB Secret
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cockroach-secret
+                  key: DATABASE_USER
+
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cockroach-secret
+                  key: DATABASE_PASSWORD
+
+            # Final assembled DATABASE_URL
+            - name: DATABASE_URL
+              value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable"
+
+            # NATS URL
+            - name: NATS_URL
+              value: "nats://nats.trading-platform.svc.cluster.local:4222"
+
+            - name: RUST_LOG
+              value: "info"
+

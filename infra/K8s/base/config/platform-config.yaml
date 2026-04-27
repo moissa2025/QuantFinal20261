@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-config
+  namespace: trading-platform
+data:
+  DB_USER: "gqx_user"
+  DB_PASSWORD: ""
+  DB_HOST: "cockroachdb-public.trading-platform.svc.cluster.local"
+  DB_PORT: "26257"
+  DB_SSLMODE: "disable"
+  DB_NAME: "gqx_db"
+  DATABASE_URL: "postgresql://gqx_user@cockroachdb-public.trading-platform.svc.cluster.local:26257/gqx_db?sslmode=disable"
+

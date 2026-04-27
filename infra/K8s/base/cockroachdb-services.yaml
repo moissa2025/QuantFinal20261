@@ -10,8 +10,8 @@ spec:
   ports:
     - port: 26257
       name: grpc
-    - port: 8080
-      name: http
+    - port: 26258
+      name: sql
   selector:
     app: cockroachdb
 ---
@@ -27,8 +27,8 @@ spec:
   ports:
     - port: 26257
       name: grpc
-    - port: 8080
-      name: http
+    - port: 26258
+      name: sql
   selector:
     app: cockroachdb
 

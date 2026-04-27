@@ -286,4 +286,71 @@ CREATE TABLE IF NOT EXISTS api.api_keys (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     last_used TIMESTAMPTZ
 );
+  0001_auth_users.sql: |
+    CREATE SCHEMA IF NOT EXISTS auth;
+
+    CREATE TABLE IF NOT EXISTS auth.users (
+        id UUID PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        roles TEXT[] DEFAULT '{}',
+        disabled BOOLEAN DEFAULT false
+    );
+
+  0002_credentials.sql: |
+    CREATE TABLE IF NOT EXISTS auth.credentials (
+        user_id UUID PRIMARY KEY,
+        password_hash TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
+
+  0003_sessions.sql: |
+    CREATE TABLE IF NOT EXISTS auth.sessions (
+        id UUID PRIMARY KEY,
+        user_id UUID NOT NULL,
+        session_token TEXT NOT NULL,
+        ip TEXT,
+        device_ua_hash TEXT,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        last_activity_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        expires_at TIMESTAMPTZ NOT NULL,
+        revoked BOOLEAN NOT NULL DEFAULT false,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
+
+  0004_email_otp.sql: |
+    CREATE TABLE IF NOT EXISTS auth.email_otp (
+        user_id UUID PRIMARY KEY,
+        code TEXT NOT NULL,
+        expires_at TIMESTAMPTZ NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
+
+  0005_totp.sql: |
+    CREATE TABLE IF NOT EXISTS auth.totp (
+        user_id UUID PRIMARY KEY,
+        secret TEXT NOT NULL,
+        enabled BOOLEAN NOT NULL DEFAULT false,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
+
+  0006_refresh_tokens.sql: |
+    CREATE TABLE IF NOT EXISTS auth.refresh_tokens (
+        id UUID PRIMARY KEY,
+        user_id UUID NOT NULL,
+        token_hash TEXT NOT NULL,
+        ciphertext BYTEA NOT NULL,
+        nonce BYTEA NOT NULL,
+        expires_at TIMESTAMPTZ NOT NULL,
+        revoked BOOLEAN NOT NULL DEFAULT false,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
+
+  0007_activation_tokens.sql: |
+    CREATE TABLE IF NOT EXISTS auth.activation_tokens (
+        user_id UUID PRIMARY KEY,
+        token TEXT NOT NULL,
+        expires_at TIMESTAMPTZ NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES auth.users(id)
+    );
 

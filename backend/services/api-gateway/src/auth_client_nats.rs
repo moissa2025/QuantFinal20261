@@ -1,11 +1,27 @@
 use crate::nats_client::{NatsClient, NatsError};
 use common::auth_messages::{
+    // LOGIN
     AuthLoginRequest,
     AuthLoginResponse,
+
+    // REFRESH
     AuthRefreshRequest,
     AuthRefreshResponse,
+
+    // LOGOUT
+    AuthLogoutRequest,
+
+    // VALIDATE SESSION
     AuthValidateSessionRequest,
     AuthValidateSessionResponse,
+
+    // MFA VERIFY
+    AuthMfaVerifyRequest,
+    AuthMfaVerifyResponse,
+
+    // MFA SETUP (TOTP)
+    AuthMfaSetupRequest,
+    AuthMfaSetupResponse,
 };
 
 #[derive(Clone)]
@@ -18,6 +34,9 @@ impl AuthNatsClient {
         Self { nats }
     }
 
+    //
+    // LOGIN
+    //
     pub async fn login(
         &self,
         email: String,
@@ -28,11 +47,14 @@ impl AuthNatsClient {
             password,
             ip_address: Some("0.0.0.0".to_string()),
             user_agent: Some("api-gateway".to_string()),
-
         };
-        self.nats.rpc("auth.refresh.request", &req).await
+
+        self.nats.rpc("auth.login.request", &req).await
     }
 
+    //
+    // VALIDATE SESSION
+    //
     pub async fn validate_session(
         &self,
         session_token: String,
@@ -41,14 +63,44 @@ impl AuthNatsClient {
             session_token,
             ip_address: Some("0.0.0.0".to_string()),
             user_agent: Some("api-gateway".to_string()),
-
         };
+
         self.nats.rpc("auth.validate_session.request", &req).await
     }
 
-    pub async fn logout(&self, _session_token: String) -> Result<(), NatsError> {
-        // TODO: implement logout RPC
+    //
+    // LOGOUT
+    //
+    pub async fn logout(
+        &self,
+        session_token: String,
+    ) -> Result<(), NatsError> {
+        let req = AuthLogoutRequest { session_token };
+
+        // Rust 2024 requires explicit response type
+        self.nats.rpc::<_, ()>("auth.logout.request", &req).await?;
+
         Ok(())
+    }
+
+    //
+    // MFA VERIFY
+    //
+    pub async fn verify_mfa(
+        &self,
+        req: AuthMfaVerifyRequest,
+    ) -> Result<AuthMfaVerifyResponse, NatsError> {
+        self.nats.rpc("auth.mfa.verify.request", &req).await
+    }
+
+    //
+    // MFA SETUP (TOTP)
+    //
+    pub async fn setup_totp(
+        &self,
+        req: AuthMfaSetupRequest,
+    ) -> Result<AuthMfaSetupResponse, NatsError> {
+        self.nats.rpc("auth.mfa.setup.request", &req).await
     }
 }
 

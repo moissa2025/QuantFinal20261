@@ -1,8 +1,9 @@
-use sqlx::PgPool;
+use sqlx::{PgPool, Row};
 use crate::dto::ArticleResponse;
+use chrono::NaiveDateTime;
 
 pub async fn get_article(pool: &PgPool, slug: &str) -> sqlx::Result<Option<ArticleResponse>> {
-    let row = sqlx::query!(
+    let row = sqlx::query(
         r#"
         SELECT 
             title,
@@ -14,22 +15,30 @@ pub async fn get_article(pool: &PgPool, slug: &str) -> sqlx::Result<Option<Artic
             themes
         FROM intelligence.articles
         WHERE slug = $1
-        "#,
-        slug
+        "#
     )
+    .bind(slug)
     .fetch_optional(pool)
     .await?;
 
-    Ok(row.map(|r| ArticleResponse {
-        title: r.title,                               // NOT optional
-        summary: r.summary,                           // Option<String>
-        body_html: r.body_html,                       // NOT optional
-        author: r.author.unwrap_or_default(),         // FIXED
-        published_at: r
-            .published_at
-            .map(|ts| ts.to_string())
-            .unwrap_or_default(),
-        assets: r.assets.unwrap_or_default(),         // Option<Vec<String>>
+    Ok(row.map(|row| {
+        let title: String = row.get("title");
+        let summary: Option<String> = row.get("summary");
+        let body_html: String = row.get("body_html");
+        let author: Option<String> = row.get("author");
+        let published_at: Option<NaiveDateTime> = row.get("published_at");
+        let assets: Option<Vec<String>> = row.get("assets");
+
+        ArticleResponse {
+            title,
+            summary,
+            body_html,
+            author: author.unwrap_or_default(),
+            published_at: published_at
+                .map(|ts| ts.to_string())
+                .unwrap_or_default(),
+            assets: assets.unwrap_or_default(),
+        }
     }))
 }
 

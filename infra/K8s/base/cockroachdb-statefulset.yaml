@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cockroachdb
+  namespace: trading-platform
+  labels:
+    app: cockroachdb
+spec:
+  serviceName: cockroachdb
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cockroachdb
+  template:
+    metadata:
+      labels:
+        app: cockroachdb
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.2.5
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/cockroach/cockroach"
+          args:
+            - "start"
+            - "--insecure"
+            - "--advertise-host=$(HOSTNAME).cockroachdb"
+            - "--join=cockroachdb-0.cockroachdb,cockroachdb-1.cockroachdb,cockroachdb-2.cockroachdb"
+            - "--listen-addr=0.0.0.0:26257"
+            - "--sql-addr=0.0.0.0:26258"
+            - "--cache=25%"
+            - "--max-sql-memory=25%"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          ports:
+            - containerPort: 26257
+              name: grpc
+            - containerPort: 26258
+              name: sql
+          volumeMounts:
+            - name: datadir
+              mountPath: /cockroach/cockroach-data
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+

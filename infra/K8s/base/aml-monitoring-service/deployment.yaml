@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aml-monitoring-service
-  namespace: compliance-platform
+  namespace: trading-platform
   labels:
     app: aml-monitoring-service
 spec:
@@ -22,11 +22,11 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: platform-config-compliance
+                name: platform-config
 
           env:
             - name: NATS_URL
-              value: "nats://nats:4222"
+              value: "nats://nats.trading-platform.svc.cluster.local:4222"
             - name: RUST_LOG
               value: "info"
 
@@ -54,18 +54,4 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: aml-monitoring-service
-  namespace: compliance-platform
-spec:
-  type: ClusterIP
-  selector:
-    app: aml-monitoring-service
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
 

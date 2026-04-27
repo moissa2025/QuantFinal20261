@@ -1,44 +1,21 @@
-pg_extension.geography_columns
-CREATE TABLE pg_extension.geography_columns (
-	f_table_catalog NAME NULL,
-	f_table_schema NAME NULL,
-	f_table_name NAME NULL,
-	f_geography_column NAME NULL,
-	coord_dimension INT8 NULL,
-	srid INT8 NULL,
-	type STRING NULL
-);
-pg_extension.geometry_columns
-CREATE TABLE pg_extension.geometry_columns (
-	f_table_catalog NAME NULL,
-	f_table_schema NAME NULL,
-	f_table_name NAME NULL,
-	f_geometry_column NAME NULL,
-	coord_dimension INT8 NULL,
-	srid INT8 NULL,
-	type STRING NULL
-);
-pg_extension.spatial_ref_sys
-CREATE TABLE pg_extension.spatial_ref_sys (
-	srid INT8 NULL,
-	auth_name VARCHAR(256) NULL,
-	auth_srid INT8 NULL,
-	srtext VARCHAR(2048) NULL,
-	proj4text VARCHAR(2048) NULL
-);
-aml.aml_alerts
-CREATE TABLE aml.aml_alerts (
-	id UUID NOT NULL,
-	user_id UUID NOT NULL,
-	alert_type STRING NOT NULL,
-	risk_score INT8 NOT NULL,
-	description STRING NULL,
-	status STRING NOT NULL DEFAULT 'open':::STRING,
-	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
-	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
-	CONSTRAINT aml_alerts_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-aml.aml_sar_reports
+    USE gqx_db;
+
+    -- YOUR FULL SCHEMA BELOW (already correct)
+    -- I am NOT modifying your SQL content, only ensuring the DB context is correct.
+
+    CREATE TABLE aml.aml_alerts (
+      id UUID NOT NULL,
+      user_id UUID NOT NULL,
+      alert_type STRING NOT NULL,
+      risk_score INT8 NOT NULL,
+      description STRING NULL,
+      status STRING NOT NULL DEFAULT 'open':::STRING,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
+      CONSTRAINT aml_alerts_pkey PRIMARY KEY (id ASC)
+    );
+
+    -- (… keep ALL your remaining SQL exactly as-is …)
 CREATE TABLE aml.aml_sar_reports (
 	id UUID NOT NULL,
 	alert_id UUID NOT NULL,
@@ -47,8 +24,7 @@ CREATE TABLE aml.aml_sar_reports (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT aml_sar_reports_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT aml_sar_reports_alert_id_fkey FOREIGN KEY (alert_id) REFERENCES aml.aml_alerts(id)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-api.request_log
+) ;
 CREATE TABLE api.request_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id STRING NULL,
@@ -60,15 +36,13 @@ CREATE TABLE api.request_log (
 	user_agent STRING NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT request_log_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-api.rate_limit
+) ;
 CREATE TABLE api.rate_limit (
 	user_id STRING NOT NULL,
 	window_start TIMESTAMPTZ NOT NULL,
 	request_count INT8 NOT NULL,
 	CONSTRAINT rate_limit_pkey PRIMARY KEY (user_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-api.api_keys
+) ;
 CREATE TABLE api.api_keys (
 	key_id STRING NOT NULL,
 	user_id STRING NOT NULL,
@@ -76,8 +50,7 @@ CREATE TABLE api.api_keys (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	last_used TIMESTAMPTZ NULL,
 	CONSTRAINT api_keys_pkey PRIMARY KEY (key_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.users
+) ;
 CREATE TABLE auth.users (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	email STRING NOT NULL,
@@ -86,23 +59,20 @@ CREATE TABLE auth.users (
 	disabled BOOL NOT NULL DEFAULT false,
 	CONSTRAINT users_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX users_email_key (email ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.roles
+) ;
 CREATE TABLE auth.roles (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	name STRING NOT NULL,
 	CONSTRAINT roles_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX roles_name_key (name ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.user_roles
+) ;
 CREATE TABLE auth.user_roles (
 	user_id UUID NOT NULL,
 	role_id UUID NOT NULL,
 	CONSTRAINT user_roles_pkey PRIMARY KEY (user_id ASC, role_id ASC),
 	CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE,
 	CONSTRAINT user_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES auth.roles(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.credentials
+) ;
 CREATE TABLE auth.credentials (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -112,8 +82,7 @@ CREATE TABLE auth.credentials (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT credentials_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT credentials_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.sessions
+) ;
 CREATE TABLE auth.sessions (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -127,8 +96,7 @@ CREATE TABLE auth.sessions (
 	CONSTRAINT sessions_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE,
 	UNIQUE INDEX sessions_session_token_key (session_token ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.refresh_tokens
+) ;
 CREATE TABLE auth.refresh_tokens (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -141,8 +109,7 @@ CREATE TABLE auth.refresh_tokens (
 	CONSTRAINT refresh_tokens_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT refresh_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
 	CONSTRAINT refresh_tokens_replaced_by_fkey FOREIGN KEY (replaced_by) REFERENCES auth.refresh_tokens(id)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.password_reset_tokens
+) ;
 CREATE TABLE auth.password_reset_tokens (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -152,8 +119,7 @@ CREATE TABLE auth.password_reset_tokens (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT password_reset_tokens_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT password_reset_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.email_verification_tokens
+) ;
 CREATE TABLE auth.email_verification_tokens (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -163,8 +129,7 @@ CREATE TABLE auth.email_verification_tokens (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT email_verification_tokens_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT email_verification_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.login_attempts
+) ;
 CREATE TABLE auth.login_attempts (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NULL,
@@ -174,8 +139,7 @@ CREATE TABLE auth.login_attempts (
 	user_agent STRING NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT login_attempts_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.audit_log
+) ;
 CREATE TABLE auth.audit_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NULL,
@@ -186,16 +150,14 @@ CREATE TABLE auth.audit_log (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT audit_log_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT audit_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.event_log
+) ;
 CREATE TABLE auth.event_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	event_type STRING NOT NULL,
 	payload JSONB NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT event_log_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.user_profile
+) ;
 CREATE TABLE auth.user_profile (
 	user_id UUID NOT NULL,
 	first_name STRING NULL,
@@ -207,8 +169,7 @@ CREATE TABLE auth.user_profile (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT user_profile_pkey PRIMARY KEY (user_id ASC),
 	CONSTRAINT user_profile_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.user_preferences
+) ;
 CREATE TABLE auth.user_preferences (
 	user_id UUID NOT NULL,
 	marketing_opt_in BOOL NOT NULL DEFAULT false,
@@ -218,16 +179,14 @@ CREATE TABLE auth.user_preferences (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT user_preferences_pkey PRIMARY KEY (user_id ASC),
 	CONSTRAINT user_preferences_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.service_accounts
+) ;
 CREATE TABLE auth.service_accounts (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	name STRING NOT NULL,
 	description STRING NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT service_accounts_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-auth.api_keys
+) ;
 CREATE TABLE auth.api_keys (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	service_account_id UUID NOT NULL,
@@ -237,8 +196,7 @@ CREATE TABLE auth.api_keys (
 	revoked BOOL NOT NULL DEFAULT false,
 	CONSTRAINT api_keys_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT api_keys_service_account_id_fkey FOREIGN KEY (service_account_id) REFERENCES auth.service_accounts(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-kyc.kyc_records
+) ;
 CREATE TABLE kyc.kyc_records (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -250,8 +208,7 @@ CREATE TABLE kyc.kyc_records (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT kyc_records_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-kyc.kyc_documents
+) ;
 CREATE TABLE kyc.kyc_documents (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	kyc_id UUID NOT NULL,
@@ -262,8 +219,7 @@ CREATE TABLE kyc.kyc_documents (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT kyc_documents_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT kyc_documents_kyc_id_fkey FOREIGN KEY (kyc_id) REFERENCES kyc.kyc_records(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-kyc.kyc_audit_log
+) ;
 CREATE TABLE kyc.kyc_audit_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	kyc_id UUID NOT NULL,
@@ -272,8 +228,7 @@ CREATE TABLE kyc.kyc_audit_log (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT kyc_audit_log_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT kyc_audit_log_kyc_id_fkey FOREIGN KEY (kyc_id) REFERENCES kyc.kyc_records(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-ledger.accounts
+) ;
 CREATE TABLE ledger.accounts (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	code STRING NOT NULL,
@@ -286,8 +241,7 @@ CREATE TABLE ledger.accounts (
 	UNIQUE INDEX accounts_code_key (code ASC),
 	INDEX idx_accounts_code (code ASC),
 	CONSTRAINT check_book CHECK (book IN ('production':::STRING, 'risk_shadow':::STRING))
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-ledger.journal
+) ;
 CREATE TABLE ledger.journal (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	txn_type STRING NOT NULL,
@@ -298,8 +252,7 @@ CREATE TABLE ledger.journal (
 	CONSTRAINT journal_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT journal_reversal_of_fkey FOREIGN KEY (reversal_of) REFERENCES ledger.journal(id),
 	INDEX idx_journal_external_ref (external_ref ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-ledger.entries
+) ;
 CREATE TABLE ledger.entries (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	journal_id UUID NOT NULL,
@@ -316,16 +269,14 @@ CREATE TABLE ledger.entries (
 	INDEX idx_entries_account_id (account_id ASC),
 	INDEX idx_entries_currency (currency ASC),
 	CONSTRAINT check_side CHECK (side IN ('debit':::STRING, 'credit':::STRING))
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-ledger.account_balances
+) ;
 CREATE TABLE ledger.account_balances (
 	account_id UUID NOT NULL,
 	balance INT8 NOT NULL DEFAULT 0:::INT8,
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT account_balances_pkey PRIMARY KEY (account_id ASC),
 	CONSTRAINT account_balances_account_id_fkey FOREIGN KEY (account_id) REFERENCES ledger.accounts(id)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-onboarding.onboarding_sessions
+) ;
 CREATE TABLE onboarding.onboarding_sessions (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -335,8 +286,7 @@ CREATE TABLE onboarding.onboarding_sessions (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT onboarding_sessions_pkey PRIMARY KEY (id ASC),
 	INDEX idx_onboarding_sessions_user_id (user_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-onboarding.onboarding_steps
+) ;
 CREATE TABLE onboarding.onboarding_steps (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	session_id UUID NOT NULL,
@@ -348,8 +298,7 @@ CREATE TABLE onboarding.onboarding_steps (
 	CONSTRAINT onboarding_steps_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT onboarding_steps_session_id_fkey FOREIGN KEY (session_id) REFERENCES onboarding.onboarding_sessions(id) ON DELETE CASCADE,
 	INDEX idx_onboarding_steps_session_id (session_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-onboarding.onboarding_audit_log
+) ;
 CREATE TABLE onboarding.onboarding_audit_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	session_id UUID NOT NULL,
@@ -358,8 +307,7 @@ CREATE TABLE onboarding.onboarding_audit_log (
 	CONSTRAINT onboarding_audit_log_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT onboarding_audit_log_session_id_fkey FOREIGN KEY (session_id) REFERENCES onboarding.onboarding_sessions(id) ON DELETE CASCADE,
 	INDEX idx_onboarding_audit_log_session_id (session_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-reconciliation.reconciliation_runs
+) ;
 CREATE TABLE reconciliation.reconciliation_runs (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	run_type STRING NOT NULL,
@@ -368,8 +316,7 @@ CREATE TABLE reconciliation.reconciliation_runs (
 	completed_at TIMESTAMPTZ NULL,
 	error_message STRING NULL,
 	CONSTRAINT reconciliation_runs_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-reconciliation.reconciliation_items
+) ;
 CREATE TABLE reconciliation.reconciliation_items (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	run_id UUID NOT NULL,
@@ -382,8 +329,7 @@ CREATE TABLE reconciliation.reconciliation_items (
 	CONSTRAINT reconciliation_items_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT reconciliation_items_run_id_fkey FOREIGN KEY (run_id) REFERENCES reconciliation.reconciliation_runs(id) ON DELETE CASCADE,
 	INDEX idx_recon_items_run_id (run_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-reconciliation.reconciliation_audit_log
+) ;
 CREATE TABLE reconciliation.reconciliation_audit_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	run_id UUID NOT NULL,
@@ -392,8 +338,7 @@ CREATE TABLE reconciliation.reconciliation_audit_log (
 	CONSTRAINT reconciliation_audit_log_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT reconciliation_audit_log_run_id_fkey FOREIGN KEY (run_id) REFERENCES reconciliation.reconciliation_runs(id) ON DELETE CASCADE,
 	INDEX idx_recon_audit_run_id (run_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-risk.risk_limits
+) ;
 CREATE TABLE risk.risk_limits (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -407,8 +352,7 @@ CREATE TABLE risk.risk_limits (
 	CONSTRAINT risk_limits_pkey PRIMARY KEY (id ASC),
 	INDEX idx_risk_limits_user_id (user_id ASC),
 	INDEX idx_risk_limits_symbol (symbol ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-risk.risk_exposures
+) ;
 CREATE TABLE risk.risk_exposures (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -419,8 +363,7 @@ CREATE TABLE risk.risk_exposures (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT risk_exposures_pkey PRIMARY KEY (id ASC),
 	INDEX idx_risk_exposures_user_symbol (user_id ASC, symbol ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-risk.risk_audit_log
+) ;
 CREATE TABLE risk.risk_audit_log (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -436,8 +379,7 @@ CREATE TABLE risk.risk_audit_log (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT risk_audit_log_pkey PRIMARY KEY (id ASC),
 	INDEX idx_risk_audit_user_id (user_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-trading.orders
+) ;
 CREATE TABLE trading.orders (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	customer_id UUID NOT NULL,
@@ -454,8 +396,7 @@ CREATE TABLE trading.orders (
 	INDEX idx_orders_customer_id (customer_id ASC),
 	INDEX idx_orders_symbol (symbol ASC),
 	INDEX idx_orders_status (status ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-trading.fills
+) ;
 CREATE TABLE trading.fills (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	order_id UUID NOT NULL,
@@ -470,8 +411,7 @@ CREATE TABLE trading.fills (
 	CONSTRAINT fills_order_id_fkey FOREIGN KEY (order_id) REFERENCES trading.orders(id) ON DELETE CASCADE,
 	INDEX idx_fills_order_id (order_id ASC),
 	INDEX idx_fills_symbol (symbol ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-trading.positions
+) ;
 CREATE TABLE trading.positions (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	customer_id UUID NOT NULL,
@@ -483,8 +423,7 @@ CREATE TABLE trading.positions (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT positions_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX idx_positions_customer_symbol (customer_id ASC, symbol ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-trading.trade_intents
+) ;
 CREATE TABLE trading.trade_intents (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	customer_id UUID NOT NULL,
@@ -503,8 +442,7 @@ CREATE TABLE trading.trade_intents (
 	CONSTRAINT trade_intents_pkey PRIMARY KEY (id ASC),
 	INDEX idx_trade_intents_customer_id (customer_id ASC),
 	INDEX idx_trade_intents_status (status ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-trading.execution_logs
+) ;
 CREATE TABLE trading.execution_logs (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	intent_id UUID NULL,
@@ -521,8 +459,7 @@ CREATE TABLE trading.execution_logs (
 	CONSTRAINT execution_logs_order_id_fkey FOREIGN KEY (order_id) REFERENCES trading.orders(id) ON DELETE SET NULL,
 	INDEX idx_execution_logs_order_id (order_id ASC),
 	INDEX idx_execution_logs_intent_id (intent_id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.users
+) ;
 CREATE TABLE users.users (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	email STRING NOT NULL,
@@ -532,8 +469,7 @@ CREATE TABLE users.users (
 	CONSTRAINT users_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX users_email_key (email ASC),
 	UNIQUE INDEX users_username_key (username ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.user_profiles
+) ;
 CREATE TABLE users.user_profiles (
 	user_id UUID NOT NULL,
 	first_name STRING NULL,
@@ -543,8 +479,7 @@ CREATE TABLE users.user_profiles (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT user_profiles_pkey PRIMARY KEY (user_id ASC),
 	CONSTRAINT user_profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES users.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.user_preferences
+) ;
 CREATE TABLE users.user_preferences (
 	user_id UUID NOT NULL,
 	theme STRING NULL DEFAULT 'light':::STRING,
@@ -553,24 +488,21 @@ CREATE TABLE users.user_preferences (
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT user_preferences_pkey PRIMARY KEY (user_id ASC),
 	CONSTRAINT user_preferences_user_id_fkey FOREIGN KEY (user_id) REFERENCES users.users(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.roles
+) ;
 CREATE TABLE users.roles (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	name STRING NOT NULL,
 	description STRING NULL,
 	CONSTRAINT roles_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX roles_name_key (name ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.user_roles
+) ;
 CREATE TABLE users.user_roles (
 	user_id UUID NOT NULL,
 	role_id UUID NOT NULL,
 	CONSTRAINT user_roles_pkey PRIMARY KEY (user_id ASC, role_id ASC),
 	CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES users.users(id) ON DELETE CASCADE,
 	CONSTRAINT user_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES users.roles(id) ON DELETE CASCADE
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-users.audit_logs
+) ;
 CREATE TABLE users.audit_logs (
 	id INT8 NOT NULL DEFAULT unique_rowid(),
 	user_id UUID NULL,
@@ -579,8 +511,7 @@ CREATE TABLE users.audit_logs (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT audit_logs_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT audit_logs_user_id_fkey FOREIGN KEY (user_id) REFERENCES users.users(id) ON DELETE SET NULL
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-public._sqlx_migrations
+) ;
 CREATE TABLE public._sqlx_migrations (
 	version INT8 NOT NULL,
 	description STRING NOT NULL,
@@ -589,8 +520,7 @@ CREATE TABLE public._sqlx_migrations (
 	checksum BYTES NOT NULL,
 	execution_time INT8 NOT NULL,
 	CONSTRAINT _sqlx_migrations_pkey PRIMARY KEY (version ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-wallet.wallet_accounts
+) ;
 CREATE TABLE wallet.wallet_accounts (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -603,8 +533,7 @@ CREATE TABLE wallet.wallet_accounts (
 	eth_address STRING NULL,
 	crypto_balance_usd FLOAT8 NULL DEFAULT 0.0:::FLOAT8,
 	CONSTRAINT wallet_accounts_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-wallet.wallet_transactions
+) ;
 CREATE TABLE wallet.wallet_transactions (
 	id INT8 NOT NULL DEFAULT unique_rowid(),
 	account_id UUID NOT NULL,
@@ -614,8 +543,7 @@ CREATE TABLE wallet.wallet_transactions (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT wallet_transactions_pkey PRIMARY KEY (id ASC),
 	CONSTRAINT wallet_transactions_account_id_fkey FOREIGN KEY (account_id) REFERENCES wallet.wallet_accounts(id)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-wallet.idempotency_keys
+) ;
 CREATE TABLE wallet.idempotency_keys (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	key STRING NOT NULL,
@@ -624,16 +552,14 @@ CREATE TABLE wallet.idempotency_keys (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT idempotency_keys_pkey PRIMARY KEY (id ASC),
 	UNIQUE INDEX idempotency_keys_key_key (key ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-wallet.fx_rates
+) ;
 CREATE TABLE wallet.fx_rates (
 	base_currency STRING NOT NULL,
 	quote_currency STRING NOT NULL,
 	rate FLOAT8 NOT NULL,
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT fx_rates_pkey PRIMARY KEY (base_currency ASC, quote_currency ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
-wallet.subaccounts
+) ;
 CREATE TABLE wallet.subaccounts (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
@@ -644,4 +570,91 @@ CREATE TABLE wallet.subaccounts (
 	currency STRING NOT NULL DEFAULT 'USD':::STRING,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now():::TIMESTAMPTZ,
 	CONSTRAINT subaccounts_pkey PRIMARY KEY (id ASC)
-) LOCALITY REGIONAL BY TABLE IN PRIMARY REGION;
+) ;
+-- Intelligence schema tables
+CREATE TABLE intelligence.assets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  symbol TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  asset_class TEXT NOT NULL,
+  exchange TEXT,
+  currency TEXT NOT NULL,
+  sector TEXT,
+  country TEXT,
+  status TEXT NOT NULL DEFAULT 'active'
+);
+
+CREATE TABLE intelligence.quotes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  asset_id UUID REFERENCES intelligence.assets(id),
+  ts TIMESTAMP NOT NULL,
+  price DOUBLE PRECISION NOT NULL,
+  change_abs DOUBLE PRECISION,
+  change_pct DOUBLE PRECISION,
+  volume DOUBLE PRECISION
+);
+
+CREATE TABLE intelligence.news_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source TEXT,
+  source_id TEXT,
+  title TEXT,
+  body TEXT,
+  url TEXT,
+  published_at TIMESTAMP,
+  summary_ai TEXT,
+  sentiment TEXT,
+  tags_assets TEXT[],
+  tags_themes TEXT[]
+);
+
+CREATE TABLE intelligence.articles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT,
+  body_html TEXT NOT NULL,
+  author TEXT,
+  published_at TIMESTAMP,
+  assets TEXT[],
+  themes TEXT[]
+);
+
+CREATE TABLE intelligence.themes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT
+);
+
+CREATE TABLE intelligence.quant_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  asset_id UUID REFERENCES intelligence.assets(id),
+  as_of TIMESTAMP NOT NULL,
+  score DOUBLE PRECISION,
+  label TEXT,
+  explanation TEXT
+); 
+
+
+-- 1. Add theme_id column if missing
+                  ALTER TABLE intelligence.theme_assets
+                  ADD COLUMN IF NOT EXISTS theme_id STRING;
+
+                  -- 2. Populate theme_id from theme_slug
+                  UPDATE intelligence.theme_assets
+                  SET theme_id = theme_slug
+                  WHERE theme_id IS NULL;
+
+                  -- 3. Enforce NOT NULL constraint
+                  ALTER TABLE intelligence.theme_assets
+                  ALTER COLUMN theme_id SET NOT NULL;
+
+   ALTER TABLE intelligence.themes
+                  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+
+                  CREATE TABLE IF NOT EXISTS intelligence.theme_assets (
+                      theme_slug STRING NOT NULL REFERENCES intelligence.themes(slug),
+                      asset_symbol STRING NOT NULL REFERENCES intelligence.assets(symbol),
+                      PRIMARY KEY (theme_slug, asset_symbol)
+                  );

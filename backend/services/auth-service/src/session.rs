@@ -1,122 +1,57 @@
-use sha2::{Digest, Sha256};
 use sqlx::Row;
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 
 use crate::db::DbPool;
-use crate::models::Session;
-
-const SESSION_TTL_SECONDS: i64 = 60 * 60; // 60 minutes
-
-//
-// DEVICE FINGERPRINTING
-//
-
-pub fn normalise_device_ua(raw: &str) -> String {
-    let cleaned = raw
-        .trim()
-        .to_lowercase()
-        .replace(|c: char| c.is_control(), "")
-        .split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ");
-
-    cleaned
-        .trim_matches(|c: char| c == ';' || c == ',')
-        .to_string()
-}
-
-pub fn hash_device_ua(normalised: &str) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(normalised.as_bytes());
-    format!("{:x}", hasher.finalize())
-}
-
-//
-// IP SOFT BINDING (/24)
-//
-
-pub fn same_subnet_24(original: &str, current: &str) -> bool {
-    let o: Vec<&str> = original.split('.').collect();
-    let c: Vec<&str> = current.split('.').collect();
-    if o.len() != 4 || c.len() != 4 {
-        return false;
-    }
-    o[0] == c[0] && o[1] == c[1] && o[2] == c[2]
-}
-
-//
-// SESSION CREATION
-//
 
 pub async fn create_session(
-    pool: &DbPool,
+    db: &DbPool,
     user_id: Uuid,
     ip: Option<String>,
-    raw_user_agent: Option<String>,
-) -> anyhow::Result<Session> {
-    let session_token = Uuid::new_v4().to_string();
-    let now = Utc::now();
-    let expires_at = now + chrono::Duration::seconds(SESSION_TTL_SECONDS);
+    device_hash: Option<String>,
+) -> Result<Session, sqlx::Error> {
+    let session_id = Uuid::new_v4();
+    let token = Uuid::new_v4().to_string();
+    let expires_at = Utc::now() + chrono::Duration::hours(1);
 
-    // Device fingerprint
-    let ua_norm = raw_user_agent.as_deref().map(normalise_device_ua);
-    let device_hash = ua_norm.as_deref().map(hash_device_ua);
-
-    let rec = sqlx::query_as!(
-        Session,
+    sqlx::query(
         r#"
-        INSERT INTO auth.sessions (
-            id, user_id, session_token,
-            ip, device_ua_hash,
-            expires_at, created_at, last_activity_at, revoked
-        )
-        VALUES (
-            $1, $2, $3,
-            $4, $5,
-            $6, $7, $7, false
-        )
-        RETURNING
-            id, user_id, session_token,
-            ip, device_ua_hash,
-            expires_at, created_at, last_activity_at, revoked
-        "#,
-        Uuid::new_v4(),
-        user_id,
-        session_token,
-        ip,
-        device_hash,
-        expires_at,
-        now
+        INSERT INTO auth.sessions (id, user_id, session_token, ip, device_ua_hash, expires_at, revoked)
+        VALUES ($1, $2, $3, $4, $5, $6, false)
+        "#
     )
-    .fetch_one(pool)
+    .bind(session_id)
+    .bind(user_id)
+    .bind(&token)
+    .bind(ip)
+    .bind(device_hash)
+    .bind(expires_at)
+    .execute(db)
     .await?;
 
-    Ok(rec)
+    Ok(Session {
+        id: session_id,
+        session_token: token,
+        expires_at,
+    })
 }
 
-//
-// SESSION VALIDATION
-//
-
 pub async fn validate_session(
-    pool: &DbPool,
+    db: &DbPool,
     token: &str,
     ip: &str,
-    device_ua_hash: &str,
-) -> anyhow::Result<Option<(Uuid, String, Vec<String>)>> {
-    let now: DateTime<Utc> = Utc::now();
-
+    device_hash: &str,
+) -> Result<Option<(Uuid, String, Vec<String>)>, sqlx::Error> {
     let row = sqlx::query(
         r#"
-        SELECT s.user_id, s.ip, s.device_ua_hash, s.expires_at, s.revoked, u.email
+        SELECT s.user_id, s.expires_at, s.revoked, u.email
         FROM auth.sessions s
-        JOIN users u ON u.id = s.user_id
+        JOIN auth.users u ON u.id = s.user_id
         WHERE s.session_token = $1
         "#
     )
     .bind(token)
-    .fetch_optional(pool)
+    .fetch_optional(db)
     .await?;
 
     let Some(row) = row else {
@@ -124,59 +59,54 @@ pub async fn validate_session(
     };
 
     let user_id: Uuid = row.get("user_id");
-    let stored_ip: Option<String> = row.try_get("ip")?;
-    let stored_device_hash: Option<String> = row.try_get("device_ua_hash")?;
-    let expires_at: DateTime<Utc> = row.get("expires_at");
+    let expires_at: chrono::DateTime<Utc> = row.get("expires_at");
     let revoked: bool = row.get("revoked");
     let email: String = row.get("email");
 
-    if revoked || expires_at <= now {
+    if revoked || expires_at < Utc::now() {
         return Ok(None);
     }
 
-    if let Some(stored_hash) = stored_device_hash {
-        if stored_hash != device_ua_hash {
-            return Ok(None);
-        }
-    }
-
-    if let Some(stored_ip) = stored_ip.as_ref() {
-        if !same_subnet_24(&stored_ip, ip) {
-            return Ok(None);
-        }
-    }
-
-    let roles_rows = sqlx::query(
+    let roles = sqlx::query(
         r#"
         SELECT r.name
-        FROM roles r
-        JOIN user_roles ur ON ur.role_id = r.id
+        FROM auth.roles r
+        JOIN auth.user_roles ur ON ur.role_id = r.id
         WHERE ur.user_id = $1
         "#
     )
     .bind(user_id)
-    .fetch_all(pool)
-    .await?;
-
-    let roles = roles_rows
-        .into_iter()
-        .map(|r| r.get::<String, _>("name"))
-        .collect();
+    .fetch_all(db)
+    .await?
+    .into_iter()
+    .map(|r| r.get::<String, _>("name"))
+    .collect::<Vec<_>>();
 
     Ok(Some((user_id, email, roles)))
 }
 
-//
-// SESSION REVOCATION
-//
-
-pub async fn revoke_session(pool: &DbPool, token: &str) -> anyhow::Result<()> {
+pub async fn revoke_session(db: &DbPool, token: &str) -> Result<(), sqlx::Error> {
     sqlx::query(
         r#"UPDATE auth.sessions SET revoked = true WHERE session_token = $1"#
     )
     .bind(token)
-    .execute(pool)
+    .execute(db)
     .await?;
+
     Ok(())
+}
+
+pub fn normalise_device_ua(ua: &str) -> String {
+    ua.trim().to_lowercase()
+}
+
+pub fn hash_device_ua(ua: &str) -> String {
+    format!("{:x}", md5::compute(ua))
+}
+
+pub struct Session {
+    pub id: Uuid,
+    pub session_token: String,
+    pub expires_at: chrono::DateTime<Utc>,
 }
 

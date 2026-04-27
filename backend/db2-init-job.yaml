@@ -1,0 +1,75 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: init-db
+          image: cockroachdb/cockroach:v23.2.5
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Waiting for CockroachDB SQL port (26258)..."
+              until (echo > /dev/tcp/cockroachdb-0.cockroachdb/26258) >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Running DB initialization..."
+
+              cockroach sql \
+                --insecure \
+                --host=cockroachdb-0.cockroachdb:26258 \
+                --execute="
+                  CREATE USER IF NOT EXISTS gqx_user;
+                  CREATE DATABASE IF NOT EXISTS gqx_db;
+                  GRANT ALL ON DATABASE gqx_db TO gqx_user;
+                  USE gqx_db;
+
+                  CREATE SCHEMA IF NOT EXISTS aml;
+                  CREATE SCHEMA IF NOT EXISTS api;
+                  CREATE SCHEMA IF NOT EXISTS auth;
+                  CREATE SCHEMA IF NOT EXISTS kyc;
+                  CREATE SCHEMA IF NOT EXISTS ledger;
+                  CREATE SCHEMA IF NOT EXISTS onboarding;
+                  CREATE SCHEMA IF NOT EXISTS reconciliation;
+                  CREATE SCHEMA IF NOT EXISTS risk;
+                  CREATE SCHEMA IF NOT EXISTS trading;
+                  CREATE SCHEMA IF NOT EXISTS users;
+                  CREATE SCHEMA IF NOT EXISTS wallet;
+                  CREATE SCHEMA IF NOT EXISTS intelligence;
+                ";
+
+              echo "Applying full schema..."
+              cockroach sql \
+                --insecure \
+                --host=cockroachdb-0.cockroachdb:26258 \
+                --database=gqx_db \
+                --file=/schema/schema.sql
+
+              echo "Schema applied successfully."
+
+          volumeMounts:
+            - name: schema-volume
+              mountPath: /schema
+
+      volumes:
+        - name: schema-volume
+          configMap:
+            name: cockroachdb-schema
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cockroachdb-schema
+  namespace: trading-platform
+data:
+  schema.sql: |
+    -- CONTENT MOVED TO schema.sql FILE
+    -- COPY THE CONTENT OF schema.sql HERE WITHOUT TABS
+

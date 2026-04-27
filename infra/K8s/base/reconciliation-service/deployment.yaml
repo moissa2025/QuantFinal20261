@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reconciliation-service
-  namespace: compliance-platform
+  namespace: trading-platform
   labels:
     app: reconciliation-service
 spec:
@@ -22,50 +22,14 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: platform-config-compliance
+                name: platform-config
 
           env:
             - name: NATS_URL
-              value: "nats://nats:4222"
+              value: "nats://nats.trading-platform.svc.cluster.local:4222"
             - name: RUST_LOG
               value: "info"
 
           ports:
             - containerPort: 8080
-
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 5
-
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: reconciliation-service
-  namespace: compliance-platform
-spec:
-  type: ClusterIP
-  selector:
-    app: reconciliation-service
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
 

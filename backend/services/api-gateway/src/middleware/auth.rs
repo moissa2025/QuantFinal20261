@@ -19,6 +19,11 @@ pub async fn auth_middleware<B>(
 where
     B: Send + 'static,
 {
+    let path = req.uri().path();
+    if path.starts_with("/auth") || path.starts_with("/v1/auth") {
+    return Ok(next.run(req).await);
+    }
+
     let cookie_header = headers
         .get("cookie")
         .and_then(|v| v.to_str().ok())

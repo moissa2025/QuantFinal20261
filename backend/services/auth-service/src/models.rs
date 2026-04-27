@@ -1,6 +1,19 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct Session {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub session_token: String,
+    pub ip: Option<String>,
+    pub device_ua_hash: Option<String>,
+    pub expires_at: DateTime<Utc>,
+    pub created_at: DateTime<Utc>,
+    pub last_activity_at: DateTime<Utc>,
+    pub revoked: bool,
+}
 
 //
 // USERS
@@ -46,18 +59,6 @@ pub struct UserRole {
 //
 // SESSIONS
 //
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Session {
-    pub id: Uuid,
-    pub user_id: Uuid,
-    pub session_token: String,
-    pub ip: Option<String>,
-    pub device_ua_hash: Option<String>,
-    pub expires_at: Option<DateTime<Utc>>,
-    pub created_at: Option<DateTime<Utc>>,
-    pub last_activity_at: Option<DateTime<Utc>>,
-    pub revoked: bool,
-}
 
 //
 // REFRESH TOKENS
@@ -191,3 +192,4 @@ pub struct EventLog {
     pub payload: serde_json::Value,
     pub created_at: DateTime<Utc>,
 }
+

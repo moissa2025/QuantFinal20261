@@ -33,17 +33,16 @@ base64 = "0.21"
 axum.workspace = true
 tower-http.workspace = true
 http.workspace = true
-
-[package.metadata.sqlx]
-offline = false
-
-[dependencies.sqlx]
-version = "0.7"
-features = [
+sqlx = { version = "0.7", features = [
     "runtime-tokio",
     "postgres",
     "uuid",
     "chrono",
-    "macros"
-]
+    "macros",
+    "migrate"
+] }
+base32 = "0.4"
+totp-rs = "5"
+qrcode = "0.14.1"
+md5 = "0.7"
 

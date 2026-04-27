@@ -1,234 +1,112 @@
 use async_nats::{Client, Message};
 use serde_json;
-use tracing::{error, info, warn};
-use chrono::Utc;
+use tracing::{error};
+use sqlx::Row;
 use uuid::Uuid;
 
-use common::auth_messages::{AuthLoginRequest, AuthLoginResponse};
-
-use crate::{
-    db::DbPool,
-    session::{normalise_device_ua, hash_device_ua, create_session},
-    password::verify_password,
-    crypto::refresh_token::{
-        generate_refresh_token,
-        hash_refresh_token,
-        encrypt_refresh_token,
-    },
+use common::auth_messages::{
+    AuthLoginRequest,
+    AuthLoginResponse,
 };
 
-//
-// Local helper for NATS replies
-//
-async fn respond<T: serde::Serialize>(nats: &Client, msg: &Message, value: &T) {
-    if let Some(reply) = msg.reply.clone() {
-        let payload = serde_json::to_vec(value).unwrap();
-        let _ = nats.publish(reply, payload.into()).await;
-    }
-}
+use crate::db::DbPool;
+use crate::password::verify_password;
+use crate::crypto::refresh_token::{
+    generate_refresh_token,
+    hash_refresh_token,
+    encrypt_refresh_token,
+};
+use crate::session::{create_session, normalise_device_ua, hash_device_ua};
 
-//
-// LOGIN HANDLER
-//
 pub async fn handle_login(pool: DbPool, nats: Client, msg: Message) {
     let req: AuthLoginRequest = match serde_json::from_slice(&msg.payload) {
         Ok(r) => r,
         Err(e) => {
-            error!("login: invalid request payload: {}", e);
-            respond(&nats, &msg, &AuthLoginResponse {
-                user_id: "".into(),
-                session_token: "".into(),
-                roles: vec![],
-                ttl_seconds: 0,
-                refresh_token: None,
-            }).await;
+            error!("login: invalid payload: {}", e);
             return;
         }
     };
 
-    info!("login: authenticating {}", req.email);
+    let device_hash = req.user_agent
+        .as_ref()
+        .map(|ua| hash_device_ua(&normalise_device_ua(ua)));
 
-    //
-    // 1. Load user
-    //
-    let user = match sqlx::query!(
-    r#"
-    SELECT u.id, c.password_hash, u.disabled
-    FROM auth.users u
-    JOIN auth.credentials c ON c.user_id = u.id
-    WHERE u.email = $1
-    "#,
-    req.email
-)
-
+    let row = match sqlx::query(
+        r#"
+        SELECT id, email, password_hash, disabled
+        FROM auth.users
+        WHERE email = $1
+        "#
+    )
+    .bind(&req.email)
     .fetch_optional(&pool)
     .await
     {
-        Ok(Some(u)) => u,
-        Ok(None) => {
-            warn!("login: invalid credentials");
-            respond(&nats, &msg, &AuthLoginResponse {
-                user_id: "".into(),
-                session_token: "".into(),
-                roles: vec![],
-                ttl_seconds: 0,
-                refresh_token: None,
-            }).await;
-            return;
-        }
-        Err(e) => {
-            error!("login: DB error: {}", e);
-            respond(&nats, &msg, &AuthLoginResponse {
-                user_id: "".into(),
-                session_token: "".into(),
-                roles: vec![],
-                ttl_seconds: 0,
-                refresh_token: None,
-            }).await;
-            return;
-        }
+        Ok(Some(r)) => r,
+        _ => return,
     };
 
-    if user.disabled {
-        warn!("login: user disabled");
-        respond(&nats, &msg, &AuthLoginResponse {
-            user_id: "".into(),
-            session_token: "".into(),
-            roles: vec![],
-            ttl_seconds: 0,
-            refresh_token: None,
-        }).await;
+    let user_id: Uuid = row.get("id");
+    let password_hash: String = row.get("password_hash");
+    let disabled: bool = row.get("disabled");
+
+    if disabled || !verify_password(&req.password, &password_hash).unwrap_or(false) {
         return;
     }
 
-    //
-    // 2. Verify password
-    //
-    if !verify_password(&req.password, &user.password_hash).unwrap_or(false) {
-        warn!("login: invalid credentials (password mismatch)");
-        respond(&nats, &msg, &AuthLoginResponse {
-            user_id: "".into(),
-            session_token: "".into(),
-            roles: vec![],
-            ttl_seconds: 0,
-            refresh_token: None,
-        }).await;
-        return;
-    }
+    let session = create_session(&pool, user_id, req.ip_address.clone(), device_hash)
+        .await
+        .unwrap();
 
-    //
-    // 3. Device fingerprinting
-    //
-    let ua_norm = req.user_agent.as_ref().map(|ua| normalise_device_ua(ua));
-    let _device_hash = ua_norm.as_ref().map(|n| hash_device_ua(n));
+    // Refresh token
+    let refresh_plain = generate_refresh_token();
+    let refresh_hash = hash_refresh_token(&refresh_plain);
+    let (ciphertext, nonce) = encrypt_refresh_token(&refresh_plain).unwrap();
+    let expires_at = chrono::Utc::now() + chrono::Duration::days(30);
 
-    //
-    // 4. Create session
-    //
-    let session = match create_session(
-        &pool,
-        user.id,
-        req.ip_address.clone(),
-        req.user_agent.clone(),
+    sqlx::query(
+        r#"
+        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
+        VALUES ($1, $2, $3, $4, $5, $6, false)
+        "#
     )
+    .bind(Uuid::new_v4())
+    .bind(user_id)
+    .bind(&refresh_hash)
+    .bind(&ciphertext)
+    .bind(&nonce)
+    .bind(expires_at)
+    .execute(&pool)
     .await
-    {
-        Ok(s) => s,
-        Err(e) => {
-            error!("login: failed to create session: {}", e);
-            respond(&nats, &msg, &AuthLoginResponse {
-                user_id: "".into(),
-                session_token: "".into(),
-                roles: vec![],
-                ttl_seconds: 0,
-                refresh_token: None,
-            }).await;
-            return;
-        }
-    };
+    .ok();
 
-    //
-    // 5. Load roles
-    //
-    let roles = match sqlx::query!(
+    // Load roles
+    let roles = sqlx::query(
         r#"
         SELECT r.name
         FROM auth.roles r
         JOIN auth.user_roles ur ON ur.role_id = r.id
         WHERE ur.user_id = $1
-        "#,
-        user.id
+        "#
     )
+    .bind(user_id)
     .fetch_all(&pool)
     .await
-    {
-        Ok(rows) => rows.into_iter().map(|r| r.name).collect::<Vec<_>>(),
-        Err(e) => {
-            error!("login: failed to load roles: {}", e);
-            vec![]
-        }
-    };
+    .unwrap_or_default()
+    .into_iter()
+    .map(|r| r.get::<String, _>("name"))
+    .collect::<Vec<_>>();
 
-    //
-    // 6. Generate encrypted refresh token
-    //
-    let refresh_plain = generate_refresh_token();
-    let refresh_hash = hash_refresh_token(&refresh_plain);
-
-    let (ciphertext, nonce) = match encrypt_refresh_token(&refresh_plain) {
-        Ok(v) => v,
-        Err(e) => {
-            error!("login: failed to encrypt refresh token: {}", e);
-            respond(&nats, &msg, &AuthLoginResponse {
-                user_id: "".into(),
-                session_token: "".into(),
-                roles: vec![],
-                ttl_seconds: 0,
-                refresh_token: None,
-            }).await;
-            return;
-        }
-    };
-
-    let expires_at = Utc::now() + chrono::Duration::days(30);
-
-    if let Err(e) = sqlx::query!(
-        r#"
-        INSERT INTO auth.refresh_tokens (id, user_id, token_hash, ciphertext, nonce, expires_at, revoked)
-        VALUES ($1, $2, $3, $4, $5, $6, false)
-        "#,
-        Uuid::new_v4(),
-        user.id,
-        refresh_hash,
-        ciphertext,
-        nonce,
-        expires_at
-    )
-    .execute(&pool)
-    .await
-    {
-        error!("login: failed to insert refresh token: {}", e);
-        respond(&nats, &msg, &AuthLoginResponse {
-            user_id: "".into(),
-            session_token: "".into(),
-            roles: vec![],
-            ttl_seconds: 0,
-            refresh_token: None,
-        }).await;
-        return;
-    }
-
-    //
-    // 7. Respond
-    //
-    let response = AuthLoginResponse {
-        user_id: user.id.to_string(),
+    let resp = AuthLoginResponse {
+        user_id: user_id.to_string(),
         session_token: session.session_token,
         roles,
         ttl_seconds: 3600,
         refresh_token: Some(refresh_plain),
     };
 
-    respond(&nats, &msg, &response).await;
+    if let Some(reply) = msg.reply {
+        let _ = nats.publish(reply, serde_json::to_vec(&resp).unwrap().into()).await;
+    }
 }
 
