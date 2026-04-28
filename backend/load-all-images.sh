@@ -9,6 +9,18 @@ fi
 
 TAG=$1
 
+# Auto-detect KIND cluster name
+CLUSTER=$(kind get clusters | head -n 1)
+
+if [ -z "$CLUSTER" ]; then
+  echo "❌ No KIND clusters found!"
+  exit 1
+fi
+
+echo "📥 Loading images into KIND cluster '$CLUSTER'..."
+echo "🔖 Using tag: $TAG"
+echo ""
+
 SERVICES=(
   auth-service
   api-gateway
@@ -25,16 +37,12 @@ SERVICES=(
   market-data-service
 )
 
-echo "📥 Loading images into KIND cluster 'globalquantx'..."
-echo "🔖 Using tag: $TAG"
-echo ""
-
 for svc in "${SERVICES[@]}"; do
   echo "----------------------------------------"
-  echo "📤 Loading $svc:$TAG into KIND"
-  kind load docker-image $svc:$TAG --name globalquantx
+  echo "📤 Loading $svc:$TAG into KIND ($CLUSTER)"
+  kind load docker-image $svc:$TAG --name "$CLUSTER"
 done
 
 echo ""
-echo "✅ All images loaded into KIND cluster 'globalquantx' with tag: $TAG"
+echo "✅ All images loaded into KIND cluster '$CLUSTER' with tag: $TAG"
 

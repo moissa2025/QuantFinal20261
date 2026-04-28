@@ -30,16 +30,6 @@ for svc in "${SERVICES[@]}"; do
   SERVICE="$svc/service.yaml"
 
   if [ -f "$DEPLOY" ]; then
-    echo "  🔍 Ensuring envFrom exists in $DEPLOY"
-
-    # Insert envFrom if missing (idempotent)
-    if ! grep -q "envFrom:" "$DEPLOY"; then
-      echo "  ➕ Adding envFrom to $DEPLOY"
-      yq -i '.spec.template.spec.containers[0].envFrom += [{"configMapRef": {"name": "platform-config"}}]' "$DEPLOY"
-    else
-      echo "  ✔ envFrom already present"
-    fi
-
     echo "  ➤ Applying deployment.yaml"
     kubectl apply -n $NAMESPACE -f "$DEPLOY"
   else
@@ -53,8 +43,13 @@ for svc in "${SERVICES[@]}"; do
     echo "  ⚠️  No service.yaml found for $svc"
   fi
 
-  echo "  🔄 Restarting deployment"
-  kubectl rollout restart deployment/$svc -n $NAMESPACE || true
+  # Restart only if deployment exists
+  if kubectl get deployment "$svc" -n "$NAMESPACE" >/dev/null 2>&1; then
+    echo "  🔄 Restarting deployment/$svc"
+    kubectl rollout restart deployment/$svc -n $NAMESPACE
+  else
+    echo "  ⚠️  Deployment $svc not found, skipping restart"
+  fi
 
 done
 

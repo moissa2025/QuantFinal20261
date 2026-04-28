@@ -1,0 +1,10 @@
+stages:
+  - test
+
+backend_tests:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install requests psycopg2-binary nats-py
+    - python -m tests.runner
+

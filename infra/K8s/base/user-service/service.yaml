@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: user-service
   namespace: trading-platform
-  labels:
-    app: user-service
 spec:
   type: ClusterIP
   selector:
@@ -13,4 +11,3 @@ spec:
     - name: http
       port: 8080
       targetPort: 8080
-
