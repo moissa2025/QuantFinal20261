@@ -1,29 +1,26 @@
-#!/bin/bash
+i#!/bin/bash
 set -e
 
-# Validate tag argument
 if [ -z "$1" ]; then
   echo "❌ No tag provided."
-  echo "Usage: ./build-all-images.sh v0.0.1"
+  echo "Usage: ./build-1-image.sh v0.2.5"
   exit 1
 fi
 
 TAG=$1
+SERVICE="intelligence-service"
 
-SERVICES=(
-  risk-service
-)
-
-echo "🐳 Building all service images locally..."
-echo "🔖 Using tag: $TAG"
+echo "🐳 Building $SERVICE..."
+echo "🔖 Tag: $TAG"
 echo ""
 
-for svc in "${SERVICES[@]}"; do
-  echo "----------------------------------------"
-  echo "📦 Building $svc"
-  docker build -t $svc:$TAG -t $svc:latest -f services/$svc/Dockerfile .
-done
+# IMPORTANT: build context must be backend root (.)
+docker build \
+  -t $SERVICE:$TAG \
+  -t $SERVICE:latest \
+  -f services/$SERVICE/Dockerfile \
+  .
 
 echo ""
-echo "✅ All images built locally with tag: $TAG"
+echo "✅ Built $SERVICE:$TAG"
 

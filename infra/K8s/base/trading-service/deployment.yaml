@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: trading-service
-          image: trading-service:v0.2.0
+          image: trading-service:v0.2.7
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

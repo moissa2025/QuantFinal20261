@@ -28,7 +28,6 @@ spec:
             - "--advertise-host=$(HOSTNAME).cockroachdb"
             - "--join=cockroachdb-0.cockroachdb,cockroachdb-1.cockroachdb,cockroachdb-2.cockroachdb"
             - "--listen-addr=0.0.0.0:26257"
-            - "--sql-addr=0.0.0.0:26258"
             - "--cache=25%"
             - "--max-sql-memory=25%"
           resources:
@@ -41,8 +40,10 @@ spec:
           ports:
             - containerPort: 26257
               name: grpc
-            - containerPort: 26258
+            - containerPort: 26257
               name: sql
+            - containerPort: 8080
+              name: http
           volumeMounts:
             - name: datadir
               mountPath: /cockroach/cockroach-data

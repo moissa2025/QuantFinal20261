@@ -1,29 +1,28 @@
 #!/bin/bash
 set -e
 
-# Validate tag argument
 if [ -z "$1" ]; then
   echo "❌ No tag provided."
-  echo "Usage: ./load-all-images.sh v0.0.1"
+  echo "Usage: ./load-1-image.sh v0.2.5"
   exit 1
 fi
 
 TAG=$1
+SERVICE="intelligence-service"
 
-SERVICES=(
-  risk-service
-)
+# Auto-detect KIND cluster
+CLUSTER=$(kind get clusters | head -n 1)
 
-echo "📥 Loading images into KIND cluster 'globalquantx'..."
-echo "🔖 Using tag: $TAG"
+if [ -z "$CLUSTER" ]; then
+  echo "❌ No KIND cluster found."
+  exit 1
+fi
+
+echo "📥 Loading $SERVICE:$TAG into KIND cluster '$CLUSTER'..."
 echo ""
 
-for svc in "${SERVICES[@]}"; do
-  echo "----------------------------------------"
-  echo "📤 Loading $svc:$TAG into KIND"
-  kind load docker-image $svc:$TAG --name globalquantx
-done
+kind load docker-image $SERVICE:$TAG --name "$CLUSTER"
 
 echo ""
-echo "✅ All images loaded into KIND cluster 'globalquantx' with tag: $TAG"
+echo "✅ Loaded $SERVICE:$TAG into KIND cluster '$CLUSTER'"
 

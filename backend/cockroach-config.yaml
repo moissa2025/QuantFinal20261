@@ -5,6 +5,6 @@ metadata:
   namespace: trading-platform
 data:
   DATABASE_HOST: cockroachdb-public.trading-platform.svc.cluster.local
-  DATABASE_PORT: "26258"
+  DATABASE_PORT: "26257"
   DATABASE_NAME: gqx_db
 

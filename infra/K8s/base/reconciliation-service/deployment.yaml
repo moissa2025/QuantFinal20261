@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: reconciliation-service
-          image: reconciliation-service:v0.2.0
+          image: reconciliation-service:v0.2.7
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

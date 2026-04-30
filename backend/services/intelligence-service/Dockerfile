@@ -16,14 +16,11 @@ RUN apt-get update && apt-get install -y \
 
 ENV SQLX_OFFLINE=false
 
-# Copy full workspace (Cargo workspace requires full structure)
-# Copy full workspace (Cargo workspace requires full structure)
-COPY Cargo.toml Cargo.lock ./
-COPY services ./services
-COPY libs ./libs
-COPY .sqlx ./.sqlx
-
-# Copy CockroachDB CA cert
+# Copy the ENTIRE workspace (required for Cargo workspace builds)
+COPY ../../Cargo.toml ../../Cargo.lock ./
+COPY ../../services ./services
+COPY ../../libs ./libs
+COPY ../../.sqlx ./.sqlx
 
 # Build only this service
 WORKDIR /app/services/intelligence-service
@@ -43,9 +40,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy binary from builder
 COPY --from=builder /app/target/release/intelligence-service /app/intelligence-service
-
 
 ENV RUST_LOG=info
 

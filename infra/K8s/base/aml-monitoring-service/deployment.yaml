@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: aml-monitoring-service
-          image: aml-monitoring-service:v0.2.0
+          image: aml-monitoring-service:v0.2.7
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

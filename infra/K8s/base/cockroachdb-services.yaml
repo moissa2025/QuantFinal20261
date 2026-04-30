@@ -9,9 +9,14 @@ spec:
   clusterIP: None
   ports:
     - port: 26257
+      targetPort: 26257
       name: grpc
-    - port: 26258
+    - port: 26257
+      targetPort: 26257
       name: sql
+    - port: 8080
+      targetPort: 8080
+      name: http
   selector:
     app: cockroachdb
 ---
@@ -26,9 +31,14 @@ spec:
   type: ClusterIP
   ports:
     - port: 26257
+      targetPort: 26257
       name: grpc
-    - port: 26258
+    - port: 26257
+      targetPort: 26257
       name: sql
+    - port: 8080
+      targetPort: 8080
+      name: http
   selector:
     app: cockroachdb
 

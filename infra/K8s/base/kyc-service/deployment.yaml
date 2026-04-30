@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: kyc-service
-          image: kyc-service:v0.2.0
+          image: kyc-service:v0.2.7
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
