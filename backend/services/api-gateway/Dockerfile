@@ -18,7 +18,7 @@ ENV SQLX_OFFLINE=false
 
 # Copy full workspace (Cargo workspace requires full structure)
 # Copy full workspace (Cargo workspace requires full structure)
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml Cargo.lock  ./
 COPY services ./services
 COPY libs ./libs
 COPY .sqlx ./.sqlx

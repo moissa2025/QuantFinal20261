@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 fi
 
 TAG=$1
-SERVICE="intelligence-service"
+SERVICE="api-gateway"
 
 # Auto-detect KIND cluster
 CLUSTER=$(kind get clusters | head -n 1)

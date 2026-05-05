@@ -15,7 +15,7 @@ pub async fn store_email_otp(
     user_id: Uuid,
     code: &str,
 ) -> Result<(), sqlx::Error> {
-    let expires_at = Utc::now() + Duration::minutes(10);
+	let expires_at = (Utc::now() + Duration::minutes(10)).naive_utc();
 
     sqlx::query!(
         r#"

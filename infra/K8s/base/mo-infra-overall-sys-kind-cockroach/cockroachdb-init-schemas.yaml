@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init-schemas
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: schema-init
+          image: gqx-schema:v0.0.4
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for CockroachDB to be ready..."
+              until /cockroach/cockroach sql --insecure --host=cockroachdb-0.cockroachdb -e "SELECT 1;" >/dev/null 2>&1; do
+                echo "CockroachDB not ready yet. Retrying..."
+                sleep 2
+              done
+
+              echo "CockroachDB is ready. Applying migrations..."
+
+              for file in \
+                /schema/migrations/0001_init_database.sql \
+                /schema/migrations/0002_schemas.sql \
+                /schema/migrations/0003_auth.sql \
+                /schema/migrations/0004_aml.sql \
+                /schema/migrations/0005_api.sql \
+                /schema/migrations/0006_kyc.sql \
+                /schema/migrations/0007_ledger.sql \
+                /schema/migrations/0008_onboarding.sql \
+                /schema/migrations/0009_reconciliation.sql \
+                /schema/migrations/0010_risk.sql \
+                /schema/migrations/0011_trading.sql \
+                /schema/migrations/0012_users.sql \
+                /schema/migrations/0013_wallet.sql \
+                /schema/migrations/0014_intelligence.sql
+              do
+                echo "Running migration: $file"
+                /cockroach/cockroach sql \
+                  --insecure \
+                  --host=cockroachdb-0.cockroachdb \
+                  --database=gqx_db \
+                  --file="$file"
+
+                if [ $? -ne 0 ]; then
+                  echo "Migration failed: $file"
+                  exit 1
+                fi
+              done
+
+              echo "All migrations applied successfully."
+

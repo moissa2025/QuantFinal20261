@@ -1,23 +1,38 @@
-import importlib
-import pkgutil
-from typing import List, Tuple
+from services.journey_user import test_user_journey, user_login
+from services.journey_wallet import test_wallet_journey
+from services.journey_trading import test_trading_journey
+from services.journey_kyc import test_kyc_journey
+from services.journey_onboarding import test_onboarding_journey
+from services.journey_ledger import test_ledger_journey
+from services.journey_risk import test_risk_journey
+from services.journey_reconciliation import test_reconciliation_journey
 
-def run_all_tests() -> List[Tuple[str, bool, object]]:
-    results = []
-    for _, module_name, _ in pkgutil.iter_modules(['tests/services']):
-        module = importlib.import_module(f"tests.services.{module_name}")
-        for name in dir(module):
-            if name.startswith("test_"):
-                fn = getattr(module, name)
-                test_name, ok, data = fn()
-                results.append((test_name, ok, data))
-    return results
+def run_all():
+    print("=== USER JOURNEY ===")
+    test_user_journey()
+    access, _ = user_login()
+
+    print("=== WALLET ===")
+    test_wallet_journey(access)
+
+    print("=== TRADING ===")
+    test_trading_journey(access)
+
+    print("=== KYC ===")
+    test_kyc_journey(access)
+
+    print("=== ONBOARDING ===")
+    test_onboarding_journey(access)
+
+    print("=== LEDGER ===")
+    test_ledger_journey(access)
+
+    print("=== RISK ===")
+    test_risk_journey(access)
+
+    print("=== RECONCILIATION ===")
+    test_reconciliation_journey(access)
 
 if __name__ == "__main__":
-    results = run_all_tests()
-    print("\n=== TEST RESULTS ===")
-    for name, ok, data in results:
-        status = "PASS" if ok else "FAIL"
-        print(f"{name:40} {status}")
-        if not ok:
-            print(f"  → {data}")
+    run_all()
+

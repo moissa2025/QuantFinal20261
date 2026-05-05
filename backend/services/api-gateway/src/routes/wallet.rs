@@ -25,16 +25,31 @@ use crate::{
 
 pub fn router() -> Router<Arc<AppState>> {
     Router::new()
-        .route("/wallet/accounts", post(create_wallet_account))
-        .route("/wallet/accounts/:id", get(get_wallet_balance))
-        .route("/wallet/accounts/:id/credit", post(credit_wallet))
-        .route("/wallet/accounts/:id/debit", post(debit_wallet))
-        .route("/wallet/transfer", post(transfer_wallet))
-        .route("/wallet/history", get(wallet_history))
-        .route("/wallet/crypto/deposit", post(crypto_deposit))
-        .route("/wallet/crypto/history", get(crypto_history))
-        .route("/wallet/subaccounts", get(list_subaccounts))
-        .route("/ws/wallet", get(wallet_ws))
+        // Health check
+        .route("/health", get(wallet_health))
+
+        // Core wallet operations
+        .route("/accounts", post(create_wallet_account))
+        .route("/accounts/:id", get(get_wallet_balance))
+        .route("/accounts/:id/credit", post(credit_wallet))
+        .route("/accounts/:id/debit", post(debit_wallet))
+        .route("/transfer", post(transfer_wallet))
+        .route("/history", get(wallet_history))
+
+        // Crypto operations
+        .route("/crypto/deposit", post(crypto_deposit))
+        .route("/crypto/history", get(crypto_history))
+        .route("/subaccounts", get(list_subaccounts))
+
+        // Binance integration
+        .route("/binance/validate", post(validate_binance))
+        .route("/binance/balance", post(binance_balance))
+
+        // WebSocket stream
+        .route("/ws", get(wallet_ws))
+}
+async fn wallet_health() -> impl IntoResponse {
+    "OK"
 }
 
 //
@@ -147,6 +162,29 @@ async fn crypto_deposit(
     Json(body): Json<Value>,
 ) -> Result<Json<Value>, AppError> {
     let resp: Value = state.nats.rpc("wallet.crypto.deposit", &body).await?;
+    Ok(Json(resp))
+}
+
+//
+// ─────────────────────────────────────────────────────────────
+//   🔐 BINANCE ROUTES (NATS RPC)
+// ─────────────────────────────────────────────────────────────
+//
+
+async fn validate_binance(
+    State(state): State<Arc<AppState>>,
+    Json(body): Json<Value>,
+) -> Result<Json<Value>, AppError> {
+    let resp: Value = state.nats.rpc("wallet.binance.validate", &body).await?;
+    Ok(Json(resp))
+}
+
+async fn binance_balance(
+    State(state): State<Arc<AppState>>,
+    Identity { user_id, .. }: Identity,
+) -> Result<Json<Value>, AppError> {
+    let payload = json!({ "user_id": user_id });
+    let resp: Value = state.nats.rpc("wallet.binance.balance", &payload).await?;
     Ok(Json(resp))
 }
 

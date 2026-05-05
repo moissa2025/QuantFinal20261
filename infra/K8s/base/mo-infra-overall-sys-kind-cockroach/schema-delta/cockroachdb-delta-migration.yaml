@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-delta-migration
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: delta-migration
+          image: gqx-schema-delta:v0.0.4
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for CockroachDB..."
+              until /cockroach/cockroach sql --insecure --host=cockroachdb-0.cockroachdb -e "SELECT 1;" >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Applying delta migrations..."
+
+              for file in /schema/migrations/*.sql; do
+                echo "Running: $file"
+                /cockroach/cockroach sql \
+                  --insecure \
+                  --host=cockroachdb-0.cockroachdb \
+                  --database=gqx_db \
+                  --file="$file" || exit 1
+              done
+
+              echo "Delta migrations complete."
+

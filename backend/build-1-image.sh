@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 fi
 
 TAG=$1
-SERVICE="intelligence-service"
+SERVICE="api-gateway"
 
 echo "🐳 Building $SERVICE..."
 echo "🔖 Tag: $TAG"

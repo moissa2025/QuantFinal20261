@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: platform-config
-  namespace: trading-platform
-data:
-  DATABASE_URL: "postgresql://root@cockroachdb.trading-platform.svc.cluster.local:26257/globalquantx?sslmode=disable"
-

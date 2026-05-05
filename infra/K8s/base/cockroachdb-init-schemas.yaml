@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init-schemas
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: init
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/sh
+            - -c
+            - |
+              HOST="cockroachdb-0.cockroachdb.trading-platform.svc.cluster.local"
+
+              echo "Waiting for CockroachDB..."
+              until /usr/local/bin/cockroach sql --insecure --host=$HOST -e "SELECT 1;" >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Creating database and schemas..."
+
+              /usr/local/bin/cockroach sql --insecure --host=$HOST -e "
+                CREATE DATABASE IF NOT EXISTS gqx_db;
+                GRANT ALL ON DATABASE gqx_db TO root;
+
+                SET database = gqx_db;
+
+                CREATE SCHEMA IF NOT EXISTS auth;
+                CREATE SCHEMA IF NOT EXISTS intelligence;
+                CREATE SCHEMA IF NOT EXISTS market;
+                CREATE SCHEMA IF NOT EXISTS wallet;
+                CREATE SCHEMA IF NOT EXISTS ledger;
+                CREATE SCHEMA IF NOT EXISTS kyc;
+                CREATE SCHEMA IF NOT EXISTS trading;
+                CREATE SCHEMA IF NOT EXISTS onboarding;
+                CREATE SCHEMA IF NOT EXISTS reconciliation;
+                CREATE SCHEMA IF NOT EXISTS aml;
+                CREATE SCHEMA IF NOT EXISTS users;
+                CREATE SCHEMA IF NOT EXISTS sessions;
+                CREATE SCHEMA IF NOT EXISTS refresh_tokens;
+                CREATE SCHEMA IF NOT EXISTS api;
+                CREATE SCHEMA IF NOT EXISTS risk;
+              "
+
+              echo "Schemas created."
+

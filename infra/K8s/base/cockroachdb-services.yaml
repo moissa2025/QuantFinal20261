@@ -10,10 +10,7 @@ spec:
   ports:
     - port: 26257
       targetPort: 26257
-      name: grpc
-    - port: 26257
-      targetPort: 26257
-      name: sql
+      name: grpc-sql
     - port: 8080
       targetPort: 8080
       name: http
@@ -32,10 +29,7 @@ spec:
   ports:
     - port: 26257
       targetPort: 26257
-      name: grpc
-    - port: 26257
-      targetPort: 26257
-      name: sql
+      name: grpc-sql
     - port: 8080
       targetPort: 8080
       name: http
