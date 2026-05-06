@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def test_onboarding_journey(token):
     status, _ = api("POST", "/onboarding/start", headers={"Authorization": f"Bearer {token}"})

@@ -1,17 +1,11 @@
 use utoipa::OpenApi as OpenApiDerive;
 
-use crate::routes::auth;
-
 #[derive(OpenApiDerive)]
 #[openapi(
-    paths(
-        auth::login_handler,
-        auth::logout_handler
-    ),
     components(
         schemas(
-            auth::LoginRequest,
-            auth::LoginResponse
+            crate::routes::auth_routes::LoginRequest,
+            crate::routes::auth_routes::LoginResponse
         )
     ),
     tags(

@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def test_reconciliation_journey(token):
     status, data = api("GET", "/reconciliation/run", headers={"Authorization": f"Bearer {token}"})

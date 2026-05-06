@@ -1,5 +1,5 @@
-from services.utils import api
-from config import EMAIL
+from .utils import api
+from ..config import EMAIL
 
 def user_register():
     status, data = api("POST", "/identity/register", {

@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def buy_eth(token):
     status, data = api("POST", "/trading/order", {

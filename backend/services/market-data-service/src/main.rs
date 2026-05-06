@@ -34,9 +34,15 @@ async fn main() {
     });
 
     let app = Router::new()
+        // Health check (required by API-Gateway)
         .route("/health", get(health))
+
+        // REST snapshot endpoint
         .route("/market-data/snapshot", get(routes::rest::market_snapshot))
+
+        // WebSocket stream endpoint
         .route("/market-stream", get(routes::ws::market_stream))
+
         .with_state(state.clone())
         .layer(
             CorsLayer::new()

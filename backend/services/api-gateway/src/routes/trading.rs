@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{
     extract::{Json, State},
-    routing::post,
+    routing::{post, get},
     Json as AxumJson,
     Router,
 };
@@ -11,7 +11,8 @@ use serde::{Deserialize, Serialize};
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/order", post(place_order))
+    Router::new()
+        .route("/order", post(place_order))
 }
 
 #[derive(Deserialize, Serialize)]
@@ -43,5 +44,9 @@ pub async fn place_order(
         .await?;
 
     Ok(AxumJson(res))
+}
+
+async fn health() -> &'static str {
+    "OK"
 }
 

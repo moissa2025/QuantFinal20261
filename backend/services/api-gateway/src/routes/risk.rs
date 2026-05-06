@@ -10,7 +10,8 @@ use serde::{Deserialize, Serialize};
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/limits", get(get_limits))
+    Router::new()
+        .route("/limits", get(get_limits))
 }
 
 #[derive(Serialize, Deserialize)]
@@ -34,5 +35,9 @@ pub async fn get_limits(
         .await?;
 
     Ok(Json(res))
+}
+
+async fn health() -> &'static str {
+    "OK"
 }
 

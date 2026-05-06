@@ -10,7 +10,8 @@ use serde::{Deserialize, Serialize};
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/balance", get(get_balance))
+    Router::new()
+        .route("/balance", get(get_balance))
 }
 
 #[derive(Serialize, Deserialize)]
@@ -33,5 +34,9 @@ pub async fn get_balance(
         .await?;
 
     Ok(Json(res))
+}
+
+async fn health() -> &'static str {
+    "OK"
 }
 

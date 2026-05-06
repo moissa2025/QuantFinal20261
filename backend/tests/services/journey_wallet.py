@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def create_wallet(token):
     status, data = api("POST", "/wallet/create", headers={

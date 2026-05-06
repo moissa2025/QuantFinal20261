@@ -1,4 +1,4 @@
-i#!/bin/bash
+#!/bin/bash
 set -e
 
 if [ -z "$1" ]; then
@@ -8,19 +8,19 @@ if [ -z "$1" ]; then
 fi
 
 TAG=$1
-SERVICE="api-gateway"
+SERVICE="auth-service"
 
-echo "🐳 Building $SERVICE..."
+echo "🐳 Building $SERVICE (no cache)..."
 echo "🔖 Tag: $TAG"
 echo ""
 
-# IMPORTANT: build context must be backend root (.)
 docker build \
+  --no-cache \
   -t $SERVICE:$TAG \
   -t $SERVICE:latest \
   -f services/$SERVICE/Dockerfile \
   .
 
 echo ""
-echo "✅ Built $SERVICE:$TAG"
+echo "✅ Built $SERVICE:$TAG (no cache)"
 

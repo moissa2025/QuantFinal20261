@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def test_kyc_journey(token):
     status, _ = api("POST", "/kyc/start", headers={"Authorization": f"Bearer {token}"})

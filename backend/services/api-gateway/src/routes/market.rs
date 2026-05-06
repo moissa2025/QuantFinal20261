@@ -5,12 +5,14 @@ use axum::{
     routing::get,
     Json, Router,
 };
+
 use serde::{Deserialize, Serialize};
 
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/ticker/:symbol", get(get_ticker))
+    Router::new()
+        .route("/ticker/:symbol", get(get_ticker))
 }
 
 #[derive(Serialize, Deserialize)]
@@ -42,5 +44,9 @@ pub async fn get_ticker(
         .await?;
 
     Ok(Json(res))
+}
+
+async fn health() -> &'static str {
+    "OK"
 }
 

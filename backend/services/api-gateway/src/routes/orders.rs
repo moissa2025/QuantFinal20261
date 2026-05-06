@@ -74,3 +74,7 @@ pub async fn get_order(
     Ok(AxumJson(res))
 }
 
+async fn health() -> &'static str {
+    "OK"
+}
+

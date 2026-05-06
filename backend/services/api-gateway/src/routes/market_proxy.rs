@@ -4,12 +4,21 @@ use axum::{
     extract::State,
     extract::ws::{WebSocketUpgrade, WebSocket, Message as AxumMessage, CloseFrame, CloseCode},
     response::IntoResponse,
+    routing::get,
+    Router,
 };
 use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::connect_async;
 use tungstenite::Message as TungsteniteMessage;
 
 use crate::state::AppState;
+
+/// Router for /v1/market/*
+pub fn router() -> Router<Arc<AppState>> {
+    Router::new()
+        .route("/snapshot", get(proxy_snapshot))
+        .route("/stream", get(proxy_stream))
+}
 
 pub async fn proxy_snapshot(State(_state): State<Arc<AppState>>) -> impl IntoResponse {
     let url = "http://market-data-service:8081/market-data/snapshot";
@@ -43,7 +52,7 @@ async fn handle_ws_proxy(client_ws: WebSocket) {
     let (mut internal_tx, mut internal_rx) = internal_ws.split();
     let (mut client_tx, mut client_rx) = client_ws.split();
 
-    // internal → client
+    // INTERNAL → CLIENT
     tokio::spawn(async move {
         while let Some(Ok(msg)) = internal_rx.next().await {
             let converted = match msg {
@@ -51,10 +60,12 @@ async fn handle_ws_proxy(client_ws: WebSocket) {
                 TungsteniteMessage::Binary(b) => AxumMessage::Binary(b),
                 TungsteniteMessage::Ping(p) => AxumMessage::Ping(p),
                 TungsteniteMessage::Pong(p) => AxumMessage::Pong(p),
-                TungsteniteMessage::Close(c) => AxumMessage::Close(c.map(|f| CloseFrame {
-                    code: CloseCode::from(f.code),
-                    reason: f.reason,
-                })),
+                TungsteniteMessage::Close(c) => AxumMessage::Close(
+                    c.map(|f| CloseFrame {
+                        code: CloseCode::from(f.code),
+                        reason: f.reason,
+                    })
+                ),
                 _ => continue,
             };
 
@@ -62,7 +73,7 @@ async fn handle_ws_proxy(client_ws: WebSocket) {
         }
     });
 
-    // client → internal
+    // CLIENT → INTERNAL
     tokio::spawn(async move {
         while let Some(Ok(msg)) = client_rx.next().await {
             let converted = match msg {
@@ -70,16 +81,23 @@ async fn handle_ws_proxy(client_ws: WebSocket) {
                 AxumMessage::Binary(b) => TungsteniteMessage::Binary(b),
                 AxumMessage::Ping(p) => TungsteniteMessage::Ping(p),
                 AxumMessage::Pong(p) => TungsteniteMessage::Pong(p),
-                AxumMessage::Close(c) => TungsteniteMessage::Close(c.map(|f| {
-                    tungstenite::protocol::CloseFrame {
+                AxumMessage::Close(c) => TungsteniteMessage::Close(
+                    c.map(|f| tungstenite::protocol::CloseFrame {
                         code: tungstenite::protocol::frame::coding::CloseCode::from(f.code),
                         reason: f.reason,
-                    }
-                })),
+                    })
+                ),
             };
 
             let _ = internal_tx.send(converted).await;
         }
     });
+}
+
+async fn health_proxy() -> impl IntoResponse {
+    match reqwest::get("http://market-data-service:8081/health").await {
+        Ok(resp) => resp.text().await.unwrap_or("FAIL".into()),
+        Err(_) => "FAIL".into(),
+    }
 }
 

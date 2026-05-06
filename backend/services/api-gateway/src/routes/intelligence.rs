@@ -10,8 +10,9 @@ use serde::{Deserialize, Serialize};
 use crate::error::AppError;
 use crate::state::AppState;
 
-// ---------- Public router ----------
-
+//
+// ---------- Public Router ----------
+//
 pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/home", get(home))
@@ -21,8 +22,9 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/research/:slug", get(article))
 }
 
+//
 // ---------- DTOs ----------
-
+//
 #[derive(Serialize, Deserialize)]
 pub struct HomeResponse {
     pub briefs: Vec<GxBrief>,
@@ -120,8 +122,9 @@ pub struct ArticleResponse {
     pub assets: Vec<String>,
 }
 
-// ---------- Handlers (BFF with NATS calls) ----------
-
+//
+// ---------- Handlers ----------
+//
 pub async fn home(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<HomeResponse>, AppError> {

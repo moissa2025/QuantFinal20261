@@ -1,4 +1,5 @@
 use std::sync::Arc;
+
 use axum::{
     Router,
     routing::get,

@@ -1,5 +1,5 @@
 import requests
-from config import API_GATEWAY
+from ..config import API_GATEWAY
 
 def api(method, path, json=None, headers=None):
     url = f"{API_GATEWAY}{path}"

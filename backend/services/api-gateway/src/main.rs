@@ -1,11 +1,8 @@
 use once_cell::sync::Lazy;
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
 
 static OPENAPI: Lazy<utoipa::openapi::OpenApi> =
     Lazy::new(|| openapi::ApiDoc::openapi());
 
-// --- MODULE DECLARATIONS ---
 mod db;
 mod state;
 mod routes;
@@ -17,12 +14,14 @@ mod auth_client_nats;
 mod identity;
 mod middleware;
 mod openapi;
-// ---------------------------
+
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 use std::sync::Arc;
 
 use axum::{
-    routing::{get, post},
+    routing::get,
     Router,
     middleware::from_fn_with_state,
     response::IntoResponse,
@@ -35,10 +34,9 @@ use crate::middleware::rate_limit_user::per_user_rate_limit;
 use crate::middleware::auth::auth_middleware;
 use crate::state::AppState;
 
-use crate::routes::intelligence;
 use crate::routes::{
-    balances, ledger, market, orders, positions, risk, trading, users, auth,
-    wallet, crypto,
+    balances, ledger, market, orders, positions, risk, trading, users,
+    auth_routes, wallet, crypto, intelligence
 };
 
 #[tokio::main]
@@ -71,13 +69,12 @@ async fn openapi_json() -> impl IntoResponse {
 
 pub fn app(state: Arc<AppState>) -> Router {
     Router::new()
-        // ⭐ Swagger UI
         .merge(
             SwaggerUi::new("/swagger-ui")
                 .url("/openapi.json", OPENAPI.clone())
         )
 
-        // 🔥 AUTH PROXY
+        // AUTH PROXY (legacy)
         .nest(
             "/auth",
             Router::new()
@@ -85,23 +82,121 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .with_state(state.clone())
         )
 
-        // 🔥 DIRECT AUTH ENDPOINTS
+        // AUTH (no auth middleware)
+// AUTH (no auth middleware)
+.merge(
+    Router::new()
+        .route("/v1/auth/health", get(|| async { "OK" }))
         .nest(
             "/v1/auth",
-            auth::router().with_state(state.clone())
+            auth_routes::router().with_state(state.clone())
+        )
+)
+
+        // USERS
+        .merge(
+            Router::new()
+                .route("/v1/users/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/users",
+                    users::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
         )
 
-        // ⭐ WALLET ROUTES
-        .nest(
-            "/v1/wallet",
-            wallet::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
+        // WALLET
+        .merge(
+            Router::new()
+                .route("/v1/wallet/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/wallet",
+                    wallet::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
         )
 
-        // ⭐ CRYPTO ROUTES
+        // MARKET
+        .merge(
+            Router::new()
+                .route("/v1/market/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/market",
+                    market::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // ORDERS
+        .merge(
+            Router::new()
+                .route("/v1/orders/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/orders",
+                    orders::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                        .layer(from_fn_with_state(state.user_limiter.clone(), per_user_rate_limit))
+                )
+        )
+
+        // POSITIONS
+        .merge(
+            Router::new()
+                .route("/v1/positions/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/positions",
+                    positions::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // TRADING
+        .merge(
+            Router::new()
+                .route("/v1/trading/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/trading",
+                    trading::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // RISK
+        .merge(
+            Router::new()
+                .route("/v1/risk/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/risk",
+                    risk::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // LEDGER
+        .merge(
+            Router::new()
+                .route("/v1/ledger/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/ledger",
+                    ledger::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // BALANCES
+        .merge(
+            Router::new()
+                .route("/v1/balances/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/balances",
+                    balances::router()
+                        .layer(from_fn_with_state(state.clone(), auth_middleware))
+                )
+        )
+
+        // CRYPTO
         .nest("/api", crypto::router())
 
-        // ⭐ MARKET DATA PROXY
+        // MARKET DATA PROXY
         .nest(
             "/market-data",
             Router::new()
@@ -110,78 +205,23 @@ pub fn app(state: Arc<AppState>) -> Router {
                 .with_state(state.clone())
         )
 
-        // ⭐ ORDER ROUTES
-        .nest(
-            "/v1/orders",
-            orders::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-                .layer(from_fn_with_state(state.user_limiter.clone(), per_user_rate_limit))
+        // INTELLIGENCE (no auth)
+        .merge(
+            Router::new()
+                .route("/v1/intelligence/health", get(|| async { "OK" }))
+                .nest(
+                    "/v1/intelligence",
+                    intelligence::router().with_state(state.clone())
+                )
         )
 
-        // ⭐ USER ROUTES
-        .nest(
-            "/v1/users",
-            users::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ POSITIONS
-        .nest(
-            "/v1/positions",
-            positions::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ MARKET
-        .nest(
-            "/v1/market",
-            market::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ TRADING
-        .nest(
-            "/v1/trading",
-            trading::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ RISK
-        .nest(
-            "/v1/risk",
-            risk::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ LEDGER
-        .nest(
-            "/v1/ledger",
-            ledger::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ BALANCES
-        .nest(
-            "/v1/balances",
-            balances::router()
-                .layer(from_fn_with_state(state.clone(), auth_middleware))
-        )
-
-        // ⭐ INTELLIGENCE PORTAL ROUTES
-        .nest(
-            "/api/intelligence",
-            intelligence::router()
-                .with_state(state.clone())
-        )
-
-        // HEALTH + ROOT
+        // GLOBAL HEALTH
+        .route("/v1/health", get(|| async { "OK" }))
         .route("/health", get(|| async { "OK" }))
         .route("/", get(|| async { "GlobalQuantX API Gateway" }))
 
-        // GLOBAL STATE
         .with_state(state)
 
-        // ⭐ TRACING LAYER
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(|req: &axum::http::Request<_>| {

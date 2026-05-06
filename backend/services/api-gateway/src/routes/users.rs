@@ -10,7 +10,8 @@ use axum::{
 use crate::{error::AppError, identity::Identity, state::AppState, user_client::UserResponse};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/me", get(get_me))
+    Router::new()
+        .route("/me", get(get_me))
 }
 
 #[tracing::instrument(
@@ -30,4 +31,5 @@ pub async fn get_me(
 
     Ok(Json(user))
 }
+
 

@@ -20,10 +20,24 @@ where
     B: Send + 'static,
 {
     let path = req.uri().path();
-    if path.starts_with("/auth") || path.starts_with("/v1/auth") {
-    return Ok(next.run(req).await);
+
+    // -----------------------------------------
+    // BYPASS HEALTH ENDPOINTS (public)
+    // -----------------------------------------
+    if path.ends_with("/health") {
+        return Ok(next.run(req).await);
     }
 
+    // -----------------------------------------
+    // BYPASS AUTH ROUTES (login, logout, refresh)
+    // -----------------------------------------
+    if path.starts_with("/auth") || path.starts_with("/v1/auth") {
+        return Ok(next.run(req).await);
+    }
+
+    // -----------------------------------------
+    // REQUIRE SESSION COOKIE
+    // -----------------------------------------
     let cookie_header = headers
         .get("cookie")
         .and_then(|v| v.to_str().ok())
@@ -42,6 +56,9 @@ where
 
     let token = session_token.ok_or(StatusCode::UNAUTHORIZED)?;
 
+    // -----------------------------------------
+    // VALIDATE SESSION WITH AUTH SERVICE
+    // -----------------------------------------
     let res = state
         .auth_nats
         .validate_session(token)
@@ -52,11 +69,17 @@ where
         return Err(StatusCode::UNAUTHORIZED);
     }
 
+    // -----------------------------------------
+    // INJECT IDENTITY INTO REQUEST
+    // -----------------------------------------
     req.extensions_mut().insert(Identity {
         user_id: res.user_id,
         roles: res.roles,
     });
 
+    // -----------------------------------------
+    // CONTINUE PIPELINE
+    // -----------------------------------------
     Ok(next.run(req).await)
 }
 

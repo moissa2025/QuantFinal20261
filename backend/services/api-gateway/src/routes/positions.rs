@@ -60,3 +60,7 @@ pub async fn get_position(
     Ok(Json(res))
 }
 
+async fn health() -> &'static str {
+    "OK"
+}
+

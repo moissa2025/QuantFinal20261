@@ -1,38 +1,85 @@
-from services.journey_user import test_user_journey, user_login
-from services.journey_wallet import test_wallet_journey
-from services.journey_trading import test_trading_journey
-from services.journey_kyc import test_kyc_journey
-from services.journey_onboarding import test_onboarding_journey
-from services.journey_ledger import test_ledger_journey
-from services.journey_risk import test_risk_journey
-from services.journey_reconciliation import test_reconciliation_journey
+import importlib
+import traceback
+import time
 
-def run_all():
-    print("=== USER JOURNEY ===")
-    test_user_journey()
-    access, _ = user_login()
+ENDPOINT_TEST = "backend.tests.test_all_endpoints"
 
-    print("=== WALLET ===")
-    test_wallet_journey(access)
+SERVICES = [
+    "backend.tests.services.journey_user",
+    "backend.tests.services.journey_kyc",
+    "backend.tests.services.journey_onboarding",
+    "backend.tests.services.journey_wallet",
+    "backend.tests.services.journey_trading",
+    "backend.tests.services.journey_risk",
+    "backend.tests.services.journey_ledger",
+    "backend.tests.services.journey_reconciliation",
+    "backend.tests.services.journey_intelligence",
+]
 
-    print("=== TRADING ===")
-    test_trading_journey(access)
+def run_module(module_name):
+    print(f"\n=== Running {module_name} ===")
+    try:
+        module = importlib.import_module(module_name)
+        if hasattr(module, "run"):
+            result = module.run()
+        elif hasattr(module, "main"):
+            result = module.main()
+        else:
+            print(f"⚠️  No run() or main() found in {module_name}")
+            return False
 
-    print("=== KYC ===")
-    test_kyc_journey(access)
+        if result is True:
+            print(f"✅ {module_name} PASSED")
+            return True
+        else:
+            print(f"❌ {module_name} FAILED")
+            return False
 
-    print("=== ONBOARDING ===")
-    test_onboarding_journey(access)
+    except Exception as e:
+        print(f"❌ {module_name} CRASHED")
+        traceback.print_exc()
+        return False
 
-    print("=== LEDGER ===")
-    test_ledger_journey(access)
 
-    print("=== RISK ===")
-    test_risk_journey(access)
+def main():
+    print("\n🔍 GlobalQuantX Automated Backend Test Suite")
+    print("============================================\n")
 
-    print("=== RECONCILIATION ===")
-    test_reconciliation_journey(access)
+    start = time.time()
+    results = {}
+
+    # 1. Test all endpoints first
+    print("\n=== Running endpoint health checks ===")
+    results["endpoints"] = run_module(ENDPOINT_TEST)
+
+    # 2. Run all journey tests
+    for svc in SERVICES:
+        results[svc] = run_module(svc)
+
+    # Summary
+    print("\n============================================")
+    print("🧪 TEST SUMMARY")
+    print("============================================")
+
+    passed = sum(1 for r in results.values() if r)
+    failed = sum(1 for r in results.values() if not r)
+
+    for name, result in results.items():
+        status = "PASS" if result else "FAIL"
+        print(f"{name:40} {status}")
+
+    print("\n--------------------------------------------")
+    print(f"Total: {len(results)} | Passed: {passed} | Failed: {failed}")
+    print(f"⏱️  Total time: {round(time.time() - start, 2)}s")
+    print("--------------------------------------------")
+
+    # Exit code for CI/CD
+    if failed > 0:
+        exit(1)
+    else:
+        exit(0)
+
 
 if __name__ == "__main__":
-    run_all()
+    main()
 

@@ -1,4 +1,4 @@
-from services.utils import api
+from .utils import api
 
 def test_ledger_journey(token):
     status, data = api("GET", "/ledger/entries", headers={"Authorization": f"Bearer {token}"})

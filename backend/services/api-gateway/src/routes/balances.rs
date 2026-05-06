@@ -4,12 +4,14 @@ use axum::{
     extract::State,
     routing::get,
     Json, Router,
+    response::IntoResponse,
 };
 
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/", get(get_balances))
+    Router::new()
+        .route("/", get(get_balances))
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -18,11 +20,6 @@ pub struct BalancesResponse {
     pub margin: f64,
 }
 
-#[tracing::instrument(
-    name = "get_balances",
-    skip(state, identity),
-    fields(user_id = %identity.user_id)
-)]
 pub async fn get_balances(
     identity: Identity,
     State(state): State<Arc<AppState>>,
@@ -33,5 +30,13 @@ pub async fn get_balances(
         .await?;
 
     Ok(Json(res))
+}
+
+async fn health_proxy() -> impl IntoResponse {
+    // FIXED: correct internal service name
+    match reqwest::get("http://wallet-service:8080/health").await {
+        Ok(resp) => resp.text().await.unwrap_or("FAIL".into()),
+        Err(_) => "FAIL".into(),
+    }
 }
 
