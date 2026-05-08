@@ -8,13 +8,7 @@ if [ -z "$1" ]; then
 fi
 
 TAG=$1
-
-CLUSTER=$(kind get clusters | head -n 1)
-
-if [ -z "$CLUSTER" ]; then
-  echo "❌ No KIND clusters found!"
-  exit 1
-fi
+CLUSTER="kind"
 
 echo "📥 Loading images into KIND cluster '$CLUSTER'..."
 echo "🔖 Using tag: $TAG"

@@ -1,13 +1,10 @@
 use async_nats::{Client, Message};
 use serde_json;
-use tracing::{error};
+use tracing::error;
 use sqlx::Row;
 use uuid::Uuid;
 
-use common::auth_messages::{
-    AuthLoginRequest,
-    AuthLoginResponse,
-};
+use common::auth_messages::{AuthLoginRequest, AuthLoginResponse};
 
 use crate::db::DbPool;
 use crate::password::verify_password;

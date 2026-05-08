@@ -1,92 +1,34 @@
-mod handlers;
 mod db;
-mod dto;
-mod models;
+mod crypto;
 mod password;
-mod routes;
 mod session;
+mod nats_handlers;
+mod models;
 mod state;
-mod nats_handlers;
-mod crypto; // for encrypted refresh tokens
-mod nats_handlers;
 
-use nats_handlers::{
-    register::handle_register,
-    activate::handle_activate,
-};
-
-use std::net::SocketAddr;
-
-use axum::{
-    extract::connect_info::IntoMakeServiceWithConnectInfo,
-    Router,
-};
-use tower_http::cors::CorsLayer;
-use tracing_subscriber::EnvFilter;
-
-use crate::state::AppState;
+use sqlx::postgres::PgPoolOptions;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Load .env if present
-    dotenvy::dotenv().ok();
+    tracing_subscriber::fmt::init();
 
-    // Initialise tracing
-    tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::from_default_env())
-        .init();
-
-    //
-    // 1. Connect to NATS
-    //
-    let nats_url = std::env::var("NATS_URL")
-        .unwrap_or_else(|_| "nats://nats.trading-platform.svc.cluster.local:4222".to_string());
-
-    let nats = async_nats::connect(&nats_url)
-        .await
-        .expect("failed to connect to NATS");
-
-    //
-    // 2. Connect to Postgres
-    //
-    let db = db::init_db()
-        .await
-        .expect("failed to connect to database");
-
-    //
-    // 3. Build shared AppState
-    //
-    let state = AppState::new(nats.clone(), db.clone());
-
-    //
-    // 4. Start NATS RPC listeners
-    //
-    nats_handlers::start_nats_listeners(nats.clone(), db.clone()).await;
-
-    //
-    // 5. Build HTTP router
-    //
-    let router: Router<AppState> = routes::router()
-        .layer(CorsLayer::very_permissive());
-
-    let app = router.with_state(state.clone());
-
-    //
-    // 6. Bind address (Axum 0.6 uses Server::bind)
-    //
-    let addr: SocketAddr = "0.0.0.0:9001".parse().unwrap();
-    tracing::info!("auth-service running on {}", addr);
-
-    //
-    // 7. Serve HTTP with ConnectInfo
-    //
-    let make_service: IntoMakeServiceWithConnectInfo<_, SocketAddr> =
-        app.into_make_service_with_connect_info::<SocketAddr>();
-
-    axum::Server::bind(&addr)
-        .serve(make_service)
+    // DB pool
+    let db = PgPoolOptions::new()
+        .max_connections(10)
+        .connect(&std::env::var("DATABASE_URL")?)
         .await?;
 
+    // NATS client
+    let nats = async_nats::connect(&std::env::var("NATS_URL")?).await?;
+
+    // Start NATS listeners
+    nats_handlers::start_nats_listeners(nats, db).await;
+
+    // Keep service alive
+    std::future::pending::<()>().await;
+
+    // unreachable, but required for return type
+    #[allow(unreachable_code)]
     Ok(())
 }
 

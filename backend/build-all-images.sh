@@ -42,7 +42,6 @@ for svc in "${SERVICES[@]}"; do
 
   docker build --no-cache \
     -t $svc:$TAG \
-    -t $svc:latest \
     -f services/$svc/Dockerfile .
 
   END=$(date +%s)

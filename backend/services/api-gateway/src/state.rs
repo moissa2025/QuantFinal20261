@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::auth_client_nats::AuthNatsClient;
 use crate::nats_client::NatsClient;
 

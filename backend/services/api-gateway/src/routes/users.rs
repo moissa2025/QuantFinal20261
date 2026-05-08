@@ -7,7 +7,8 @@ use axum::{
     Router,
 };
 
-use crate::{error::AppError, identity::Identity, state::AppState, user_client::UserResponse};
+use crate::{error::AppError, identity::Identity, state::AppState};
+use common::auth_messages::AuthValidateSessionResponse;
 
 pub fn router() -> Router<Arc<AppState>> {
     Router::new()
@@ -22,14 +23,14 @@ pub fn router() -> Router<Arc<AppState>> {
 pub async fn get_me(
     identity: Identity,
     State(state): State<Arc<AppState>>,
-) -> Result<Json<UserResponse>, AppError> {
+) -> Result<Json<AuthValidateSessionResponse>, AppError> {
+    // Re‑validate session and return the same payload
     let user = state
-        .user_client
-        .get_user_by_id(&identity.user_id)
+        .auth_nats
+        .validate_session(identity.session_token.clone(), "0.0.0.0".into(), "api-gateway".into())
         .await
         .map_err(|_| AppError::Http(axum::http::StatusCode::BAD_GATEWAY))?;
 
     Ok(Json(user))
 }
-
 

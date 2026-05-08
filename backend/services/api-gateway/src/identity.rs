@@ -3,7 +3,8 @@ use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
 #[derive(Clone, Debug)]
 pub struct Identity {
     pub user_id: String,
-    pub roles: Vec<String>,
+    pub session_token: String,
+    pub roles: Vec<String>, // or Vec<String>, or Option<Vec<String>> if you prefer
 }
 
 #[async_trait]

@@ -1,39 +1,52 @@
-use async_nats::Message;
+use async_nats::{Client, Message};
 use common::auth_messages::{RegisterRequest, RegisterResponse};
-use sqlx::PgPool;
 use serde_json::json;
+use sqlx::Row;
 
-pub async fn handle_register(msg: Message, db: PgPool) {
+use crate::db::DbPool;
+
+pub async fn handle_register(pool: DbPool, nats: Client, msg: Message) {
     let payload: RegisterRequest = match serde_json::from_slice(&msg.payload) {
         Ok(v) => v,
         Err(_) => {
-            let _ = msg.respond(json!({ "error": "invalid payload" }).to_string().into());
+            if let Some(reply) = msg.reply {
+                let _ = nats
+                    .publish(reply, json!({ "error": "invalid payload" }).to_string().into())
+                    .await;
+            }
             return;
         }
     };
 
-    // Insert user into DB
-    let user_id = match sqlx::query_scalar!(
+    let user_id: String = match sqlx::query(
         r#"
         INSERT INTO users (email, password_hash)
         VALUES ($1, crypt($2, gen_salt('bf')))
         RETURNING id
-        "#,
-        payload.email,
-        payload.password
+        "#
     )
-    .fetch_one(&db)
+    .bind(&payload.email)
+    .bind(&payload.password)
+    .fetch_one(&pool)
     .await
     {
-        Ok(id) => id,
+        Ok(row) => row.get("id"),
         Err(_) => {
-            let _ = msg.respond(json!({ "error": "registration failed" }).to_string().into());
+            if let Some(reply) = msg.reply {
+                let _ = nats
+                    .publish(reply, json!({ "error": "registration failed" }).to_string().into())
+                    .await;
+            }
             return;
         }
     };
 
     let response = RegisterResponse { user_id };
 
-    let _ = msg.respond(serde_json::to_vec(&response).unwrap().into());
+    if let Some(reply) = msg.reply {
+        let _ = nats
+            .publish(reply, serde_json::to_vec(&response).unwrap().into())
+            .await;
+    }
 }
 

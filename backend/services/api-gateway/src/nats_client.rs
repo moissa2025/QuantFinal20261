@@ -20,7 +20,18 @@ pub enum NatsError {
 }
 
 impl NatsClient {
-    pub async fn connect(url: &str) -> Result<Self, NatsError> {
+       pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
+    where
+        Req: Serialize,
+        Res: DeserializeOwned,
+    {
+        self.rpc(subject, req).await
+    }
+ 
+    /// Connect using NATS_URL env var or default localhost
+    pub async fn connect_from_env() -> Result<Self, NatsError> {
+        let url = std::env::var("NATS_URL").unwrap_or_else(|_| "nats://127.0.0.1:4222".into());
+
         let inner = async_nats::connect(url)
             .await
             .map_err(|e| NatsError::Connection(e.to_string()))?;
@@ -28,14 +39,13 @@ impl NatsClient {
         Ok(Self { inner })
     }
 
-    pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
-    where
-        Req: Serialize,
-        Res: DeserializeOwned,
-    {
-        self.rpc(subject, req).await
+    /// Synchronous-looking constructor for main.rs
+    pub fn new_blocking() -> Result<Self, NatsError> {
+        tokio::runtime::Handle::current()
+            .block_on(Self::connect_from_env())
     }
 
+    /// Generic RPC request
     pub async fn rpc<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
     where
         Req: Serialize,
@@ -56,6 +66,7 @@ impl NatsClient {
         Ok(res)
     }
 
+    /// Subscribe to a subject
     pub async fn subscribe(&self, subject: &str) -> Result<Subscriber, NatsError> {
         self.inner
             .subscribe(subject.to_string())

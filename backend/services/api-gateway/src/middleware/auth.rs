@@ -1,67 +1,64 @@
 use std::sync::Arc;
 
 use axum::{
+    body::Body,
     extract::State,
     http::{HeaderMap, Request, StatusCode},
     middleware::Next,
     response::Response,
 };
-use cookie::Cookie;
 
 use crate::{identity::Identity, state::AppState};
 
-pub async fn auth_middleware<B>(
+fn extract_ip(headers: &HeaderMap) -> String {
+    headers
+        .get("x-forwarded-for")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("0.0.0.0")
+        .to_string()
+}
+
+fn extract_ua(headers: &HeaderMap) -> String {
+    headers
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("api-gateway")
+        .to_string()
+}
+
+pub async fn auth_middleware(
     State(state): State<Arc<AppState>>,
-    headers: HeaderMap,
-    mut req: Request<B>,
-    next: Next<B>,
-) -> Result<Response, StatusCode>
-where
-    B: Send + 'static,
-{
+    mut req: Request<Body>,
+    next: Next<Body>,
+) -> Result<Response, StatusCode> {
     let path = req.uri().path();
 
-    // -----------------------------------------
-    // BYPASS HEALTH ENDPOINTS (public)
-    // -----------------------------------------
+    // Public endpoints
     if path.ends_with("/health") {
         return Ok(next.run(req).await);
     }
 
-    // -----------------------------------------
-    // BYPASS AUTH ROUTES (login, logout, refresh)
-    // -----------------------------------------
+    // Auth endpoints are public
     if path.starts_with("/auth") || path.starts_with("/v1/auth") {
         return Ok(next.run(req).await);
     }
 
-    // -----------------------------------------
-    // REQUIRE SESSION COOKIE
-    // -----------------------------------------
-    let cookie_header = headers
-        .get("cookie")
+    let headers = req.headers();
+    let ip = extract_ip(headers);
+    let ua = extract_ua(headers);
+
+    // Extract Bearer token
+    let token = headers
+        .get("authorization")
         .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.strip_prefix("Bearer "))
+        .map(|s| s.to_string())
         .ok_or(StatusCode::UNAUTHORIZED)?;
 
-    let cookies = Cookie::split_parse(cookie_header);
-    let mut session_token = None;
-
-    for c in cookies {
-        let c = c.map_err(|_| StatusCode::UNAUTHORIZED)?;
-        if c.name() == "session_token" {
-            session_token = Some(c.value().to_string());
-            break;
-        }
-    }
-
-    let token = session_token.ok_or(StatusCode::UNAUTHORIZED)?;
-
-    // -----------------------------------------
-    // VALIDATE SESSION WITH AUTH SERVICE
-    // -----------------------------------------
+    // Validate session via NATS
     let res = state
         .auth_nats
-        .validate_session(token)
+        .validate_session(token.clone(), ip, ua)
         .await
         .map_err(|_| StatusCode::UNAUTHORIZED)?;
 
@@ -69,17 +66,14 @@ where
         return Err(StatusCode::UNAUTHORIZED);
     }
 
-    // -----------------------------------------
-    // INJECT IDENTITY INTO REQUEST
-    // -----------------------------------------
+    // Inject identity
     req.extensions_mut().insert(Identity {
-        user_id: res.user_id,
-        roles: res.roles,
-    });
+    user_id: res.user_id,
+    session_token: token,
+    roles: Vec::new(),
+});
 
-    // -----------------------------------------
-    // CONTINUE PIPELINE
-    // -----------------------------------------
+
     Ok(next.run(req).await)
 }
 

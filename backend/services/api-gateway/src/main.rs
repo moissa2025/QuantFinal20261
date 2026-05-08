@@ -1,3 +1,5 @@
+use crate::middleware::rate_limit_user::{UserRateLimiter, per_user_rate_limit};
+
 use once_cell::sync::Lazy;
 
 static OPENAPI: Lazy<utoipa::openapi::OpenApi> =
@@ -7,9 +9,7 @@ mod db;
 mod state;
 mod routes;
 mod error;
-mod user_client;
 mod nats_client;
-mod auth_client_http;
 mod auth_client_nats;
 mod identity;
 mod middleware;
@@ -30,8 +30,8 @@ use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
 
 use crate::middleware::auth::auth_middleware;
-use crate::middleware::rate_limit_user::per_user_rate_limit;
 use crate::state::AppState;
+use crate::nats_client::NatsClient;
 
 use crate::routes::{
     auth_routes,
@@ -56,13 +56,13 @@ async fn main() {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    let state = Arc::new(
-        AppState::new()
-            .await
-            .expect("❌ API Gateway failed to initialize AppState"),
-    );
+    // Initialize NATS client
+    let nats = NatsClient::new_blocking().expect("❌ Failed to initialize NATS client");
 
-    let app = app(state.clone());
+    // AppState::new() is NOT async and requires NatsClient
+    let state = Arc::new(AppState::new(nats));
+    let rate_limiter = UserRateLimiter::new();
+    let app = app(state.clone(), rate_limiter.clone());
 
     let addr = "0.0.0.0:8080";
     println!("🚀 API Gateway running on http://{addr}");
@@ -77,8 +77,10 @@ async fn openapi_json() -> impl IntoResponse {
     Json(openapi::ApiDoc::openapi())
 }
 
-pub fn app(state: Arc<AppState>) -> Router {
+pub fn app(state: Arc<AppState>, rate_limiter: UserRateLimiter) -> Router {
     Router::new()
+        .layer(axum::Extension(rate_limiter))
+
         // OpenAPI / Swagger
         .merge(
             SwaggerUi::new("/swagger-ui")
@@ -86,7 +88,7 @@ pub fn app(state: Arc<AppState>) -> Router {
         )
         .route("/openapi.json", get(openapi_json))
 
-        // AUTH (NATS, no auth middleware)
+        // AUTH (NATS)
         .merge(
             Router::new()
                 .route("/v1/auth/health", get(|| async { "OK" }))
@@ -129,18 +131,14 @@ pub fn app(state: Arc<AppState>) -> Router {
                 ),
         )
 
-        // ORDERS
+        // ORDERS (rate limiter removed)
         .merge(
             Router::new()
                 .route("/v1/orders/health", get(|| async { "OK" }))
                 .nest(
                     "/v1/orders",
                     orders::router()
-                        .layer(from_fn_with_state(state.clone(), auth_middleware))
-                        .layer(from_fn_with_state(
-                            state.user_limiter.clone(),
-                            per_user_rate_limit,
-                        )),
+                        .layer(from_fn_with_state(state.clone(), auth_middleware)),
                 ),
         )
 

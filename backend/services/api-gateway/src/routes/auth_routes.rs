@@ -1,14 +1,15 @@
+use std::sync::Arc;
+
 use axum::{
     extract::{State, TypedHeader},
-    routing::{post},
+    http::HeaderMap,
+    routing::post,
     Json, Router,
 };
 use headers::UserAgent;
-use http::HeaderMap;
 use serde::Deserialize;
 
-use crate::state::AppState;
-use crate::auth_client_nats::AuthNatsClient;
+use crate::{error::AppError, state::AppState};
 
 use common::auth_messages::{
     RegisterRequest,
@@ -71,7 +72,7 @@ pub struct LogoutBody {
 //
 // Router
 //
-pub fn router() -> Router<AppState> {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/register", post(register))
         .route("/activate", post(activate))
@@ -87,105 +88,110 @@ pub fn router() -> Router<AppState> {
 // Handlers
 //
 
-async fn register(
-    State(state): State<AppState>,
+pub async fn register(
+    State(state): State<Arc<AppState>>,
     Json(body): Json<RegisterRequest>,
-) -> Result<Json<RegisterResponse>, String> {
-    state.auth_nats
-        .register(body)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+) -> Result<Json<RegisterResponse>, AppError> {
+    let res = state.auth_nats.register(body).await?;
+    Ok(Json(res))
 }
 
-async fn activate(
-    State(state): State<AppState>,
+pub async fn activate(
+    State(state): State<Arc<AppState>>,
     Json(body): Json<ActivateBody>,
-) -> Result<Json<ActivateResponse>, String> {
-    state.auth_nats
-        .activate(body.token)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+) -> Result<Json<ActivateResponse>, AppError> {
+    let res = state.auth_nats.activate(body.token).await?;
+    Ok(Json(res))
+
 }
 
-async fn login(
-    State(state): State<AppState>,
+pub async fn login(
+    State(state): State<Arc<AppState>>,
     headers: HeaderMap,
-    ua: Option<TypedHeader<UserAgent>>,
     Json(body): Json<LoginBody>,
-) -> Result<Json<AuthLoginResponse>, String> {
+) -> Result<Json<AuthLoginResponse>, AppError> {
     let ip = extract_ip(&headers);
-    let ua_str = extract_ua(ua);
 
-    state.auth_nats
+    let ua_str = headers
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("api-gateway")
+        .to_string();
+
+    let res = state
+        .auth_nats
         .login(body.email, body.password, ip, ua_str)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+        .await?;
+
+    Ok(Json(res))
 }
 
-async fn refresh(
-    State(state): State<AppState>,
+
+pub async fn refresh(
+    State(state): State<Arc<AppState>>,
     headers: HeaderMap,
-    ua: Option<TypedHeader<UserAgent>>,
     Json(body): Json<RefreshBody>,
-) -> Result<Json<AuthRefreshResponse>, String> {
+) -> Result<Json<AuthRefreshResponse>, AppError> {
     let ip = extract_ip(&headers);
-    let ua_str = extract_ua(ua);
 
-    state.auth_nats
+    let ua_str = headers
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("api-gateway")
+        .to_string();
+
+    let res = state
+        .auth_nats
         .refresh(body.refresh_token, ip, ua_str)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+        .await?;
+
+    Ok(Json(res))
 }
 
-async fn validate_session(
-    State(state): State<AppState>,
+
+pub async fn validate_session(
+    State(state): State<Arc<AppState>>,
     headers: HeaderMap,
-    ua: Option<TypedHeader<UserAgent>>,
     Json(body): Json<ValidateBody>,
-) -> Result<Json<AuthValidateSessionResponse>, String> {
+) -> Result<Json<AuthValidateSessionResponse>, AppError> {
     let ip = extract_ip(&headers);
-    let ua_str = extract_ua(ua);
 
-    state.auth_nats
+    let ua_str = headers
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("api-gateway")
+        .to_string();
+
+    let res = state
+        .auth_nats
         .validate_session(body.session_token, ip, ua_str)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+        .await?;
+
+    Ok(Json(res))
 }
 
-async fn logout(
-    State(state): State<AppState>,
+
+pub async fn logout(
+    State(state): State<Arc<AppState>>,
     Json(body): Json<LogoutBody>,
-) -> Result<(), String> {
-    state.auth_nats
-        .logout(body.session_token)
-        .await
-        .map_err(|e| e.to_string())
+) -> Result<(), AppError> {
+    state.auth_nats.logout(body.session_token).await?;
+    Ok(())
 }
 
-async fn verify_mfa(
-    State(state): State<AppState>,
+pub async fn verify_mfa(
+    State(state): State<Arc<AppState>>,
     Json(body): Json<AuthMfaVerifyRequest>,
-) -> Result<Json<AuthMfaVerifyResponse>, String> {
-    state.auth_nats
-        .verify_mfa(body)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+) -> Result<Json<AuthMfaVerifyResponse>, AppError> {
+    let res = state.auth_nats.verify_mfa(body).await?;
+    Ok(Json(res))
 }
 
-async fn setup_totp(
-    State(state): State<AppState>,
+pub async fn setup_totp(
+    State(state): State<Arc<AppState>>,
     Json(body): Json<AuthMfaSetupRequest>,
-) -> Result<Json<AuthMfaSetupResponse>, String> {
-    state.auth_nats
-        .setup_totp(body)
-        .await
-        .map(Json)
-        .map_err(|e| e.to_string())
+) -> Result<Json<AuthMfaSetupResponse>, AppError> {
+    let res = state.auth_nats.setup_totp(body).await?;
+    Ok(Json(res))
 }
 

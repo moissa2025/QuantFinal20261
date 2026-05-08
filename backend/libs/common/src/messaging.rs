@@ -18,7 +18,7 @@ impl Messaging {
     //
     // PUBLISH RAW BYTES
     //
-    pub async fn publish(&self, subject: &str, data: Vec<u8>) -> Result<()> {
+    pub async fn publish(&self, subject: String, data: Vec<u8>) -> Result<()> {
         self.client.publish(subject, data.into()).await?;
         Ok(())
     }
@@ -60,7 +60,7 @@ impl Messaging {
         Res: DeserializeOwned,
     {
         let payload = serde_json::to_vec(req)?;
-        let inbox = self.client.new_inbox(); // this is a String
+        let inbox = self.client.new_inbox();
         let mut sub = self.client.subscribe(inbox.clone()).await?;
 
         self.client

@@ -1,37 +1,45 @@
-use async_nats::Message;
+use async_nats::{Client, Message};
 use common::auth_messages::ActivateResponse;
 use serde_json::json;
-use sqlx::PgPool;
+
+use crate::db::DbPool;
 
 #[derive(serde::Deserialize)]
 struct ActivateRequest {
     token: String,
 }
 
-pub async fn handle_activate(msg: Message, db: PgPool) {
+pub async fn handle_activate(pool: DbPool, nats: Client, msg: Message) {
     let payload: ActivateRequest = match serde_json::from_slice(&msg.payload) {
         Ok(v) => v,
         Err(_) => {
-            let _ = msg.respond(json!({ "error": "invalid payload" }).to_string().into());
+            if let Some(reply) = msg.reply {
+                let _ = nats
+                    .publish(reply, json!({ "error": "invalid payload" }).to_string().into())
+                    .await;
+            }
             return;
         }
     };
 
-    let result = sqlx::query!(
+    let ok = sqlx::query(
         r#"
         UPDATE users
         SET is_active = TRUE
         WHERE activation_token = $1
-        "#,
-        payload.token
+        "#
     )
-    .execute(&db)
-    .await;
-
-    let ok = result.is_ok();
+    .bind(&payload.token)
+    .execute(&pool)
+    .await
+    .is_ok();
 
     let response = ActivateResponse { ok };
 
-    let _ = msg.respond(serde_json::to_vec(&response).unwrap().into());
+    if let Some(reply) = msg.reply {
+        let _ = nats
+            .publish(reply, serde_json::to_vec(&response).unwrap().into())
+            .await;
+    }
 }
 
