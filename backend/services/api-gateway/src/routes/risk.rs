@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{error::AppError, identity::Identity, state::AppState};
 
-pub fn router() -> Router<Arc<AppState>> {
+pub fn router() -> Router {
     Router::new()
         .route("/limits", get(get_limits))
 }

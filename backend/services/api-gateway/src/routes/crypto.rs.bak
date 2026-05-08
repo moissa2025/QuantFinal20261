@@ -11,7 +11,7 @@ use futures::StreamExt;
 
 use crate::state::AppState;
 
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/ws/crypto-prices", get(crypto_prices_ws))
 }

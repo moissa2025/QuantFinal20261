@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -29,8 +31,12 @@ use common::auth_messages::*;
 )]
 pub struct ApiDoc;
 
+// Lazily build OpenAPI once at runtime
+pub static OPENAPI: LazyLock<utoipa::openapi::OpenApi> =
+    LazyLock::new(|| ApiDoc::openapi());
+
 pub fn swagger() -> SwaggerUi {
     SwaggerUi::new("/swagger-ui")
-        .url("/openapi.json", ApiDoc::openapi())
+        .url("/openapi.json", OPENAPI.clone())
 }
 

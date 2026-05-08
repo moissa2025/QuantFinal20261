@@ -1,5 +1,5 @@
-use crate::auth_client_nats::AuthNatsClient;
 use crate::nats_client::NatsClient;
+use crate::auth_client_nats::AuthNatsClient;
 
 #[derive(Clone)]
 pub struct AppState {

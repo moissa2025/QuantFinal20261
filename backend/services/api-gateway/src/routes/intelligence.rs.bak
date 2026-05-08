@@ -13,7 +13,7 @@ use crate::state::AppState;
 //
 // ---------- Public Router ----------
 //
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/home", get(home))
         .route("/markets", get(markets))

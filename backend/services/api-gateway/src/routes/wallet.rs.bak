@@ -10,7 +10,7 @@ use crate::state::AppState;
 //
 // /v1/wallet/health is defined centrally in main.rs.
 //
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
 }
 

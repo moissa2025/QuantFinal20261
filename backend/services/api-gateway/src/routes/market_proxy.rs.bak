@@ -14,7 +14,7 @@ use tungstenite::Message as TungsteniteMessage;
 use crate::state::AppState;
 
 /// Router for /v1/market/*
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/snapshot", get(proxy_snapshot))
         .route("/stream", get(proxy_stream))

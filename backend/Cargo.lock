@@ -116,6 +116,7 @@ dependencies = [
  "common",
  "cookie",
  "dashmap",
+ "dotenvy",
  "futures",
  "futures-util",
  "headers 0.4.1",

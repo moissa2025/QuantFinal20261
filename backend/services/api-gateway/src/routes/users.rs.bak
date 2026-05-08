@@ -10,7 +10,7 @@ use axum::{
 use crate::{error::AppError, identity::Identity, state::AppState};
 use common::auth_messages::AuthValidateSessionResponse;
 
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/me", get(get_me))
 }

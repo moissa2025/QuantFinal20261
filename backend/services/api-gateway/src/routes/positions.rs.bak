@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{error::AppError, identity::Identity, state::AppState};
 
-pub fn router() -> Router {
+pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/", get(list_positions))
         .route("/:symbol", get(get_position))
