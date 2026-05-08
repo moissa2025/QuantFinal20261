@@ -1,13 +1,4 @@
-use crate::dto::{
-    ActivateRequest, ActivateResponse,
-    VerifyMfaRequest, VerifyMfaResponse,
-    SetupTotpRequest, SetupTotpResponse,
-    LoginRequest, LoginResponse,
-    ValidateRequest, ValidateResponse,
-    LogoutRequest,
-    RefreshRequest, RefreshResponse,
-    RegisterRequest, RegisterResponse,
-};
+use common::auth_messages::*;
 use crate::crypto::totp::{generate_totp_secret, generate_totp_qr, verify_totp};
 use crate::crypto::email_otp::generate_email_otp;
 

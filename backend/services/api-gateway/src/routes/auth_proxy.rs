@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{State, Path},
+    body::Body,
+    extract::{Path, State},
     http::{Request, StatusCode},
     response::IntoResponse,
-    routing::get,
-    body::Body,
     Router,
 };
 use hyper::body::to_bytes;
@@ -14,8 +13,7 @@ use reqwest::Client;
 use crate::state::AppState;
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new()
-        .route("/*path", axum::routing::any(proxy_auth))
+    Router::new().route("/*path", axum::routing::any(proxy_auth))
 }
 
 pub async fn proxy_auth(
@@ -47,15 +45,17 @@ pub async fn proxy_auth(
             continue;
         }
 
-        let header_name = match reqwest::header::HeaderName::from_bytes(name.as_str().as_bytes()) {
-            Ok(n) => n,
-            Err(_) => continue,
-        };
+        let header_name =
+            match reqwest::header::HeaderName::from_bytes(name.as_str().as_bytes()) {
+                Ok(n) => n,
+                Err(_) => continue,
+            };
 
-        let header_value = match reqwest::header::HeaderValue::from_bytes(value.as_bytes()) {
-            Ok(v) => v,
-            Err(_) => continue,
-        };
+        let header_value =
+            match reqwest::header::HeaderValue::from_bytes(value.as_bytes()) {
+                Ok(v) => v,
+                Err(_) => continue,
+            };
 
         builder = builder.header(header_name, header_value);
     }
@@ -64,8 +64,8 @@ pub async fn proxy_auth(
 
     match resp {
         Ok(r) => {
-            let status = StatusCode::from_u16(r.status().as_u16())
-                .unwrap_or(StatusCode::BAD_GATEWAY);
+            let status =
+                StatusCode::from_u16(r.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
             let bytes = r.bytes().await.unwrap_or_default();
             (status, bytes).into_response()
         }

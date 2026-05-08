@@ -20,7 +20,7 @@ pub enum NatsError {
 }
 
 impl NatsClient {
-    pub async fn connect(url: String) -> Result<Self, NatsError> {
+    pub async fn connect(url: &str) -> Result<Self, NatsError> {
         let inner = async_nats::connect(url)
             .await
             .map_err(|e| NatsError::Connection(e.to_string()))?;
@@ -28,11 +28,6 @@ impl NatsClient {
         Ok(Self { inner })
     }
 
-    //
-    // ─────────────────────────────────────────────────────────────
-    //   ADD THIS: request() wrapper for API Gateway compatibility
-    // ─────────────────────────────────────────────────────────────
-    //
     pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
     where
         Req: Serialize,
@@ -41,11 +36,6 @@ impl NatsClient {
         self.rpc(subject, req).await
     }
 
-    //
-    // ─────────────────────────────────────────────────────────────
-    //   RPC REQUEST (your original implementation)
-    // ─────────────────────────────────────────────────────────────
-    //
     pub async fn rpc<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
     where
         Req: Serialize,
@@ -66,11 +56,6 @@ impl NatsClient {
         Ok(res)
     }
 
-    //
-    // ─────────────────────────────────────────────────────────────
-    //   SUBSCRIBE (unchanged)
-    // ─────────────────────────────────────────────────────────────
-    //
     pub async fn subscribe(&self, subject: &str) -> Result<Subscriber, NatsError> {
         self.inner
             .subscribe(subject.to_string())

@@ -8,6 +8,12 @@ mod session;
 mod state;
 mod nats_handlers;
 mod crypto; // for encrypted refresh tokens
+mod nats_handlers;
+
+use nats_handlers::{
+    register::handle_register,
+    activate::handle_activate,
+};
 
 use std::net::SocketAddr;
 

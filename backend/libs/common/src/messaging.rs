@@ -18,7 +18,7 @@ impl Messaging {
     //
     // PUBLISH RAW BYTES
     //
-    pub async fn publish(&self, subject: String, data: Vec<u8>) -> Result<()> {
+    pub async fn publish(&self, subject: &str, data: Vec<u8>) -> Result<()> {
         self.client.publish(subject, data.into()).await?;
         Ok(())
     }

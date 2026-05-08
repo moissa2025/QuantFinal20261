@@ -1,97 +1,123 @@
+pub mod login;
+pub mod logout;
+pub mod refresh;
+pub mod validate_session;
+pub mod introspect_session;
+pub mod mfa_verify;
+pub mod mfa_setup;
+
+pub mod register;
+pub mod activate;
+
 use async_nats::Client;
-use crate::db::DbPool;
+use sqlx::PgPool;
 
-// Required for sub.next().await
-use futures_util::StreamExt;
+use register::handle_register;
+use activate::handle_activate;
+use login::handle_login;
+use logout::handle_logout;
+use refresh::handle_refresh;
+use validate_session::handle_validate_session;
+use mfa_verify::handle_mfa_verify;
+use mfa_setup::handle_mfa_setup;
+use introspect_session::handle_introspect_session;
 
-mod login;
-mod refresh;
-mod logout;
-mod mfa_setup;
-mod mfa_verify;
-mod introspect_session;
+pub async fn start_nats_listeners(nats: Client, db: PgPool) {
+    // REGISTER
+    {
+        let sub = nats.subscribe("auth.register.request".into()).await.unwrap();
+        let db = db.clone();
+        tokio::spawn(async move {
+            while let Some(msg) = sub.next().await {
+                handle_register(msg, db.clone()).await;
+            }
+        });
+    }
 
-pub async fn start_nats_listeners(nats: Client, pool: DbPool) {
-    //
+    // ACTIVATE
+    {
+        let sub = nats.subscribe("auth.activate.request".into()).await.unwrap();
+        let db = db.clone();
+        tokio::spawn(async move {
+            while let Some(msg) = sub.next().await {
+                handle_activate(msg, db.clone()).await;
+            }
+        });
+    }
+
     // LOGIN
-    //
     {
-        let pool = pool.clone();
-        let nats = nats.clone();
+        let sub = nats.subscribe("auth.login.request".into()).await.unwrap();
+        let db = db.clone();
         tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.login").await.unwrap();
             while let Some(msg) = sub.next().await {
-                login::handle_login(pool.clone(), nats.clone(), msg).await;
+                handle_login(msg, db.clone()).await;
             }
         });
     }
 
-    //
     // REFRESH
-    //
     {
-        let pool = pool.clone();
-        let nats = nats.clone();
+        let sub = nats.subscribe("auth.refresh.request".into()).await.unwrap();
+        let db = db.clone();
         tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.refresh").await.unwrap();
             while let Some(msg) = sub.next().await {
-                refresh::handle_refresh(pool.clone(), nats.clone(), msg).await;
+                handle_refresh(msg, db.clone()).await;
             }
         });
     }
 
-    //
+    // VALIDATE SESSION
+    {
+        let sub = nats.subscribe("auth.validate_session.request".into()).await.unwrap();
+        let db = db.clone();
+        tokio::spawn(async move {
+            while let Some(msg) = sub.next().await {
+                handle_validate_session(msg, db.clone()).await;
+            }
+        });
+    }
+
     // LOGOUT
-    //
     {
-        let pool = pool.clone();
-        let nats = nats.clone();
+        let sub = nats.subscribe("auth.logout.request".into()).await.unwrap();
+        let db = db.clone();
         tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.logout").await.unwrap();
             while let Some(msg) = sub.next().await {
-                logout::handle_logout(pool.clone(), nats.clone(), msg).await;
+                handle_logout(msg, db.clone()).await;
             }
         });
     }
 
-    //
-    // MFA SETUP
-    //
-    {
-        let pool = pool.clone();
-        let nats = nats.clone();
-        tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.mfa.setup").await.unwrap();
-            while let Some(msg) = sub.next().await {
-                mfa_setup::handle_mfa_setup(pool.clone(), nats.clone(), msg).await;
-            }
-        });
-    }
-
-    //
     // MFA VERIFY
-    //
     {
-        let pool = pool.clone();
-        let nats = nats.clone();
+        let sub = nats.subscribe("auth.mfa.verify.request".into()).await.unwrap();
+        let db = db.clone();
         tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.mfa.verify").await.unwrap();
             while let Some(msg) = sub.next().await {
-                mfa_verify::handle_mfa_verify(pool.clone(), nats.clone(), msg).await;
+                handle_mfa_verify(msg, db.clone()).await;
             }
         });
     }
 
-    //
-    // SESSION INTROSPECTION
-    //
+    // MFA SETUP
     {
-        let pool = pool.clone();
-        let nats = nats.clone();
+        let sub = nats.subscribe("auth.mfa.setup.request".into()).await.unwrap();
+        let db = db.clone();
         tokio::spawn(async move {
-            let mut sub = nats.subscribe("auth.session.introspect").await.unwrap();
             while let Some(msg) = sub.next().await {
-                introspect_session::handle_introspect_session(pool.clone(), nats.clone(), msg).await;
+                handle_mfa_setup(msg, db.clone()).await;
+            }
+        });
+    }
+
+    // INTROSPECT SESSION
+    {
+        let sub = nats.subscribe("auth.session.introspect.request".into()).await.unwrap();
+        let db = db.clone();
+        tokio::spawn(async move {
+            while let Some(msg) = sub.next().await {
+                handle_introspect_session(msg, db.clone()).await;
             }
         });
     }
