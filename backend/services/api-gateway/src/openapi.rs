@@ -1,11 +1,33 @@
 use utoipa::OpenApi as OpenApiDerive;
 
+// Import REAL DTOs from common crate
+use common::auth_messages::{
+    AuthLoginRequest,
+    AuthLoginResponse,
+    RegisterRequest,
+    RegisterResponse,
+    AuthRefreshRequest,
+    AuthRefreshResponse,
+    AuthValidateSessionRequest,
+    AuthValidateSessionResponse,
+    AuthMfaVerifyRequest,
+    AuthMfaVerifyResponse,
+};
+
 #[derive(OpenApiDerive)]
 #[openapi(
     components(
         schemas(
-            crate::routes::auth_routes::LoginRequest,
-            crate::routes::auth_routes::LoginResponse
+            AuthLoginRequest,
+            AuthLoginResponse,
+            RegisterRequest,
+            RegisterResponse,
+            AuthRefreshRequest,
+            AuthRefreshResponse,
+            AuthValidateSessionRequest,
+            AuthValidateSessionResponse,
+            AuthMfaVerifyRequest,
+            AuthMfaVerifyResponse
         )
     ),
     tags(

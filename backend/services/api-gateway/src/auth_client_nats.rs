@@ -22,6 +22,13 @@ use common::auth_messages::{
     // MFA SETUP (TOTP)
     AuthMfaSetupRequest,
     AuthMfaSetupResponse,
+
+    // REGISTER
+    RegisterRequest,
+    RegisterResponse,
+
+    // ACTIVATE
+    ActivateResponse,
 };
 
 #[derive(Clone)]
@@ -32,6 +39,27 @@ pub struct AuthNatsClient {
 impl AuthNatsClient {
     pub fn new(nats: NatsClient) -> Self {
         Self { nats }
+    }
+
+    //
+    // REGISTER
+    //
+    pub async fn register(
+        &self,
+        req: RegisterRequest,
+    ) -> Result<RegisterResponse, NatsError> {
+        self.nats.rpc("auth.register.request", &req).await
+    }
+
+    //
+    // ACTIVATE
+    //
+    pub async fn activate(
+        &self,
+        token: String,
+    ) -> Result<ActivateResponse, NatsError> {
+        let req = serde_json::json!({ "token": token });
+        self.nats.rpc("auth.activate.request", &req).await
     }
 
     //
@@ -53,7 +81,17 @@ impl AuthNatsClient {
     }
 
     //
-    // VALIDATE SESSION
+    // REFRESH
+    //
+    pub async fn refresh(
+        &self,
+        req: AuthRefreshRequest,
+    ) -> Result<AuthRefreshResponse, NatsError> {
+        self.nats.rpc("auth.refresh.request", &req).await
+    }
+
+    //
+    // VALIDATE SESSION  (your "session" endpoint)
     //
     pub async fn validate_session(
         &self,
@@ -77,9 +115,7 @@ impl AuthNatsClient {
     ) -> Result<(), NatsError> {
         let req = AuthLogoutRequest { session_token };
 
-        // Rust 2024 requires explicit response type
         self.nats.rpc::<_, ()>("auth.logout.request", &req).await?;
-
         Ok(())
     }
 
