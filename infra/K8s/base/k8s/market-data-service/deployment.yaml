@@ -24,36 +24,44 @@ spec:
       serviceAccountName: default
       containers:
         - name: market-data-service
-          image: market-data-service:v0.0.1
+          image: market-data-service:v0.4.6
           imagePullPolicy: IfNotPresent
+
           envFrom:
             - configMapRef:
                 name: platform-config
+
           env:
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
-                  name: platform-config
+                secretKeyRef:
+                  name: market-data-db-url
                   key: DATABASE_URL
+
             - name: NATS_URL
               value: "nats://nats.trading-platform.svc.cluster.local:4222"
+
             - name: RUST_LOG
               value: "info"
+
           ports:
             - name: http
               containerPort: 8080
+
           readinessProbe:
             httpGet:
               path: /health
               port: http
             initialDelaySeconds: 5
             periodSeconds: 5
+
           livenessProbe:
             httpGet:
               path: /health
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
+
           resources:
             requests:
               cpu: "100m"
@@ -61,6 +69,7 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -70,3 +79,4 @@ spec:
                   matchLabels:
                     app: market-data-service
                 topologyKey: kubernetes.io/hostname
+

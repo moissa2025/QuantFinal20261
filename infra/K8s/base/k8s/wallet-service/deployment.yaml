@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: wallet-service
-          image: wallet-service:v0.0.1
+          image: wallet-service:v0.4.6
           imagePullPolicy: IfNotPresent
 
           envFrom:
@@ -32,24 +32,19 @@ spec:
                 name: platform-config
 
           env:
-            # Database URL from ConfigMap
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
-                  name: platform-config
+                secretKeyRef:
+                  name: wallet-db-url
                   key: DATABASE_URL
 
-            # NATS
             - name: NATS_URL
               value: "nats://nats.trading-platform.svc.cluster.local:4222"
 
-            # Logging
             - name: RUST_LOG
               value: "info"
 
-            # -------------------------------
-            # 🔐 Binance API Credentials (from Kubernetes Secret)
-            # -------------------------------
+            # Binance API credentials
             - name: BINANCE_API_KEY
               valueFrom:
                 secretKeyRef:

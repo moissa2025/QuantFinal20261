@@ -24,40 +24,48 @@ spec:
       serviceAccountName: default
       containers:
         - name: auth-service
-          image: auth-service:v0.0.1
+          image: auth-service:v0.4.6
           imagePullPolicy: IfNotPresent
+
           envFrom:
             - configMapRef:
                 name: platform-config
+
           env:
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
-                  name: platform-config
+                secretKeyRef:
+                  name: auth-db-url
                   key: DATABASE_URL
+
             - name: NATS_URL
               value: "nats://nats.trading-platform.svc.cluster.local:4222"
+
             - name: RUST_LOG
               value: "info"
+
           ports:
             - containerPort: 9001
               name: http
+
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 6
+
           livenessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 15
+            initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
+
           resources:
             requests:
               cpu: "100m"
@@ -65,6 +73,7 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -74,3 +83,4 @@ spec:
                   matchLabels:
                     app: auth-service
                 topologyKey: kubernetes.io/hostname
+

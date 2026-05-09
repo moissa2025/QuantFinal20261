@@ -79,10 +79,9 @@ pub fn app(state: Arc<AppState>, rate_limiter: UserRateLimiter) -> Router {
 
         // SWAGGER
         .merge(
-            SwaggerUi::new("/swagger-ui")
-                .url("/openapi.json", crate::openapi::OPENAPI.clone()),
+        SwaggerUi::new("/swagger-ui")
+        .url("/openapi.json", crate::openapi::OPENAPI.clone())
         )
-        .route("/openapi.json", get(openapi_json))
 
         // PUBLIC AUTH
         .nest("/v1/auth", auth_routes::router())
