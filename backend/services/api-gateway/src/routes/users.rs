@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::State,
+    extract::Extension,
     routing::get,
     Json,
     Router,
@@ -22,12 +22,15 @@ pub fn router() -> Router {
 )]
 pub async fn get_me(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<AuthValidateSessionResponse>, AppError> {
-    // Re‑validate session and return the same payload
     let user = state
         .auth_nats
-        .validate_session(identity.session_token.clone(), "0.0.0.0".into(), "api-gateway".into())
+        .validate_session(
+            identity.session_token.clone(),
+            "0.0.0.0".into(),
+            "api-gateway".into(),
+        )
         .await
         .map_err(|_| AppError::Http(axum::http::StatusCode::BAD_GATEWAY))?;
 

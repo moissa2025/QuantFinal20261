@@ -11,7 +11,7 @@ use std::sync::Arc;
 use crate::{
     repository::wallet_repo,
     state::AppState,
-    models::{WalletAccount, WalletTransaction},
+    models::WalletAccount,
 };
 
 pub async fn health() -> &'static str {

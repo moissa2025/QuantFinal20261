@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{
     body::Body,
-    extract::{Path, State},
+    extract::{Path, Extension},
     http::{Request, StatusCode},
     response::IntoResponse,
     Router,
@@ -17,7 +17,7 @@ pub fn router() -> Router {
 }
 
 pub async fn proxy_auth(
-    State(_state): State<Arc<AppState>>,
+    Extension(_state): Extension<Arc<AppState>>,
     Path(path): Path<String>,
     req: Request<Body>,
 ) -> impl IntoResponse {

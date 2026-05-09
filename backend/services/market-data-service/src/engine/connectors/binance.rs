@@ -1,5 +1,5 @@
 use futures_util::{StreamExt, SinkExt};
-use tokio_tungstenite::{connect_async, tungstenite::Message};
+use tokio_tungstenite::connect_async;
 use serde::Deserialize;
 use common::market::MarketRow;
 

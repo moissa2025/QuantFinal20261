@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::State,
+    extract::Extension,
     routing::get,
     Json, Router,
 };
@@ -26,7 +26,7 @@ pub struct BalanceResponse {
 )]
 pub async fn get_balance(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<BalanceResponse>, AppError> {
     let res: BalanceResponse = state
         .nats

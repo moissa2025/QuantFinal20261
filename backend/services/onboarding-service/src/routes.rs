@@ -1,4 +1,4 @@
-use axum::{Json, extract::State};
+use axum::Json;
 use serde_json::json;
 
 pub async fn health() -> &'static str {

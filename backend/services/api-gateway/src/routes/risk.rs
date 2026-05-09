@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::State,
+    extract::Extension,
     routing::get,
     Json, Router,
 };
@@ -27,7 +27,7 @@ pub struct RiskLimits {
 )]
 pub async fn get_limits(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<RiskLimits>, AppError> {
     let res: RiskLimits = state
         .nats

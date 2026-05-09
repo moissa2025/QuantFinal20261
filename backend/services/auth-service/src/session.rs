@@ -39,8 +39,8 @@ pub async fn create_session(
 pub async fn validate_session(
     db: &DbPool,
     token: &str,
-    ip: &str,
-    device_hash: &str,
+    _ip: &str,
+    _device_hash: &str,
 ) -> Result<Option<(Uuid, String, Vec<String>)>, sqlx::Error> {
     let row = sqlx::query(
         r#"

@@ -7,7 +7,7 @@ use axum::{Router, routing::get, serve};
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::EnvFilter;
 
-use crate::db::{DbPool, init_db};
+use crate::db::init_db;
 use async_nats::connect;
 use tokio::net::TcpListener;
 

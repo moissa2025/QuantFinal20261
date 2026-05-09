@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Path, State},
+    extract::{Path, Extension},
     routing::get,
     Json, Router,
 };
@@ -30,7 +30,7 @@ pub struct Position {
 )]
 pub async fn list_positions(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<Vec<Position>>, AppError> {
     let res: Vec<Position> = state
         .nats
@@ -47,7 +47,7 @@ pub async fn list_positions(
 )]
 pub async fn get_position(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Path(symbol): Path<String>,
 ) -> Result<Json<Position>, AppError> {
     let req = (identity.user_id.clone(), symbol);

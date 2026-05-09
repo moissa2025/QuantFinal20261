@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Path, State},
+    extract::{Path, Extension},
     routing::get,
     Json, Router,
 };
@@ -33,7 +33,7 @@ pub struct TickerResponse {
 )]
 pub async fn get_ticker(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Path(symbol): Path<String>,
 ) -> Result<Json<TickerResponse>, AppError> {
     let req = TickerRequest { symbol };

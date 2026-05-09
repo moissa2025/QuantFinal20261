@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::State,
+    extract::Extension,
     routing::get,
     Json, Router,
     response::IntoResponse,
@@ -22,7 +22,7 @@ pub struct BalancesResponse {
 
 pub async fn get_balances(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<BalancesResponse>, AppError> {
     let res: BalancesResponse = state
         .nats
@@ -33,7 +33,6 @@ pub async fn get_balances(
 }
 
 async fn health_proxy() -> impl IntoResponse {
-    // FIXED: correct internal service name
     match reqwest::get("http://wallet-service:8080/health").await {
         Ok(resp) => resp.text().await.unwrap_or("FAIL".into()),
         Err(_) => "FAIL".into(),

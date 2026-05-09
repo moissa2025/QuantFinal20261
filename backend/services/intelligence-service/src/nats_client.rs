@@ -1,5 +1,4 @@
 use async_nats::Client;
-use serde::{Serialize, de::DeserializeOwned};
 use anyhow::Result;
 
 #[derive(Clone)]

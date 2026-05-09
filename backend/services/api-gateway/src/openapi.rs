@@ -31,7 +31,6 @@ use common::auth_messages::*;
 )]
 pub struct ApiDoc;
 
-// Lazily build OpenAPI once at runtime
 pub static OPENAPI: LazyLock<utoipa::openapi::OpenApi> =
     LazyLock::new(|| ApiDoc::openapi());
 

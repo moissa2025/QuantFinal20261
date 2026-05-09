@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{State, TypedHeader},
+    extract::{Extension, TypedHeader},
     http::HeaderMap,
     routing::post,
     Json, Router,
@@ -24,9 +24,6 @@ use common::auth_messages::{
     AuthMfaSetupResponse,
 };
 
-//
-// Helpers
-//
 fn extract_ip(headers: &HeaderMap) -> String {
     headers
         .get("x-forwarded-for")
@@ -40,9 +37,6 @@ fn extract_ua(ua: Option<TypedHeader<UserAgent>>) -> String {
         .unwrap_or_else(|| "api-gateway".into())
 }
 
-//
-// Request bodies
-//
 #[derive(Deserialize)]
 pub struct LoginBody {
     pub email: String,
@@ -69,9 +63,6 @@ pub struct LogoutBody {
     pub session_token: String,
 }
 
-//
-// Router (NO STATE HERE)
-//
 pub fn router() -> Router {
     Router::new()
         .route("/register", post(register))
@@ -84,12 +75,8 @@ pub fn router() -> Router {
         .route("/mfa/setup", post(setup_totp))
 }
 
-//
-// Handlers (STATE IS STILL EXTRACTED HERE)
-//
-
 pub async fn register(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<RegisterRequest>,
 ) -> Result<Json<RegisterResponse>, AppError> {
     let res = state.auth_nats.register(body).await?;
@@ -97,7 +84,7 @@ pub async fn register(
 }
 
 pub async fn activate(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<ActivateBody>,
 ) -> Result<Json<ActivateResponse>, AppError> {
     let res = state.auth_nats.activate(body.token).await?;
@@ -105,7 +92,7 @@ pub async fn activate(
 }
 
 pub async fn login(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
     Json(body): Json<LoginBody>,
 ) -> Result<Json<AuthLoginResponse>, AppError> {
@@ -126,7 +113,7 @@ pub async fn login(
 }
 
 pub async fn refresh(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
     Json(body): Json<RefreshBody>,
 ) -> Result<Json<AuthRefreshResponse>, AppError> {
@@ -147,7 +134,7 @@ pub async fn refresh(
 }
 
 pub async fn validate_session(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
     Json(body): Json<ValidateBody>,
 ) -> Result<Json<AuthValidateSessionResponse>, AppError> {
@@ -168,7 +155,7 @@ pub async fn validate_session(
 }
 
 pub async fn logout(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<LogoutBody>,
 ) -> Result<(), AppError> {
     state.auth_nats.logout(body.session_token).await?;
@@ -176,7 +163,7 @@ pub async fn logout(
 }
 
 pub async fn verify_mfa(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<AuthMfaVerifyRequest>,
 ) -> Result<Json<AuthMfaVerifyResponse>, AppError> {
     let res = state.auth_nats.verify_mfa(body).await?;
@@ -184,7 +171,7 @@ pub async fn verify_mfa(
 }
 
 pub async fn setup_totp(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<AuthMfaSetupRequest>,
 ) -> Result<Json<AuthMfaSetupResponse>, AppError> {
     let res = state.auth_nats.setup_totp(body).await?;

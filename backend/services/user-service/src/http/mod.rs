@@ -6,7 +6,7 @@ use crate::{
     repository::{
         user_repo::get_user,
         role_repo::{get_user_roles, get_all_roles},
-        audit_repo::{get_audit_logs_for_user, get_recent_audit_logs},
+        audit_repo::get_recent_audit_logs,
     },
 };
 

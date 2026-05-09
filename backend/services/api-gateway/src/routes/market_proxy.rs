@@ -1,7 +1,5 @@
-use std::sync::Arc;
 
 use axum::{
-    extract::State,
     extract::ws::{WebSocketUpgrade, WebSocket, Message as AxumMessage, CloseFrame, CloseCode},
     response::IntoResponse,
     routing::get,
@@ -11,22 +9,21 @@ use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::connect_async;
 use tungstenite::Message as TungsteniteMessage;
 
-use crate::state::AppState;
 
-/// Router for /v1/market/*
 pub fn router() -> Router {
     Router::new()
         .route("/snapshot", get(proxy_snapshot))
         .route("/stream", get(proxy_stream))
 }
 
-pub async fn proxy_snapshot(State(_state): State<Arc<AppState>>) -> impl IntoResponse {
+pub async fn proxy_snapshot() -> impl IntoResponse {
     let url = "http://market-data-service:8081/market-data/snapshot";
 
     match reqwest::get(url).await {
         Ok(res) => {
             let status =
-                axum::http::StatusCode::from_u16(res.status().as_u16()).unwrap_or(axum::http::StatusCode::BAD_GATEWAY);
+                axum::http::StatusCode::from_u16(res.status().as_u16())
+                    .unwrap_or(axum::http::StatusCode::BAD_GATEWAY);
             let body = res.text().await.unwrap_or_default();
             (status, body)
         }
@@ -39,7 +36,6 @@ pub async fn proxy_snapshot(State(_state): State<Arc<AppState>>) -> impl IntoRes
 
 pub async fn proxy_stream(
     ws: WebSocketUpgrade,
-    State(_state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
     ws.on_upgrade(handle_ws_proxy)
 }

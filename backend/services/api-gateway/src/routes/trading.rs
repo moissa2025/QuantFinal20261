@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Json, State},
-    routing::{post, get},
+    extract::{Json, Extension},
+    routing::post,
     Json as AxumJson,
     Router,
 };
@@ -35,7 +35,7 @@ pub struct PlaceOrderResponse {
 )]
 pub async fn place_order(
     identity: Identity,
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Json(req): Json<PlaceOrderRequest>,
 ) -> Result<AxumJson<PlaceOrderResponse>, AppError> {
     let res: PlaceOrderResponse = state

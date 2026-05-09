@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Path, State},
+    extract::{Path, Extension},
     routing::get,
     Json, Router,
 };
@@ -10,9 +10,6 @@ use serde::{Deserialize, Serialize};
 use crate::error::AppError;
 use crate::state::AppState;
 
-//
-// ---------- Public Router ----------
-//
 pub fn router() -> Router {
     Router::new()
         .route("/home", get(home))
@@ -22,9 +19,6 @@ pub fn router() -> Router {
         .route("/research/:slug", get(article))
 }
 
-//
-// ---------- DTOs ----------
-//
 #[derive(Serialize, Deserialize)]
 pub struct HomeResponse {
     pub briefs: Vec<GxBrief>,
@@ -122,11 +116,8 @@ pub struct ArticleResponse {
     pub assets: Vec<String>,
 }
 
-//
-// ---------- Handlers ----------
-//
 pub async fn home(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<HomeResponse>, AppError> {
     let reply: HomeResponse = state
         .nats
@@ -138,7 +129,7 @@ pub async fn home(
 }
 
 pub async fn markets(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
 ) -> Result<Json<MarketSnapshot>, AppError> {
     let reply: MarketSnapshot = state
         .nats
@@ -150,7 +141,7 @@ pub async fn markets(
 }
 
 pub async fn ticker(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Path(symbol): Path<String>,
 ) -> Result<Json<TickerResponse>, AppError> {
     #[derive(Serialize)]
@@ -170,7 +161,7 @@ pub async fn ticker(
 }
 
 pub async fn theme(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Path(slug): Path<String>,
 ) -> Result<Json<ThemeResponse>, AppError> {
     #[derive(Serialize)]
@@ -190,7 +181,7 @@ pub async fn theme(
 }
 
 pub async fn article(
-    State(state): State<Arc<AppState>>,
+    Extension(state): Extension<Arc<AppState>>,
     Path(slug): Path<String>,
 ) -> Result<Json<ArticleResponse>, AppError> {
     #[derive(Serialize)]
