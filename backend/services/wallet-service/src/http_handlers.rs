@@ -5,14 +5,30 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::sync::Arc;
-    use uuid::Uuid;
+use uuid::Uuid;
 
 use crate::{
     repository::wallet_repo,
     state::AppState,
     models::WalletAccount,
 };
+
+
+use serde_json::json;
+use std::sync::Arc;
+
+pub async fn binance_health(
+    State(state): State<Arc<AppState>>,
+) -> Json<serde_json::Value> {
+    match state.binance_client.ping().await {
+        Ok(_) => Json(json!({"status": "ok"})),
+        Err(e) => Json(json!({
+            "status": "error",
+            "message": format!("{:?}", e)
+        })),
+    }
+}
+
 
 pub async fn health() -> &'static str {
     "OK"
