@@ -15,16 +15,16 @@ spec:
             - /bin/sh
             - -c
             - |
-              HOST="cockroachdb-0.cockroachdb.trading-platform.svc.cluster.local"
+              HOST="cockroachdb-public.trading-platform.svc.cluster.local:26257"
 
-              echo "Waiting for CockroachDB..."
-              until /usr/local/bin/cockroach sql --insecure --host=$HOST -e "SELECT 1;" >/dev/null 2>&1; do
+              echo "Waiting for CockroachDB SQL port..."
+              until /cockroach/cockroach sql --insecure --host=$HOST -e "SELECT 1;" >/dev/null 2>&1; do
                 sleep 2
               done
 
               echo "Creating database and schemas..."
 
-              /usr/local/bin/cockroach sql --insecure --host=$HOST -e "
+              /cockroach/cockroach sql --insecure --host=$HOST -e "
                 CREATE DATABASE IF NOT EXISTS gqx_db;
                 GRANT ALL ON DATABASE gqx_db TO root;
 

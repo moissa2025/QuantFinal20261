@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: api-gateway
-          image: api-gateway:v0.4.6
+          image: api-gateway:v0.4.9
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

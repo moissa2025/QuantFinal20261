@@ -35,7 +35,7 @@ spec:
 
       containers:
         - name: intelligence-service
-          image: intelligence-service:v0.4.6
+          image: intelligence-service:v0.4.9
           imagePullPolicy: IfNotPresent
 
           envFrom:
@@ -43,8 +43,15 @@ spec:
                 name: platform-config
 
           env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: platform-config
+                  key: DATABASE_URL
+
             - name: NATS_URL
               value: "nats://nats.trading-platform.svc.cluster.local:4222"
+
             - name: RUST_LOG
               value: "info"
 

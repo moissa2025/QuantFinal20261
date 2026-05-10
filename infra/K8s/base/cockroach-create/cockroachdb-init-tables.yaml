@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init-tables
+  namespace: trading-platform
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: init-tables
+          image: cockroachdb/cockroach:v24.1.0
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Running init-tables.sql..."
+              /cockroach/cockroach sql \
+                --insecure \
+                --host=cockroachdb-public \
+                --database=gqx_db \
+                -f /sql/init-tables.sql
+              echo "Tables created successfully."
+          volumeMounts:
+            - name: tables-sql
+              mountPath: /sql
+      volumes:
+        - name: tables-sql
+          configMap:
+            name: cockroachdb-tables
+            items:
+              - key: init-tables.sql
+                path: init-tables.sql
+

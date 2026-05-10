@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: onboarding-service
-          image: onboarding-service:v0.4.6
+          image: onboarding-service:v0.4.9
           imagePullPolicy: IfNotPresent
 
           envFrom:
@@ -34,8 +34,8 @@ spec:
           env:
             - name: DATABASE_URL
               valueFrom:
-                secretKeyRef:
-                  name: onboarding-db-url
+                configMapKeyRef:
+                  name: platform-config
                   key: DATABASE_URL
 
             - name: NATS_URL

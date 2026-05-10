@@ -20,23 +20,20 @@ spec:
         - name: cockroachdb
           image: cockroachdb/cockroach:v23.2.5
           imagePullPolicy: IfNotPresent
-          command:
-            - "/cockroach/cockroach"
           args:
-            - "start"
-            - "--insecure"
-            - "--advertise-addr=$(HOSTNAME).cockroachdb"
-            - "--join=cockroachdb-0.cockroachdb,cockroachdb-1.cockroachdb,cockroachdb-2.cockroachdb"
-            - "--listen-addr=0.0.0.0:26257"
-            - "--sql-addr=0.0.0.0:26257"
-            - "--http-addr=0.0.0.0:8080"
-            - "--cache=25%"
-            - "--max-sql-memory=25%"
+            - start
+            - --insecure
+            - --advertise-addr=$(HOSTNAME).cockroachdb.trading-platform.svc.cluster.local
+            - --join=cockroachdb-0.cockroachdb.trading-platform.svc.cluster.local:26257,cockroachdb-1.cockroachdb.trading-platform.svc.cluster.local:26257,cockroachdb-2.cockroachdb.trading-platform.svc.cluster.local:26257
+            - --listen-addr=0.0.0.0:26257
+            - --sql-addr=0.0.0.0:26257
+            - --http-addr=0.0.0.0:8080
+            - --cache=25%
+            - --max-sql-memory=25%
+            - --store=/cockroach/cockroach-data
           ports:
             - containerPort: 26257
               name: grpc
-            - containerPort: 26257
-              name: sql
             - containerPort: 8080
               name: http
           volumeMounts:
@@ -46,7 +43,8 @@ spec:
     - metadata:
         name: datadir
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes:
+          - ReadWriteOnce
         resources:
           requests:
             storage: 10Gi

@@ -1,0 +1,4 @@
+cockroachdb-0.cockroachdb.trading-platform.svc.cluster.local
+cockroachdb-1.cockroachdb.trading-platform.svc.cluster.local
+cockroachdb-2.cockroachdb.trading-platform.svc.cluster.local
+
