@@ -11,7 +11,6 @@ TAG=$1
 NS="trading-platform"
 
 SERVICES=(
-  wallet-service
   api-gateway
   auth-service
   user-service
