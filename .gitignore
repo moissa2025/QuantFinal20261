@@ -63,5 +63,18 @@ id_ed25519.pub
 
 # Ignore any folder named "keys" inside the repo
 keys/
+# Binance RSA keys (private + public + secret YAML)
+binance_rsa_private.pem
+binance_rsa_public.pem
+binance-rsa-credentials.yaml
+
+# Any PEM or key files anywhere
+*.pem
+*.key
+*.priv
+*.private
+
+# Any credentials YAML
+*credentials.yaml
 
 backend/local-data/*.log
