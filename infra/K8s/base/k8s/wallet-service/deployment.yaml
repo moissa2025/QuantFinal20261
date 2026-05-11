@@ -44,18 +44,18 @@ spec:
             - name: RUST_LOG
               value: "info"
 
-            # Binance API credentials
+            # Binance API credentials (RSA mode)
             - name: BINANCE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: binance-credentials
+                  name: binance-rsa-credentials
                   key: BINANCE_API_KEY
 
-            - name: BINANCE_API_SECRET
+            - name: BINANCE_RSA_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: binance-credentials
-                  key: BINANCE_API_SECRET
+                  name: binance-rsa-credentials
+                  key: BINANCE_RSA_PRIVATE_KEY
 
           ports:
             - name: http

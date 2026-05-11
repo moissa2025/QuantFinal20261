@@ -49,4 +49,8 @@ chrono = { version = "0.4", features = ["serde"] }
 tower = "0.4"
 hyper = "0.14"
 http = "0.2"
-
+openssh-keys = "0.6"
+rsa = "0.8.2"
+pkcs8 = "0.9"
+digest = "0.10"
+signature = "2.1"

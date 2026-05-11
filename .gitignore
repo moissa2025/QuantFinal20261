@@ -47,5 +47,21 @@ sqlx-data.json
 # Never commit secrets
 .env
 .env.*
+# Ignore any PEM private keys
+*.pem
+*.key
+*.priv
+*.private
+
+# Ignore SSH keys if accidentally copied into repo
+id_rsa
+id_rsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+
+# Ignore any folder named "keys" inside the repo
+keys/
 
 backend/local-data/*.log
