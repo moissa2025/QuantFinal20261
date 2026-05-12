@@ -44,6 +44,12 @@ spec:
             - name: RUST_LOG
               value: "info"
 
+            - name: SERVICE_NAME
+              value: "auth-service"
+
+            - name: SERVICE_PORT
+              value: "9001"
+
           ports:
             - containerPort: 9001
               name: http
@@ -69,10 +75,10 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "250Mi"
             limits:
               cpu: "500m"
-              memory: "512Mi"
+              memory: "1Gi"
 
       affinity:
         podAntiAffinity:

@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: wallet-service
-          image: wallet-service:v0.4.9
+          image: wallet-service:v0.5.0
           imagePullPolicy: IfNotPresent
 
           envFrom:
