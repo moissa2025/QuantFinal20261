@@ -24,7 +24,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: auth-service
-          image: auth-service:v0.4.9
+          image: auth-service:v0.5.1
           imagePullPolicy: IfNotPresent
 
           envFrom:
@@ -53,24 +53,6 @@ spec:
           ports:
             - containerPort: 9001
               name: http
-
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 2
-            failureThreshold: 6
-
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 2
-            failureThreshold: 3
 
           resources:
             requests:

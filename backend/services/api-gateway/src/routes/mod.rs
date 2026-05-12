@@ -1,3 +1,4 @@
+pub mod health;
 pub mod auth_routes;
 pub mod auth_proxy;
 pub mod balances;

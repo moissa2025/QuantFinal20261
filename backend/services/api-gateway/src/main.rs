@@ -79,15 +79,18 @@ pub fn app(state: Arc<AppState>, rate_limiter: UserRateLimiter) -> Router {
 
         // SWAGGER
         .merge(
-        SwaggerUi::new("/swagger-ui")
-        .url("/openapi.json", crate::openapi::OPENAPI.clone())
+            SwaggerUi::new("/swagger-ui")
+                .url("/openapi.json", crate::openapi::OPENAPI.clone())
         )
+
+        // GLOBAL HEALTH
+        .route("/health", get(|| async { "OK" }))
 
         // PUBLIC AUTH
         .nest("/v1/auth", auth_routes::router())
         .route("/v1/auth/health", get(|| async { "OK" }))
 
-        // PROTECTED ROUTES (middleware uses state.clone())
+        // PROTECTED ROUTES
         .nest(
             "/v1/users",
             users::router().layer(from_fn_with_state(state.clone(), auth_middleware)),

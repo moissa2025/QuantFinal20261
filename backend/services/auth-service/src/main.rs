@@ -21,10 +21,10 @@ async fn main() -> anyhow::Result<()> {
     // NATS client
     let nats = async_nats::connect(&std::env::var("NATS_URL")?).await?;
 
-    // Start NATS listeners
+    // Start NATS listeners (must spawn tasks internally)
     nats_handlers::start_nats_listeners(nats, db).await;
 
-    // Keep service alive
+    // Keep service alive forever
     std::future::pending::<()>().await;
 
     // unreachable, but required for return type
