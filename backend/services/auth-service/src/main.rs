@@ -21,6 +21,8 @@ async fn main() -> anyhow::Result<()> {
     // NATS client
     let nats = async_nats::connect(&std::env::var("NATS_URL")?).await?;
 
+    tracing::info!("auth-service: connected to DB and NATS, starting listeners...");
+
     // Start NATS listeners in background
     tokio::spawn({
         let nats = nats.clone();
@@ -31,9 +33,11 @@ async fn main() -> anyhow::Result<()> {
     });
 
     // Keep service alive forever
-    std::future::pending::<()>().await;
+    loop {
+        tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
+    }
 
-    #[allow(unreachable_code)]
-    Ok(())
+    // (unreachable)
+    // Ok(())
 }
 
