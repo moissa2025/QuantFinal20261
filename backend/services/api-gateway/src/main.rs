@@ -73,35 +73,63 @@ async fn openapi_json() -> impl IntoResponse {
 }
 
 pub fn app(state: Arc<AppState>, rate_limiter: UserRateLimiter) -> Router {
-    let router = Router::new()
+    Router::new()
+        // PUBLIC ROUTES
         .nest("/v1/auth", auth_routes::router())
         .nest("/v1/auth-proxy", auth_proxy::router())
-        .nest("/v1/balances", balances::router())
-        .nest("/v1/crypto", crypto::router())
         .nest("/v1/intelligence", intelligence::router())
-        .nest("/v1/ledger", ledger::router())
-        .nest("/v1/market", market::router())
+        .nest("/v1/crypto", crypto::router())
         .nest("/v1/market-proxy", market_proxy::router())
-        .nest("/v1/orders", orders::router())
-        .nest("/v1/positions", positions::router())
-        .nest("/v1/risk", risk::router())
-        .nest("/v1/trading", trading::router())
-        .nest("/v1/users", users::router())
-        .nest("/v1/wallet", wallet::router())
         .nest("/v1/wallet-ws", wallet_ws::router())
         .nest("/v1/health", health::router())
-        .route("/openapi.json", get(openapi_json))
+        .route("/health", get(|| async { "OK" }))
+
+        // OPENAPI + SWAGGER (PUBLIC)
         .merge(
             SwaggerUi::new("/swagger-ui")
-                .url("/openapi.json", crate::openapi::OPENAPI.clone()),
+                .url("/openapi.json", crate::openapi::OPENAPI.clone())
         )
-        .route("/health", get(|| async { "OK" }));
 
-    // Global layers: AppState + rate limiter + auth on protected prefixes
-    router
-        .layer(Extension(state.clone()))
+        // PROTECTED ROUTES
+        .nest(
+            "/v1/users",
+            users::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/wallet",
+            wallet::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/balances",
+            balances::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/market",
+            market::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/orders",
+            orders::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/positions",
+            positions::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/trading",
+            trading::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/risk",
+            risk::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+        .nest(
+            "/v1/ledger",
+            ledger::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
+        )
+
+        // GLOBAL EXTENSIONS
+        .layer(Extension(state))
         .layer(Extension(rate_limiter))
-        // auth middleware on protected prefixes
-        .route_layer(from_fn_with_state(state.clone(), auth_middleware))
 }
 
