@@ -1,12 +1,9 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::Extension,
     routing::get,
-    Json, Router,
+    Json, Router, Extension,
 };
 use serde::{Deserialize, Serialize};
-
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router {
@@ -25,8 +22,8 @@ pub struct BalanceResponse {
     fields(user_id = %identity.user_id)
 )]
 pub async fn get_balance(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
 ) -> Result<Json<BalanceResponse>, AppError> {
     let res: BalanceResponse = state
         .nats
@@ -34,9 +31,5 @@ pub async fn get_balance(
         .await?;
 
     Ok(Json(res))
-}
-
-async fn health() -> &'static str {
-    "OK"
 }
 

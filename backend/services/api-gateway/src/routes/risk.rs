@@ -1,12 +1,9 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::Extension,
     routing::get,
-    Json, Router,
+    Json, Router, Extension,
 };
 use serde::{Deserialize, Serialize};
-
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router {
@@ -15,9 +12,9 @@ pub fn router() -> Router {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct RiskLimits {
+pub struct RiskLimitsResponse {
     pub max_position: f64,
-    pub max_order_size: f64,
+    pub max_leverage: f64,
 }
 
 #[tracing::instrument(
@@ -26,18 +23,14 @@ pub struct RiskLimits {
     fields(user_id = %identity.user_id)
 )]
 pub async fn get_limits(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
-) -> Result<Json<RiskLimits>, AppError> {
-    let res: RiskLimits = state
+    identity: Identity,
+) -> Result<Json<RiskLimitsResponse>, AppError> {
+    let res: RiskLimitsResponse = state
         .nats
         .rpc("risk.limits.get", &identity.user_id)
         .await?;
 
     Ok(Json(res))
-}
-
-async fn health() -> &'static str {
-    "OK"
 }
 

@@ -1,4 +1,3 @@
-
 use axum::{
     extract::ws::{WebSocketUpgrade, WebSocket, Message as AxumMessage, CloseFrame, CloseCode},
     response::IntoResponse,
@@ -8,7 +7,6 @@ use axum::{
 use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::connect_async;
 use tungstenite::Message as TungsteniteMessage;
-
 
 pub fn router() -> Router {
     Router::new()
@@ -88,12 +86,5 @@ async fn handle_ws_proxy(client_ws: WebSocket) {
             let _ = internal_tx.send(converted).await;
         }
     });
-}
-
-async fn health_proxy() -> impl IntoResponse {
-    match reqwest::get("http://market-data-service:8081/health").await {
-        Ok(resp) => resp.text().await.unwrap_or("FAIL".into()),
-        Err(_) => "FAIL".into(),
-    }
 }
 

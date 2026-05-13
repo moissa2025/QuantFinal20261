@@ -1,18 +1,9 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::Extension,
     routing::get,
-    Json, Router,
-    response::IntoResponse,
+    Json, Router, Extension,
 };
-
 use crate::{error::AppError, identity::Identity, state::AppState};
-
-pub fn router() -> Router {
-    Router::new()
-        .route("/", get(get_balances))
-}
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct BalancesResponse {
@@ -20,9 +11,13 @@ pub struct BalancesResponse {
     pub margin: f64,
 }
 
+pub fn router() -> Router {
+    Router::new().route("/", get(get_balances))
+}
+
 pub async fn get_balances(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
 ) -> Result<Json<BalancesResponse>, AppError> {
     let res: BalancesResponse = state
         .nats
@@ -30,12 +25,5 @@ pub async fn get_balances(
         .await?;
 
     Ok(Json(res))
-}
-
-async fn health_proxy() -> impl IntoResponse {
-    match reqwest::get("http://wallet-service:8080/health").await {
-        Ok(resp) => resp.text().await.unwrap_or("FAIL".into()),
-        Err(_) => "FAIL".into(),
-    }
 }
 

@@ -2,6 +2,8 @@ use async_nats::{Client, Subscriber};
 use serde::{de::DeserializeOwned, Serialize};
 use thiserror::Error;
 
+use common::messaging::Messaging;
+
 #[derive(Clone)]
 pub struct NatsClient {
     inner: Client,
@@ -20,7 +22,15 @@ pub enum NatsError {
 }
 
 impl NatsClient {
-    /// Async constructor — safe inside Axum/Tokio
+    pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
+where
+    Req: Serialize,
+    Res: DeserializeOwned,
+{
+    self.rpc(subject, req).await
+}
+
+     
     pub async fn connect_from_env() -> Result<Self, NatsError> {
         let url = std::env::var("NATS_URL")
             .unwrap_or_else(|_| "nats://127.0.0.1:4222".into());
@@ -32,16 +42,10 @@ impl NatsClient {
         Ok(Self { inner })
     }
 
-    /// REMOVE THIS — it caused the crash
-    /// pub fn new_blocking() -> Result<Self, NatsError> { ... }
-
-    /// Generic RPC request
-    pub async fn request<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>
-    where
-        Req: Serialize,
-        Res: DeserializeOwned,
-    {
-        self.rpc(subject, req).await
+    pub fn messaging(&self) -> Messaging {
+        Messaging {
+            client: self.inner.clone(),
+        }
     }
 
     pub async fn rpc<Req, Res>(&self, subject: &str, req: &Req) -> Result<Res, NatsError>

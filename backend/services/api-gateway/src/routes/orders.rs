@@ -1,13 +1,12 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::{Path, Json, Extension},
+    extract::{Path, Json},
     routing::{get, post},
     Json as AxumJson,
     Router,
+    Extension,
 };
 use serde::{Deserialize, Serialize};
-
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router {
@@ -35,8 +34,8 @@ pub struct PlaceOrderResponse {
     fields(user_id = %identity.user_id)
 )]
 pub async fn place_order(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
     Json(req): Json<PlaceOrderRequest>,
 ) -> Result<AxumJson<PlaceOrderResponse>, AppError> {
     let res: PlaceOrderResponse = state
@@ -62,8 +61,8 @@ pub struct GetOrderResponse {
     fields(user_id = %identity.user_id, order_id = %order_id)
 )]
 pub async fn get_order(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
     Path(order_id): Path<String>,
 ) -> Result<AxumJson<GetOrderResponse>, AppError> {
     let res: GetOrderResponse = state
@@ -72,9 +71,5 @@ pub async fn get_order(
         .await?;
 
     Ok(AxumJson(res))
-}
-
-async fn health() -> &'static str {
-    "OK"
 }
 

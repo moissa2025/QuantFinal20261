@@ -16,7 +16,6 @@ pub enum AppError {
 struct ErrorBody {
     message: String,
 }
-
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let (status, msg): (StatusCode, String) = match self {
@@ -42,4 +41,8 @@ impl AppError {
         AppError::Internal(err.to_string())
     }
 }
-
+impl From<anyhow::Error> for AppError {
+    fn from(err: anyhow::Error) -> Self {
+        AppError::Internal(err.to_string())
+    }
+}

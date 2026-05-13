@@ -1,114 +1,100 @@
-use crate::nats_client::{NatsClient, NatsError};
-use common::auth_messages::{
-    RegisterRequest,
-    RegisterResponse,
-    ActivateResponse,
-    AuthLoginRequest,
-    AuthLoginResponse,
-    AuthRefreshRequest,
-    AuthRefreshResponse,
-    AuthLogoutRequest,
-    AuthValidateSessionRequest,
-    AuthValidateSessionResponse,
-    AuthMfaVerifyRequest,
-    AuthMfaVerifyResponse,
-    AuthMfaSetupRequest,
-    AuthMfaSetupResponse,
-};
+use anyhow::Result;
+use common::auth_messages::*;
+use common::messaging::Messaging;
+use crate::nats_client::NatsClient;
 
 #[derive(Clone)]
 pub struct AuthNatsClient {
-    nats: NatsClient,
+    pub messaging: Messaging,
 }
 
 impl AuthNatsClient {
     pub fn new(nats: NatsClient) -> Self {
-        Self { nats }
+        Self {
+            messaging: nats.messaging(),
+        }
     }
 
-    pub async fn register(
-        &self,
-        req: RegisterRequest,
-    ) -> Result<RegisterResponse, NatsError> {
-        self.nats.rpc("auth.register.request", &req).await
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  REGISTER
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn register(&self, req: RegisterRequest) -> Result<RegisterResponse> {
+        self.messaging.rpc("auth.register", &req).await
     }
 
-    pub async fn activate(
-        &self,
-        token: String,
-    ) -> Result<ActivateResponse, NatsError> {
-        let req = serde_json::json!({ "token": token });
-        self.nats.rpc("auth.activate.request", &req).await
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  ACTIVATE
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn activate(&self, req: ActivateRequest) -> Result<ActivateResponse> {
+        self.messaging.rpc("auth.activate", &req).await
     }
 
-    pub async fn login(
-        &self,
-        email: String,
-        password: String,
-        ip: String,
-        ua: String,
-    ) -> Result<AuthLoginResponse, NatsError> {
-        let req = AuthLoginRequest {
-            email,
-            password,
-            ip_address: Some(ip),
-            user_agent: Some(ua),
-        };
-
-        self.nats.rpc("auth.login.request", &req).await
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  LOGIN
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn login(&self, req: AuthLoginRequest) -> Result<AuthLoginResponse> {
+        self.messaging.rpc("auth.login", &req).await
     }
 
-    pub async fn refresh(
-        &self,
-        refresh_token: String,
-        ip: String,
-        ua: String,
-    ) -> Result<AuthRefreshResponse, NatsError> {
-        let req = AuthRefreshRequest {
-            refresh_token,
-            ip_address: Some(ip),
-            user_agent: Some(ua),
-        };
-
-        self.nats.rpc("auth.refresh.request", &req).await
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  REFRESH
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn refresh(&self, req: AuthRefreshRequest) -> Result<AuthRefreshResponse> {
+        self.messaging.rpc("auth.refresh", &req).await
     }
 
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  VALIDATE SESSION
+    // ─────────────────────────────────────────────────────────────
+    //
     pub async fn validate_session(
         &self,
-        session_token: String,
-        ip: String,
-        ua: String,
-    ) -> Result<AuthValidateSessionResponse, NatsError> {
-        let req = AuthValidateSessionRequest {
-            session_token,
-            ip_address: Some(ip),
-            user_agent: Some(ua),
-        };
-
-        self.nats.rpc("auth.validate_session.request", &req).await
+        req: AuthValidateSessionRequest,
+    ) -> Result<AuthValidateSessionResponse> {
+        self.messaging.rpc("auth.validate_session", &req).await
     }
 
-    pub async fn logout(
-        &self,
-        session_token: String,
-    ) -> Result<(), NatsError> {
-        let req = AuthLogoutRequest { session_token };
-        self.nats.rpc::<_, ()>("auth.logout.request", &req).await?;
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  LOGOUT
+    // ─────────────────────────────────────────────────────────────
+    //
+    pub async fn logout(&self, req: AuthLogoutRequest) -> Result<()> {
+        let _: serde_json::Value = self.messaging.rpc("auth.logout", &req).await?;
         Ok(())
     }
 
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  MFA VERIFY
+    // ─────────────────────────────────────────────────────────────
+    //
     pub async fn verify_mfa(
         &self,
         req: AuthMfaVerifyRequest,
-    ) -> Result<AuthMfaVerifyResponse, NatsError> {
-        self.nats.rpc("auth.mfa.verify.request", &req).await
+    ) -> Result<AuthMfaVerifyResponse> {
+        self.messaging.rpc("auth.mfa.verify", &req).await
     }
 
+    //
+    // ─────────────────────────────────────────────────────────────
+    //  MFA SETUP
+    // ─────────────────────────────────────────────────────────────
+    //
     pub async fn setup_totp(
         &self,
         req: AuthMfaSetupRequest,
-    ) -> Result<AuthMfaSetupResponse, NatsError> {
-        self.nats.rpc("auth.mfa.setup.request", &req).await
+    ) -> Result<AuthMfaSetupResponse> {
+        self.messaging.rpc("auth.mfa.setup", &req).await
     }
 }
 

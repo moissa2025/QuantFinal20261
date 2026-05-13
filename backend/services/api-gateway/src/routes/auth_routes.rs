@@ -1,67 +1,14 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::{Extension, TypedHeader},
+    extract::Json,
     http::HeaderMap,
     routing::post,
-    Json, Router,
+    Json as AxumJson,
+    Router,
+    Extension,
 };
-use headers::UserAgent;
-use serde::Deserialize;
-
 use crate::{error::AppError, state::AppState};
-
-use common::auth_messages::{
-    RegisterRequest,
-    RegisterResponse,
-    ActivateResponse,
-    AuthLoginResponse,
-    AuthRefreshResponse,
-    AuthValidateSessionResponse,
-    AuthMfaVerifyRequest,
-    AuthMfaVerifyResponse,
-    AuthMfaSetupRequest,
-    AuthMfaSetupResponse,
-};
-
-fn extract_ip(headers: &HeaderMap) -> String {
-    headers
-        .get("x-forwarded-for")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("0.0.0.0")
-        .to_string()
-}
-
-fn extract_ua(ua: Option<TypedHeader<UserAgent>>) -> String {
-    ua.map(|TypedHeader(ua)| ua.to_string())
-        .unwrap_or_else(|| "api-gateway".into())
-}
-
-#[derive(Deserialize)]
-pub struct LoginBody {
-    pub email: String,
-    pub password: String,
-}
-
-#[derive(Deserialize)]
-pub struct RefreshBody {
-    pub refresh_token: String,
-}
-
-#[derive(Deserialize)]
-pub struct ActivateBody {
-    pub token: String,
-}
-
-#[derive(Deserialize)]
-pub struct ValidateBody {
-    pub session_token: String,
-}
-
-#[derive(Deserialize)]
-pub struct LogoutBody {
-    pub session_token: String,
-}
+use common::auth_messages::*;
 
 pub fn router() -> Router {
     Router::new()
@@ -75,106 +22,86 @@ pub fn router() -> Router {
         .route("/mfa/setup", post(setup_totp))
 }
 
+fn extract_ip(headers: &HeaderMap) -> Option<String> {
+    headers
+        .get("x-forwarded-for")
+        .and_then(|v| v.to_str().ok())
+        .map(|s| s.to_string())
+}
+
+fn extract_ua(headers: &HeaderMap) -> Option<String> {
+    headers
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .map(|s| s.to_string())
+}
+
 pub async fn register(
     Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<RegisterRequest>,
-) -> Result<Json<RegisterResponse>, AppError> {
-    let res = state.auth_nats.register(body).await?;
-    Ok(Json(res))
+) -> Result<AxumJson<RegisterResponse>, AppError> {
+    Ok(AxumJson(state.auth_nats.register(body).await?))
 }
 
 pub async fn activate(
     Extension(state): Extension<Arc<AppState>>,
-    Json(body): Json<ActivateBody>,
-) -> Result<Json<ActivateResponse>, AppError> {
-    let res = state.auth_nats.activate(body.token).await?;
-    Ok(Json(res))
+    Json(body): Json<ActivateRequest>,
+) -> Result<AxumJson<ActivateResponse>, AppError> {
+    Ok(AxumJson(state.auth_nats.activate(body).await?))
 }
 
 pub async fn login(
     Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
-    Json(body): Json<LoginBody>,
-) -> Result<Json<AuthLoginResponse>, AppError> {
-    let ip = extract_ip(&headers);
+    Json(mut body): Json<AuthLoginRequest>,
+) -> Result<AxumJson<AuthLoginResponse>, AppError> {
+    body.ip_address = extract_ip(&headers);
+    body.user_agent = extract_ua(&headers);
 
-    let ua_str = headers
-        .get("user-agent")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("api-gateway")
-        .to_string();
-
-    let res = state
-        .auth_nats
-        .login(body.email, body.password, ip, ua_str)
-        .await?;
-
-    Ok(Json(res))
+    Ok(AxumJson(state.auth_nats.login(body).await?))
 }
 
 pub async fn refresh(
     Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
-    Json(body): Json<RefreshBody>,
-) -> Result<Json<AuthRefreshResponse>, AppError> {
-    let ip = extract_ip(&headers);
+    Json(mut body): Json<AuthRefreshRequest>,
+) -> Result<AxumJson<AuthRefreshResponse>, AppError> {
+    body.ip_address = extract_ip(&headers);
+    body.user_agent = extract_ua(&headers);
 
-    let ua_str = headers
-        .get("user-agent")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("api-gateway")
-        .to_string();
-
-    let res = state
-        .auth_nats
-        .refresh(body.refresh_token, ip, ua_str)
-        .await?;
-
-    Ok(Json(res))
+    Ok(AxumJson(state.auth_nats.refresh(body).await?))
 }
 
 pub async fn validate_session(
     Extension(state): Extension<Arc<AppState>>,
     headers: HeaderMap,
-    Json(body): Json<ValidateBody>,
-) -> Result<Json<AuthValidateSessionResponse>, AppError> {
-    let ip = extract_ip(&headers);
+    Json(mut body): Json<AuthValidateSessionRequest>,
+) -> Result<AxumJson<AuthValidateSessionResponse>, AppError> {
+    body.ip_address = extract_ip(&headers);
+    body.user_agent = extract_ua(&headers);
 
-    let ua_str = headers
-        .get("user-agent")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("api-gateway")
-        .to_string();
-
-    let res = state
-        .auth_nats
-        .validate_session(body.session_token, ip, ua_str)
-        .await?;
-
-    Ok(Json(res))
+    Ok(AxumJson(state.auth_nats.validate_session(body).await?))
 }
 
 pub async fn logout(
     Extension(state): Extension<Arc<AppState>>,
-    Json(body): Json<LogoutBody>,
+    Json(body): Json<AuthLogoutRequest>,
 ) -> Result<(), AppError> {
-    state.auth_nats.logout(body.session_token).await?;
+    state.auth_nats.logout(body).await?;
     Ok(())
 }
 
 pub async fn verify_mfa(
     Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<AuthMfaVerifyRequest>,
-) -> Result<Json<AuthMfaVerifyResponse>, AppError> {
-    let res = state.auth_nats.verify_mfa(body).await?;
-    Ok(Json(res))
+) -> Result<AxumJson<AuthMfaVerifyResponse>, AppError> {
+    Ok(AxumJson(state.auth_nats.verify_mfa(body).await?))
 }
 
 pub async fn setup_totp(
     Extension(state): Extension<Arc<AppState>>,
     Json(body): Json<AuthMfaSetupRequest>,
-) -> Result<Json<AuthMfaSetupResponse>, AppError> {
-    let res = state.auth_nats.setup_totp(body).await?;
-    Ok(Json(res))
+) -> Result<AxumJson<AuthMfaSetupResponse>, AppError> {
+    Ok(AxumJson(state.auth_nats.setup_totp(body).await?))
 }
 

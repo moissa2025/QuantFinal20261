@@ -1,14 +1,11 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::{Path, Extension},
+    extract::Path,
     routing::get,
-    Json, Router,
+    Json, Router, Extension,
 };
 use serde::{Deserialize, Serialize};
-
-use crate::error::AppError;
-use crate::state::AppState;
+use crate::{error::AppError, state::AppState};
 
 pub fn router() -> Router {
     Router::new()

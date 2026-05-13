@@ -1,12 +1,10 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::{Path, Extension},
+    extract::Path,
     routing::get,
-    Json, Router,
+    Json, Router, Extension,
 };
 use serde::{Deserialize, Serialize};
-
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router {
@@ -29,8 +27,8 @@ pub struct Position {
     fields(user_id = %identity.user_id)
 )]
 pub async fn list_positions(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
 ) -> Result<Json<Vec<Position>>, AppError> {
     let res: Vec<Position> = state
         .nats
@@ -46,8 +44,8 @@ pub async fn list_positions(
     fields(user_id = %identity.user_id, symbol = %symbol)
 )]
 pub async fn get_position(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
     Path(symbol): Path<String>,
 ) -> Result<Json<Position>, AppError> {
     let req = (identity.user_id.clone(), symbol);
@@ -58,9 +56,5 @@ pub async fn get_position(
         .await?;
 
     Ok(Json(res))
-}
-
-async fn health() -> &'static str {
-    "OK"
 }
 

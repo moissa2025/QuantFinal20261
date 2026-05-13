@@ -1,32 +1,30 @@
 use std::sync::Arc;
-
 use axum::{
-    Router,
-    routing::get,
-    extract::{Extension, WebSocketUpgrade},
+    extract::WebSocketUpgrade,
     response::IntoResponse,
+    Router,
+    Extension,
 };
 use axum::extract::ws::{Message, WebSocket};
 use futures::StreamExt;
-
 use crate::state::AppState;
 
 pub fn router() -> Router {
     Router::new()
-        .route("/ws/wallet", get(wallet_ws))
+        .route("/ws/wallet", axum::routing::get(wallet_ws))
 }
 
 pub async fn wallet_ws(
-    ws: WebSocketUpgrade,
     Extension(state): Extension<Arc<AppState>>,
+    ws: WebSocketUpgrade,
 ) -> impl IntoResponse {
     ws.on_upgrade(move |socket| handle_wallet_ws(socket, state))
 }
 
 async fn handle_wallet_ws(mut socket: WebSocket, state: Arc<AppState>) {
-    let Ok(mut sub) = state.nats.subscribe("wallet.events.*").await else {
+    let Ok(mut sub) = state.nats.subscribe("wallet.updates.*").await else {
         let _ = socket
-            .send(Message::Text("Error: unable to subscribe to wallet feed".into()))
+            .send(Message::Text("Error: unable to subscribe to wallet updates".into()))
             .await;
         return;
     };

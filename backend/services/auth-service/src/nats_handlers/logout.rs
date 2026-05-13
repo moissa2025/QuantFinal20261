@@ -1,25 +1,26 @@
-use async_nats::{Client, Message};
-use serde_json;
-use tracing::error;
+use anyhow::Result;
+use async_nats::Client;
+use futures_util::StreamExt;
+use sqlx::PgPool;
 
 use common::auth_messages::AuthLogoutRequest;
 
-use crate::db::DbPool;
-use crate::session::revoke_session;
+pub async fn handle_logout(nats: Client, db: PgPool) -> Result<()> {
+  let mut sub = nats.subscribe("auth.logout").await?;
 
-pub async fn handle_logout(pool: DbPool, nats: Client, msg: Message) {
-    let req: AuthLogoutRequest = match serde_json::from_slice(&msg.payload) {
-        Ok(r) => r,
-        Err(e) => {
-            error!("logout: invalid payload: {}", e);
-            return;
+    while let Some(msg) = sub.next().await {
+        let req: AuthLogoutRequest = serde_json::from_slice(&msg.payload)?;
+        process(req, &db).await;
+
+        if let Some(reply) = msg.reply {
+            nats.publish(reply, b"{}".to_vec().into()).await?;
         }
-    };
-
-    let _ = revoke_session(&pool, &req.session_token).await;
-
-    if let Some(reply) = msg.reply {
-        let _ = nats.publish(reply, b"{}".to_vec().into()).await;
     }
+
+    Ok(())
+}
+
+async fn process(req: AuthLogoutRequest, db: &PgPool) {
+    // TODO: invalidate session
 }
 

@@ -1,13 +1,10 @@
 use std::sync::Arc;
-
 use axum::{
-    extract::{Path, Extension},
+    extract::Path,
     routing::get,
-    Json, Router,
+    Json, Router, Extension,
 };
-
 use serde::{Deserialize, Serialize};
-
 use crate::{error::AppError, identity::Identity, state::AppState};
 
 pub fn router() -> Router {
@@ -32,8 +29,8 @@ pub struct TickerResponse {
     fields(user_id = %identity.user_id, symbol = %symbol)
 )]
 pub async fn get_ticker(
-    identity: Identity,
     Extension(state): Extension<Arc<AppState>>,
+    identity: Identity,
     Path(symbol): Path<String>,
 ) -> Result<Json<TickerResponse>, AppError> {
     let req = TickerRequest { symbol };
@@ -44,9 +41,5 @@ pub async fn get_ticker(
         .await?;
 
     Ok(Json(res))
-}
-
-async fn health() -> &'static str {
-    "OK"
 }
 

@@ -1,14 +1,13 @@
 use std::sync::Arc;
-
 use axum::{
-    Router,
-    routing::get,
-    extract::{Extension, WebSocketUpgrade},
+    extract::WebSocketUpgrade,
     response::IntoResponse,
+    routing::get,
+    Router,
+    Extension,
 };
 use axum::extract::ws::{Message, WebSocket};
 use futures::StreamExt;
-
 use crate::state::AppState;
 
 pub fn router() -> Router {
@@ -17,8 +16,8 @@ pub fn router() -> Router {
 }
 
 pub async fn crypto_prices_ws(
-    ws: WebSocketUpgrade,
     Extension(state): Extension<Arc<AppState>>,
+    ws: WebSocketUpgrade,
 ) -> impl IntoResponse {
     ws.on_upgrade(move |socket| handle_crypto_prices_ws(socket, state))
 }

@@ -1,3 +1,6 @@
+
+use crate::nats_client::NatsClient;
+
 use std::sync::Arc;
 
 use axum::{
@@ -11,9 +14,6 @@ use axum::{
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-use hyper::Server;
-use tower::make::Shared;
-
 mod state;
 mod nats_client;
 mod auth_client_nats;
@@ -25,7 +25,6 @@ mod identity;
 mod error;
 
 use crate::state::AppState;
-use crate::nats_client::NatsClient;
 use crate::middleware::rate_limit_user::UserRateLimiter;
 use crate::middleware::auth::auth_middleware;
 
@@ -44,6 +43,8 @@ use crate::routes::{
     intelligence,
     crypto,
     auth_proxy,
+    wallet_ws,
+    health,
 };
 
 #[tokio::main]
@@ -60,8 +61,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:8080".parse::<std::net::SocketAddr>()?;
     println!("🚀 API Gateway running on {}", addr);
 
-    Server::bind(&addr)
-        .serve(Shared::new(app))
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
         .await?;
 
     Ok(())
@@ -72,66 +73,35 @@ async fn openapi_json() -> impl IntoResponse {
 }
 
 pub fn app(state: Arc<AppState>, rate_limiter: UserRateLimiter) -> Router {
-    Router::new()
-        // GLOBAL STATE INJECTION (stateless router)
-        .layer(Extension(state.clone()))
-        .layer(Extension(rate_limiter))
-
-        // SWAGGER
+    let router = Router::new()
+        .nest("/v1/auth", auth_routes::router())
+        .nest("/v1/auth-proxy", auth_proxy::router())
+        .nest("/v1/balances", balances::router())
+        .nest("/v1/crypto", crypto::router())
+        .nest("/v1/intelligence", intelligence::router())
+        .nest("/v1/ledger", ledger::router())
+        .nest("/v1/market", market::router())
+        .nest("/v1/market-proxy", market_proxy::router())
+        .nest("/v1/orders", orders::router())
+        .nest("/v1/positions", positions::router())
+        .nest("/v1/risk", risk::router())
+        .nest("/v1/trading", trading::router())
+        .nest("/v1/users", users::router())
+        .nest("/v1/wallet", wallet::router())
+        .nest("/v1/wallet-ws", wallet_ws::router())
+        .nest("/v1/health", health::router())
+        .route("/openapi.json", get(openapi_json))
         .merge(
             SwaggerUi::new("/swagger-ui")
-                .url("/openapi.json", crate::openapi::OPENAPI.clone())
+                .url("/openapi.json", crate::openapi::OPENAPI.clone()),
         )
+        .route("/health", get(|| async { "OK" }));
 
-        // GLOBAL HEALTH
-        .route("/health", get(|| async { "OK" }))
-
-        // PUBLIC AUTH
-        .nest("/v1/auth", auth_routes::router())
-        .route("/v1/auth/health", get(|| async { "OK" }))
-
-        // PROTECTED ROUTES
-        .nest(
-            "/v1/users",
-            users::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/wallet",
-            wallet::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/balances",
-            balances::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/market",
-            market::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/orders",
-            orders::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/positions",
-            positions::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/trading",
-            trading::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/risk",
-            risk::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-        .nest(
-            "/v1/ledger",
-            ledger::router().layer(from_fn_with_state(state.clone(), auth_middleware)),
-        )
-
-        // PUBLIC ROUTES
-        .nest("/v1/intelligence", intelligence::router())
-        .nest("/v1/crypto", crypto::router())
-        .nest("/v1/market-proxy", market_proxy::router())
-        .nest("/v1/auth-proxy", auth_proxy::router())
+    // Global layers: AppState + rate limiter + auth on protected prefixes
+    router
+        .layer(Extension(state.clone()))
+        .layer(Extension(rate_limiter))
+        // auth middleware on protected prefixes
+        .route_layer(from_fn_with_state(state.clone(), auth_middleware))
 }
 

@@ -1,3 +1,5 @@
+use common::auth_messages::AuthValidateSessionRequest;
+
 use std::sync::Arc;
 
 use axum::{
@@ -58,7 +60,11 @@ pub async fn auth_middleware(
     // Validate session via NATS
     let res = state
         .auth_nats
-        .validate_session(token.clone(), ip, ua)
+        .validate_session(AuthValidateSessionRequest {
+                          session_token: token.clone(),
+                          ip_address: Some(ip),
+                          user_agent: Some(ua),
+                          })
         .await
         .map_err(|_| StatusCode::UNAUTHORIZED)?;
 
