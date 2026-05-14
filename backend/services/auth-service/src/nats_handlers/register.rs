@@ -11,7 +11,8 @@ pub async fn listener(nats: Client, db: PgPool) -> Result<()> {
     tracing::info!("Listening on auth.register.request");
 
     while let Some(msg) = sub.next().await {
-        let req: RegisterRequest = serde_json::from_slice(&msg.payload)?;
+        let _req: RegisterRequest = serde_json::from_slice(&msg.payload)?;
+
         let res = RegisterResponse {
             user_id: "123".into(),
             requires_activation: true,
