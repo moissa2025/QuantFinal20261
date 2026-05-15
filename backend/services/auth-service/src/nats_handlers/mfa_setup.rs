@@ -11,7 +11,24 @@ pub async fn listener(nats: Client, db: PgPool) -> Result<()> {
     tracing::info!("Listening on auth.mfa.setup.request");
 
     while let Some(msg) = sub.next().await {
-        let _req: AuthMfaSetupRequest = serde_json::from_slice(&msg.payload)?;
+        let req: AuthMfaSetupRequest = match serde_json::from_slice(&msg.payload) {
+    Ok(r) => r,
+    Err(e) => {
+        tracing::error!("mfa_setup: invalid payload: {}", e);
+
+        if let Some(reply) = msg.reply {
+            let res = AuthMfaSetupResponse {
+                ok: false,
+                secret: None,
+                qr_code: None,
+            };
+            let payload = serde_json::to_vec(&res)?;
+            nats.publish(reply, payload.into()).await?;
+        }
+
+        continue;
+    }
+};
 
         let res = AuthMfaSetupResponse {
             ok: true,

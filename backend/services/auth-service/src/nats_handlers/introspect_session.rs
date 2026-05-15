@@ -11,6 +11,24 @@ use common::auth_messages::{
 
 use crate::db::DbPool;
 use crate::session::{normalise_device_ua, hash_device_ua};
+use futures_util::StreamExt;
+
+pub async fn listener(nats: Client, pool: DbPool) -> anyhow::Result<()> {
+    let mut sub = nats.subscribe("auth.introspect_session.request").await?;
+
+    tracing::info!("Listening on auth.introspect_session.request");
+
+    while let Some(msg) = sub.next().await {
+        let n = nats.clone();
+        let p = pool.clone();
+
+        tokio::spawn(async move {
+            handle_introspect_session(p, n, msg).await;
+        });
+    }
+
+    Ok(())
+}
 
 async fn respond(nats: &Client, msg: &Message, resp: &AuthValidateSessionResponse) {
     if let Some(reply) = msg.reply.clone() {
